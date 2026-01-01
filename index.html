@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LessonBuilders - Build Better Lessons in Minutes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0D2847;
+            --orange: #FF8C42;
+            --orange-light: #FFB380;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #F7FAFC 0%, #FFF 100%);
+            color: #0D2847;
+        }
+        
+        .top-nav {
+            background: white;
+            border-bottom: 2px solid rgba(13, 40, 71, 0.1);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .logo-text {
+            font-family: 'Crimson Pro', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #4A5568;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: var(--navy);
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-profile {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .hero {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: #4A5568;
+            margin-bottom: 12px;
+        }
+        
+        .hero-description {
+            font-size: 16px;
+            color: #718096;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+        }
+        
+        .standards-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+        
+        .section-subtitle {
+            font-size: 18px;
+            color: #4A5568;
+        }
+        
+        .standards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 50px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .standard-item {
+            text-align: center;
+        }
+        
+        .standard-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(255, 179, 128, 0.15));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+        
+        .standard-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+        
+        .standard-description {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.5;
+        }
+        
+        .testimonials {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 40px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border: 2px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+        
+        .testimonial-card:hover {
+            border-color: var(--orange);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+        }
+        
+        .testimonial-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+        
+        .testimonial-text {
+            font-size: 15px;
+            color: #4A5568;
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 60px 40px;
+            text-align: center;
+            background: white;
+            border-radius: 24px;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .cta-title {
+            font-family: 'Crimson Pro', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+        
+        .cta-description {
+            font-size: 18px;
+            color: #4A5568;
+            margin-bottom: 32px;
+        }
+        
+        .footer {
+            background: var(--navy);
+            color: white;
+            padding: 60px 40px 40px;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--orange);
+        }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .footer-bottom-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .standards-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" class="logo-text">LessonBuilders</a>
+            <div class="nav-menu">
+                <a href="library.html" class="nav-link">My Lessons</a>
+                <a href="discover.html" class="nav-link">Discover</a>
+                <a href="about.html" class="nav-link">Help</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="user-profile">JD</div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1 class="hero-title">Build Better Lessons in Minutes</h1>
+        <p class="hero-subtitle">Turn basic ideas into standards-aligned lesson plans</p>
+        <p class="hero-description">Stop stressing over standards and spend more time where it matters&mdash;connecting with your students.</p>
+        
+        <div class="cta-group">
+            <a href="build-step1.html" class="btn btn-primary">Start Building &rarr;</a>
+        </div>
+    </section>
+
+    <section class="standards-section">
+        <div class="section-header">
+            <h2 class="section-title">Standards-Informed Design</h2>
+            <p class="section-subtitle">Built by educators, backed by best practices</p>
+        </div>
+        
+        <div class="standards-grid">
+            <div class="standard-item">
+                <div class="standard-icon">&#9889;</div>
+                <h4 class="standard-title">Effortlessly Well-Crafted</h4>
+                <p class="standard-description">Complete lessons with objectives, materials, procedures, and assessments ready to teach Monday morning.</p>
+            </div>
+            
+            <div class="standard-item">
+                <div class="standard-icon">&#127919;</div>
+                <h4 class="standard-title">California Standards</h4>
+                <p class="standard-description">Automatically aligned to CA frameworks. Every lesson cites specific standards so you're always covered.</p>
+            </div>
+            
+            <div class="standard-item">
+                <div class="standard-icon">&#128161;</div>
+                <h4 class="standard-title">Your Teaching Style</h4>
+                <p class="standard-description">Tell us how you teach&mdash;hands-on, direct, collaborative&mdash;and get lessons that match your classroom approach.</p>
+            </div>
+            
+            <div class="standard-item">
+                <div class="standard-icon">&#128241;</div>
+                <h4 class="standard-title">Built-In Differentiation</h4>
+                <p class="standard-description">Specific strategies for diverse learners included automatically. Real accommodations, not generic advice.</p>
+            </div>
+            
+            <div class="standard-item">
+                <div class="standard-icon">&#11088;</div>
+                <h4 class="standard-title">Research-Backed</h4>
+                <p class="standard-description">Choose from proven frameworks: Madeline Hunter, 5E Model, Understanding by Design, or Gradual Release.</p>
+            </div>
+            
+            <div class="standard-item">
+                <div class="standard-icon">&#128101;</div>
+                <h4 class="standard-title">Community-Driven</h4>
+                <p class="standard-description">Share your lessons, discover what works for others, and build a collective library of great teaching.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-header">
+            <h2 class="section-title">Why Teachers Love LessonBuilders</h2>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <h4 class="testimonial-title">Get 10 Hours Back</h4>
+                <p class="testimonial-text">"I used to spend Sunday afternoons planning. Now I build a week's worth of lessons during my prep period. Game changer for work-life balance."</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <h4 class="testimonial-title">Stress-Free Observations</h4>
+                <p class="testimonial-text">"Admin walk-ins don't stress me anymore. My lesson plans are detailed, standards-aligned, and ready to show."</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <h4 class="testimonial-title">No More Generic Lessons</h4>
+                <p class="testimonial-text">"Finally, lesson plans that match how I actually teach. I set my teaching style, and the lesson comes out the way I want it to."</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <h4 class="testimonial-title">Timing That Actually Works</h4>
+                <p class="testimonial-text">"The timing is realistic! No more cramming a 90-minute lesson into 45 minutes. Plans account for transitions, setup, everything my class actually needs."</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="cta-title">Your Lessons. Your Style. Better.</h2>
+        <p class="cta-description">Great lessons, standards-aligned, all yours. Build new in minutes or modernize your favorites. No more throwing away what works.</p>
+        <a href="build-step1.html" class="btn btn-primary">Start Building Now &rarr;</a>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>LessonBuilders</h4>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="about.html">How It Works</a></li>
+                    <li><a href="about.html">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="build-step1.html">Build Lesson</a></li>
+                    <li><a href="library.html">My Lessons</a></li>
+                    <li><a href="discover.html">Discover</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="about.html">Help Center</a></li>
+                    <li><a href="about.html">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="about.html">Privacy</a></li>
+                    <li><a href="about.html">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-text">
+                &copy; 2025 LessonBuilders. Built by educators for educators.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

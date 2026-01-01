@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Choose Template - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.container{display:flex;max-width:1400px;margin:0 auto;}
+.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+.nav-step.completed{color:#10B981;}
+.step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
+.nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
+.nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
+.main-content{flex:1;padding:40px 60px;max-width:900px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
+.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+.template-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-bottom:40px;}
+.template-card{padding:24px;border:2px solid #E2E8F0;border-radius:12px;cursor:pointer;transition:all 0.3s;}
+.template-card:hover{border-color:var(--orange);background:rgba(255,140,66,0.05);}
+.template-card.selected{border-color:var(--orange);background:rgba(255,140,66,0.1);}
+.template-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.template-description{color:#4A5568;font-size:14px;}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+.info-box{background:rgba(59,130,246,0.05);border:2px solid rgba(59,130,246,0.3);border-radius:12px;padding:20px;margin-bottom:32px;cursor:pointer;transition:all 0.3s;}
+.info-box:hover{background:rgba(59,130,246,0.1);}
+.info-header{display:flex;align-items:center;justify-content:space-between;font-weight:600;color:var(--navy);font-size:16px;margin-bottom:0;}
+.info-icon{font-size:18px;transition:transform 0.3s;}
+.info-icon.expanded{transform:rotate(180deg);}
+.info-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease;margin-top:0;}
+.info-content.show{max-height:800px;margin-top:16px;}
+.info-section{margin-bottom:16px;}
+.info-section h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.info-section p{color:#4A5568;line-height:1.6;font-size:14px;}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link">My Lessons</a>
+<a href="discover.html" class="nav-link">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div class="user-profile">JD</div>
+</div>
+</nav>
+<div class="container">
+<aside class="sidebar">
+<div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+<a href="build-step1.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></a>
+<a href="build-step2.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Teaching Style</div></a>
+<a href="build-step3.html" class="nav-step active"><div class="step-number">3</div><div>Choose Template</div></a>
+<a href="build-step4.html" class="nav-step"><div class="step-number">4</div><div>Build Method</div></a>
+<a href="build-step5.html" class="nav-step"><div class="step-number">5</div><div>Assessments</div></a>
+<a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
+<a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
+</aside>
+<main class="main-content">
+<h1 class="page-title">Pick your framework</h1>
+<p class="page-subtitle">Choose a research-backed lesson structure</p>
+<div class="progress-bar"><div class="progress-fill" style="width:37%;"></div></div>
+
+<div class="info-box" id="infoBox">
+<div class="info-header" onclick="toggleInfo()">
+<span>About Lesson Frameworks</span>
+<span class="info-icon" id="infoIcon">&#9660;</span>
+</div>
+<div class="info-content" id="infoContent">
+<div class="info-section">
+<h4>Madeline Hunter</h4>
+<p>Structured, step-by-step teaching with clear objectives and guided practice. 7 steps from anticipatory set through closure.</p>
+</div>
+<div class="info-section">
+<h4>5E Model</h4>
+<p>Inquiry-based, hands-on exploration (Engage, Explore, Explain, Elaborate, Evaluate). Great for science and discovery learning.</p>
+</div>
+<div class="info-section">
+<h4>Understanding by Design (UbD)</h4>
+<p>Backward design that starts with learning goals and works back to activities. Focus on transfer and authentic assessment.</p>
+</div>
+<div class="info-section">
+<h4>Gradual Release</h4>
+<p>Progressive student independence (I do, We do, You do together, You do alone). Systematic scaffolding approach.</p>
+</div>
+</div>
+</div>
+
+<div class="template-grid" id="templateGrid">
+<div class="template-card" data-framework="madeline-hunter" onclick="selectTemplate(this)">
+<div class="template-title">Madeline Hunter</div>
+<div class="template-description">7-step direct instruction model</div>
+</div>
+<div class="template-card" data-framework="5e-model" onclick="selectTemplate(this)">
+<div class="template-title">5E Model</div>
+<div class="template-description">Engage, Explore, Explain, Elaborate, Evaluate</div>
+</div>
+<div class="template-card" data-framework="ubd" onclick="selectTemplate(this)">
+<div class="template-title">Understanding by Design</div>
+<div class="template-description">Backward design approach</div>
+</div>
+<div class="template-card" data-framework="gradual-release" onclick="selectTemplate(this)">
+<div class="template-title">Gradual Release</div>
+<div class="template-description">I do, We do, You do</div>
+</div>
+</div>
+<div class="btn-group">
+<a href="build-step2.html" class="btn btn-secondary">&larr; Back</a>
+<button class="btn btn-primary" onclick="saveAndContinue()">Next: Build Method &rarr;</button>
+</div>
+</main>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    
+    // Restore selected framework
+    if (data.step3 && data.step3.framework) {
+      const cards = document.querySelectorAll('.template-card');
+      cards.forEach(card => {
+        card.classList.remove('selected');
+        if (card.dataset.framework === data.step3.framework) {
+          card.classList.add('selected');
+        }
+      });
+    }
+  }
+});
+
+function toggleInfo() {
+  const content = document.getElementById('infoContent');
+  const icon = document.getElementById('infoIcon');
+  content.classList.toggle('show');
+  icon.classList.toggle('expanded');
+}
+
+function selectTemplate(card){
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+}
+
+function saveAndContinue() {
+  const selectedCard = document.querySelector('.template-card.selected');
+  const framework = selectedCard.dataset.framework;
+  
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    lessonData = JSON.parse(saved);
+  }
+  
+  lessonData.step3 = { framework };
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+  window.location.href = 'build-step4.html';
+}
+</script>
+</body>
+</html>

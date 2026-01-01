@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Teaching Style - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.container{display:flex;max-width:1400px;margin:0 auto;}
+.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+.nav-step.completed{color:#10B981;}
+.step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
+.nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
+.nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
+.main-content{flex:1;padding:40px 60px;max-width:900px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
+.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+.style-slider{margin-bottom:32px;}
+.style-label{display:flex;justify-content:space-between;margin-bottom:8px;font-weight:600;color:var(--navy);}
+.style-value{color:var(--orange);}
+.slider{width:100%;height:8px;border-radius:4px;background:#E2E8F0;appearance:none;cursor:pointer;outline:none;}
+.slider::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--orange);cursor:pointer;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--orange);cursor:pointer;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link">My Lessons</a>
+<a href="discover.html" class="nav-link">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div class="user-profile">JD</div>
+</div>
+</nav>
+<div class="container">
+<aside class="sidebar">
+<div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+<a href="build-step1.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></a>
+<a href="build-step2.html" class="nav-step active"><div class="step-number">2</div><div>Teaching Style</div></a>
+<a href="build-step3.html" class="nav-step"><div class="step-number">3</div><div>Choose Template</div></a>
+<a href="build-step4.html" class="nav-step"><div class="step-number">4</div><div>Build Method</div></a>
+<a href="build-step5.html" class="nav-step"><div class="step-number">5</div><div>Assessments</div></a>
+<a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
+<a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
+</aside>
+<main class="main-content">
+<h1 class="page-title">How do you teach?</h1>
+<p class="page-subtitle">Help us match your classroom style</p>
+<div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
+
+<div class="style-slider">
+<div class="style-label"><span>Hands-On Activities</span><span class="style-value" id="handsOnValue">20%</span></div>
+<input type="range" min="0" max="100" step="1" value="20" class="slider" id="handsOnSlider">
+</div>
+<div class="style-slider">
+<div class="style-label"><span>Direct Instruction</span><span class="style-value" id="directValue">20%</span></div>
+<input type="range" min="0" max="100" step="1" value="20" class="slider" id="directSlider">
+</div>
+<div class="style-slider">
+<div class="style-label"><span>Collaborative Work</span><span class="style-value" id="collabValue">20%</span></div>
+<input type="range" min="0" max="100" step="1" value="20" class="slider" id="collabSlider">
+</div>
+<div class="style-slider">
+<div class="style-label"><span>Independent Practice</span><span class="style-value" id="indepValue">20%</span></div>
+<input type="range" min="0" max="100" step="1" value="20" class="slider" id="indepSlider">
+</div>
+<div class="style-slider">
+<div class="style-label"><span>Technology Integration</span><span class="style-value" id="techValue">20%</span></div>
+<input type="range" min="0" max="100" step="1" value="20" class="slider" id="techSlider">
+</div>
+<div style="margin-top:24px;padding:16px;background:rgba(255,140,66,0.05);border-radius:10px;text-align:center;">
+<div style="font-size:14px;color:#4A5568;margin-bottom:4px;">Combined Total</div>
+<div style="font-size:28px;font-weight:700;color:var(--navy);" id="totalValue">100%</div>
+</div>
+
+<div class="btn-group">
+<a href="build-step1.html" class="btn btn-secondary">&larr; Back</a>
+<button class="btn btn-primary" onclick="saveAndContinue()">Next: Choose Template &rarr;</button>
+</div>
+</main>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    if (data.step2) {
+      document.getElementById('handsOnSlider').value = data.step2.handsOn || 20;
+      document.getElementById('directSlider').value = data.step2.direct || 20;
+      document.getElementById('collabSlider').value = data.step2.collaborative || 20;
+      document.getElementById('indepSlider').value = data.step2.independent || 20;
+      document.getElementById('techSlider').value = data.step2.technology || 20;
+      updateAllDisplays();
+    }
+  }
+});
+
+const sliders = {
+  handsOn: document.getElementById('handsOnSlider'),
+  direct: document.getElementById('directSlider'),
+  collab: document.getElementById('collabSlider'),
+  indep: document.getElementById('indepSlider'),
+  tech: document.getElementById('techSlider')
+};
+
+const values = {
+  handsOn: document.getElementById('handsOnValue'),
+  direct: document.getElementById('directValue'),
+  collab: document.getElementById('collabValue'),
+  indep: document.getElementById('indepValue'),
+  tech: document.getElementById('techValue')
+};
+
+const totalDisplay = document.getElementById('totalValue');
+
+function getTotal() {
+  return parseInt(sliders.handsOn.value) + parseInt(sliders.direct.value) + 
+         parseInt(sliders.collab.value) + parseInt(sliders.indep.value) + 
+         parseInt(sliders.tech.value);
+}
+
+function updateTotal() {
+  const total = getTotal();
+  totalDisplay.textContent = total + '%';
+  
+  if (total === 100) {
+    totalDisplay.style.color = '#10B981';
+  } else if (total > 100) {
+    totalDisplay.style.color = '#EF4444';
+  } else {
+    totalDisplay.style.color = 'var(--orange)';
+  }
+}
+
+function updateAllDisplays() {
+  values.handsOn.textContent = sliders.handsOn.value + '%';
+  values.direct.textContent = sliders.direct.value + '%';
+  values.collab.textContent = sliders.collab.value + '%';
+  values.indep.textContent = sliders.indep.value + '%';
+  values.tech.textContent = sliders.tech.value + '%';
+  updateTotal();
+}
+
+sliders.handsOn.addEventListener('input', function() {
+  values.handsOn.textContent = this.value + '%';
+  updateTotal();
+});
+
+sliders.direct.addEventListener('input', function() {
+  values.direct.textContent = this.value + '%';
+  updateTotal();
+});
+
+sliders.collab.addEventListener('input', function() {
+  values.collab.textContent = this.value + '%';
+  updateTotal();
+});
+
+sliders.indep.addEventListener('input', function() {
+  values.indep.textContent = this.value + '%';
+  updateTotal();
+});
+
+sliders.tech.addEventListener('input', function() {
+  values.tech.textContent = this.value + '%';
+  updateTotal();
+});
+
+updateTotal();
+
+function saveAndContinue() {
+  const total = getTotal();
+  
+  if (total !== 100) {
+    alert('Please adjust the sliders so they total exactly 100%');
+    return;
+  }
+  
+  const teachingStyles = {
+    handsOn: parseInt(sliders.handsOn.value),
+    direct: parseInt(sliders.direct.value),
+    collaborative: parseInt(sliders.collab.value),
+    independent: parseInt(sliders.indep.value),
+    technology: parseInt(sliders.tech.value)
+  };
+  
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    lessonData = JSON.parse(saved);
+  }
+  
+  lessonData.step2 = teachingStyles;
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+  window.location.href = 'build-step3.html';
+}
+</script>
+</body>
+</html>

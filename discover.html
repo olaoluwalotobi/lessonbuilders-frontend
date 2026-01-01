@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Discover Lessons - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-link.active{color:var(--navy);font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.content{max-width:1200px;margin:0 auto;padding:40px;}
+.page-header{margin-bottom:32px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:48px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:16px;}
+.tab-nav{display:flex;gap:8px;border-bottom:2px solid #E2E8F0;margin-bottom:32px;}
+.tab{padding:12px 24px;background:none;border:none;font-size:16px;font-weight:600;color:#4A5568;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab:hover:not(.active){color:var(--navy);}
+.section-header{margin-bottom:24px;}
+.section-title{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.section-subtitle{font-size:14px;color:#718096;}
+.folder-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:48px;}
+.folder-tile{height:140px;background:white;border:2px solid #E2E8F0;border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;position:relative;}
+.folder-tile:hover{border-color:var(--orange);box-shadow:0 8px 24px rgba(255,140,66,0.15);transform:translateY(-4px);}
+.folder-tile-content{text-align:center;}
+.folder-title{font-size:20px;font-weight:700;color:var(--navy);transition:color 0.3s;}
+.folder-tile:hover .folder-title{color:var(--orange);}
+.grade-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:48px;}
+.grade-tile{height:100px;background:white;border:2px solid #E2E8F0;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;}
+.grade-tile:hover{border-color:var(--orange);box-shadow:0 6px 20px rgba(255,140,66,0.15);transform:translateY(-4px);}
+.grade-title{font-size:24px;font-weight:700;color:var(--navy);transition:color 0.3s;}
+.grade-tile:hover .grade-title{color:var(--orange);}
+.lesson-list{display:none;}
+.lesson-list.active{display:block;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:white;border:2px solid #E2E8F0;border-radius:10px;color:var(--navy);font-weight:600;text-decoration:none;margin-bottom:24px;transition:all 0.2s;}
+.back-btn:hover{border-color:var(--orange);}
+.lessons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px;}
+.lesson-card{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:20px;transition:all 0.3s;}
+.lesson-card:hover{border-color:var(--orange);box-shadow:0 8px 24px rgba(0,0,0,0.08);transform:translateY(-4px);}
+.lesson-badge{display:inline-block;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;margin-bottom:12px;}
+.badge-math{background:rgba(59,130,246,0.1);color:#2563EB;}
+.badge-science{background:rgba(16,185,129,0.1);color:#059669;}
+.badge-ela{background:rgba(255,140,66,0.1);color:var(--orange);}
+.badge-social{background:rgba(139,92,246,0.1);color:#7C3AED;}
+.badge-arts{background:rgba(236,72,153,0.1);color:#DB2777;}
+.badge-pe{background:rgba(239,68,68,0.1);color:#DC2626;}
+.badge-other{background:rgba(107,114,128,0.1);color:#4B5563;}
+.lesson-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.3;}
+.lesson-meta{font-size:14px;color:#718096;margin-bottom:8px;}
+.lesson-teacher{font-size:13px;color:#718096;font-style:italic;margin-bottom:16px;}
+.lesson-actions{display:flex;gap:8px;}
+.btn-preview{flex:1;padding:10px;border:2px solid #E2E8F0;background:white;color:var(--navy);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-preview:hover{border-color:var(--orange);background:rgba(255,140,66,0.05);}
+.btn-add{flex:1;padding:10px;border:none;background:var(--orange);color:white;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-add:hover{background:#FF6B2C;}
+.btn-add.added{background:#10B981;cursor:not-allowed;}
+@media (max-width:1024px){
+  .folder-grid{grid-template-columns:repeat(3,1fr);}
+  .grade-grid{grid-template-columns:repeat(4,1fr);}
+  .lessons-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:768px){
+  .folder-grid{grid-template-columns:repeat(2,1fr);}
+  .grade-grid{grid-template-columns:repeat(3,1fr);}
+  .lessons-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link">My Lessons</a>
+<a href="discover.html" class="nav-link active">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div class="user-profile">JD</div>
+</div>
+</nav>
+
+<div class="content">
+<div class="page-header">
+<h1 class="page-title">Discover Lessons</h1>
+<p class="page-subtitle">Explore lessons shared by teachers in your community</p>
+</div>
+
+<div class="tab-nav">
+<button class="tab active" onclick="showTab('subjects')">Subjects</button>
+<button class="tab" onclick="showTab('templates')">Templates</button>
+<button class="tab" onclick="showTab('grades')">Grades</button>
+</div>
+
+<!-- Subjects View -->
+<div id="subjectsView" class="folder-view">
+<div class="section-header">
+<h2 class="section-title">Browse by Subject</h2>
+<p class="section-subtitle">Click a subject to explore community lessons</p>
+</div>
+<div class="folder-grid">
+<div class="folder-tile" onclick="showLessons('mathematics', 'Mathematics')">
+<div class="folder-tile-content">
+<div class="folder-title">Mathematics</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('science', 'Science')">
+<div class="folder-tile-content">
+<div class="folder-title">Science</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('ela', 'English/ELA')">
+<div class="folder-tile-content">
+<div class="folder-title">English/ELA</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('history', 'Social Studies')">
+<div class="folder-tile-content">
+<div class="folder-title">Social Studies</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('arts', 'Arts')">
+<div class="folder-tile-content">
+<div class="folder-title">Arts</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('pe', 'Physical Education')">
+<div class="folder-tile-content">
+<div class="folder-title">Physical Ed</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('other', 'Other')">
+<div class="folder-tile-content">
+<div class="folder-title">Other</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Templates View -->
+<div id="templatesView" class="folder-view" style="display:none;">
+<div class="section-header">
+<h2 class="section-title">Browse by Template</h2>
+<p class="section-subtitle">Explore lessons organized by teaching framework</p>
+</div>
+<div class="folder-grid">
+<div class="folder-tile" onclick="showLessons('madeline-hunter', 'Madeline Hunter')">
+<div class="folder-tile-content">
+<div class="folder-title">Madeline Hunter</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('5e-model', '5E Model')">
+<div class="folder-tile-content">
+<div class="folder-title">5E Model</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('ubd', 'Understanding by Design')">
+<div class="folder-tile-content">
+<div class="folder-title">Understanding by Design</div>
+</div>
+</div>
+<div class="folder-tile" onclick="showLessons('gradual-release', 'Gradual Release')">
+<div class="folder-tile-content">
+<div class="folder-title">Gradual Release</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Grades View -->
+<div id="gradesView" class="folder-view" style="display:none;">
+<div class="section-header">
+<h2 class="section-title">Browse by Grade</h2>
+<p class="section-subtitle">Find lessons for your grade level</p>
+</div>
+<div class="grade-grid">
+<div class="grade-tile" onclick="showLessons('grade-k', 'Kindergarten')">
+<div class="grade-title">K</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-1', '1st Grade')">
+<div class="grade-title">1st</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-2', '2nd Grade')">
+<div class="grade-title">2nd</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-3', '3rd Grade')">
+<div class="grade-title">3rd</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-4', '4th Grade')">
+<div class="grade-title">4th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-5', '5th Grade')">
+<div class="grade-title">5th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-6', '6th Grade')">
+<div class="grade-title">6th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-7', '7th Grade')">
+<div class="grade-title">7th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-8', '8th Grade')">
+<div class="grade-title">8th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-9', '9th Grade')">
+<div class="grade-title">9th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-10', '10th Grade')">
+<div class="grade-title">10th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-11', '11th Grade')">
+<div class="grade-title">11th</div>
+</div>
+<div class="grade-tile" onclick="showLessons('grade-12', '12th Grade')">
+<div class="grade-title">12th</div>
+</div>
+</div>
+</div>
+
+<!-- Lesson List View -->
+<div id="lessonListView" class="lesson-list">
+<a href="#" class="back-btn" onclick="backToFolders(); return false;">&larr; Back to Browse</a>
+<div class="section-header">
+<h2 class="section-title" id="lessonListTitle">Mathematics Lessons</h2>
+<p class="section-subtitle" id="lessonListCount">6 lessons available</p>
+</div>
+<div class="lessons-grid" id="lessonCards">
+<!-- Lessons will be populated by JavaScript -->
+</div>
+</div>
+
+</div>
+
+<script>
+const allLessons = [
+  {id:1, title:'Introduction to Fractions', subject:'mathematics', grade:'grade-5', template:'madeline-hunter', teacher:'Sarah Chen', meta:'5th Grade &bull; 45 min', badge:'math'},
+  {id:2, title:'Photosynthesis Basics', subject:'science', grade:'grade-6', template:'5e-model', teacher:'Maria Rodriguez', meta:'6th Grade &bull; 50 min', badge:'science'},
+  {id:3, title:'Persuasive Writing', subject:'ela', grade:'grade-8', template:'madeline-hunter', teacher:'David Kim', meta:'8th Grade &bull; 55 min', badge:'ela'},
+  {id:4, title:'California Gold Rush', subject:'history', grade:'grade-4', template:'ubd', teacher:'Jennifer Martinez', meta:'4th Grade &bull; 45 min', badge:'social'},
+  {id:5, title:'Basketball Fundamentals', subject:'pe', grade:'grade-9', template:'gradual-release', teacher:'Michael Johnson', meta:'9th Grade &bull; 60 min', badge:'pe'},
+  {id:6, title:'Color Theory', subject:'arts', grade:'grade-7', template:'5e-model', teacher:'Lisa Wong', meta:'7th Grade &bull; 50 min', badge:'arts'},
+];
+
+let currentFilter = '';
+let currentFilterName = '';
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  document.getElementById('subjectsView').style.display = tab === 'subjects' ? 'block' : 'none';
+  document.getElementById('templatesView').style.display = tab === 'templates' ? 'block' : 'none';
+  document.getElementById('gradesView').style.display = tab === 'grades' ? 'block' : 'none';
+  document.getElementById('lessonListView').classList.remove('active');
+}
+
+function showLessons(filter, name) {
+  currentFilter = filter;
+  currentFilterName = name;
+  
+  document.getElementById('subjectsView').style.display = 'none';
+  document.getElementById('templatesView').style.display = 'none';
+  document.getElementById('gradesView').style.display = 'none';
+  
+  document.getElementById('lessonListView').classList.add('active');
+  document.getElementById('lessonListTitle').textContent = name + ' Lessons';
+  
+  let filteredLessons = allLessons;
+  if (filter.startsWith('grade-')) {
+    filteredLessons = allLessons.filter(l => l.grade === filter);
+  } else if (['madeline-hunter','5e-model','ubd','gradual-release'].includes(filter)) {
+    filteredLessons = allLessons.filter(l => l.template === filter);
+  } else {
+    filteredLessons = allLessons.filter(l => l.subject === filter);
+  }
+  
+  document.getElementById('lessonListCount').textContent = filteredLessons.length + ' lessons available';
+  
+  const container = document.getElementById('lessonCards');
+  container.innerHTML = filteredLessons.map(lesson => `
+    <div class="lesson-card">
+      <div class="lesson-badge badge-${lesson.badge}">${name}</div>
+      <div class="lesson-title">${lesson.title}</div>
+      <div class="lesson-meta">${lesson.meta}</div>
+      <div class="lesson-teacher">by ${lesson.teacher}</div>
+      <div class="lesson-actions">
+        <button class="btn-preview" onclick="previewLesson(${lesson.id})">&#128065; Preview</button>
+        <button class="btn-add" onclick="addToLibrary(this, ${lesson.id})">&#128229; Add</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function backToFolders() {
+  document.getElementById('lessonListView').classList.remove('active');
+  
+  const activeTab = document.querySelector('.tab.active').textContent.toLowerCase();
+  if (activeTab === 'subjects') {
+    document.getElementById('subjectsView').style.display = 'block';
+  } else if (activeTab === 'templates') {
+    document.getElementById('templatesView').style.display = 'block';
+  } else if (activeTab === 'grades') {
+    document.getElementById('gradesView').style.display = 'block';
+  }
+}
+
+function previewLesson(lessonId) {
+  window.open('lesson-view.html?id=' + lessonId, '_blank');
+}
+
+function addToLibrary(button, lessonId) {
+  if (button.classList.contains('added')) return;
+  
+  // Find the lesson from the Discover catalog
+  const lesson = allLessons.find(l => l.id === lessonId);
+  if (!lesson) {
+    alert('Lesson not found!');
+    return;
+  }
+  
+  // Get existing saved lessons from localStorage
+  let savedLessons = JSON.parse(localStorage.getItem('savedLessons') || '[]');
+  
+  // Convert the Discover lesson format to Library lesson format
+  const gradeNumber = lesson.grade.replace('grade-', '');
+  const gradeLabel = gradeNumber === '1' ? '1st' : 
+                     gradeNumber === '2' ? '2nd' :
+                     gradeNumber === '3' ? '3rd' :
+                     gradeNumber + 'th';
+  
+  const newLesson = {
+    id: Date.now(), // Unique ID for the user's library
+    title: lesson.title,
+    grade: gradeLabel + ' Grade',
+    subject: lesson.subject.charAt(0).toUpperCase() + lesson.subject.slice(1),
+    duration: parseInt(lesson.meta.split('&bull;')[1]) || 60,
+    framework: lesson.template,
+    savedAt: new Date().toISOString(),
+    discoveredFrom: true, // ⭐ KEY FLAG - marks this as downloaded from Discover
+    sharedToDiscover: false, // They didn't share it, they got it
+    hasCollaborations: false,
+    collaborationPending: false
+  };
+  
+  // Add to saved lessons
+  savedLessons.push(newLesson);
+  localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
+  
+  // Update button appearance
+  button.innerHTML = '&#10003; Added';
+  button.classList.add('added');
+  button.style.background = '#10B981';
+  
+  alert('Lesson added to My Lessons!');
+}
+</script>
+
+</body>
+</html>

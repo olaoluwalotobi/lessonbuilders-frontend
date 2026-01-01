@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Preview & Export - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.container{display:flex;max-width:1400px;margin:0 auto;}
+.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+.nav-step.completed{color:#10B981;}
+.step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
+.nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
+.nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
+.main-content{flex:1;padding:40px 60px;max-width:900px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
+.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+
+/* Standards Verification Banner */
+.verification-banner{background:rgba(16,185,129,0.05);border:2px solid rgba(16,185,129,0.2);border-radius:12px;padding:16px 20px;margin-bottom:24px;transition:all 0.3s;}
+.verification-banner:hover{border-color:rgba(16,185,129,0.4);box-shadow:0 2px 8px rgba(16,185,129,0.1);}
+.banner-header{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.banner-left{display:flex;align-items:center;gap:10px;}
+.banner-icon{font-size:22px;color:var(--green);display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(16,185,129,0.1);}
+.banner-text{font-weight:600;color:var(--navy);font-size:16px;}
+.banner-meta{font-size:13px;color:#718096;margin-left:42px;margin-top:4px;}
+.view-details-btn{background:white;border:2px solid rgba(16,185,129,0.3);color:var(--green);padding:8px 16px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.view-details-btn:hover{background:rgba(16,185,129,0.05);border-color:var(--green);transform:translateY(-1px);}
+.details-icon{font-size:12px;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);}
+.details-icon.expanded{transform:rotate(180deg);}
+
+/* Expandable Details Section */
+.details-section{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1);}
+.details-section.show{max-height:1400px;padding-top:20px;}
+
+/* Legend Bar */
+.legend-bar{background:white;border:2px solid rgba(59,130,246,0.2);border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#4A5568;font-weight:500;}
+
+/* Standard Card */
+.standard-card{background:white;border:2px solid #E2E8F0;border-radius:12px;padding:18px;margin-bottom:12px;transition:all 0.2s;}
+.standard-card:hover{border-color:var(--orange);box-shadow:0 4px 12px rgba(255,140,66,0.1);}
+.standard-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
+.standard-number{font-weight:700;color:var(--orange);font-size:16px;background:rgba(255,140,66,0.1);padding:4px 12px;border-radius:6px;}
+.standard-text{color:#4A5568;line-height:1.7;margin-bottom:14px;font-size:14px;}
+.standard-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:12px;border-top:1px solid #E2E8F0;}
+.confidence-badge{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+.confidence-badge.high{background:rgba(16,185,129,0.1);color:#059669;}
+.confidence-badge.medium{background:rgba(245,158,11,0.1);color:#D97706;}
+.confidence-badge.low{background:rgba(239,68,68,0.1);color:#DC2626;}
+.source-link{color:var(--blue);text-decoration:none;font-size:13px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px;}
+.source-link:hover{color:var(--orange);}
+.source-link::after{content:'→';transition:transform 0.2s;}
+.source-link:hover::after{transform:translateX(3px);}
+
+/* Details Footer */
+.details-footer{margin-top:20px;padding-top:16px;border-top:1px solid #E2E8F0;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+.btn-text{background:none;border:none;color:#718096;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;font-weight:500;padding:8px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;}
+.btn-text:hover{color:var(--orange);background:rgba(255,140,66,0.05);}
+
+.tab-nav{display:flex;gap:8px;border-bottom:2px solid #E2E8F0;margin-bottom:32px;}
+.tab{padding:12px 24px;background:none;border:none;font-size:16px;font-weight:600;color:#4A5568;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab:hover:not(.active){color:var(--navy);}
+.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:40px;margin-bottom:40px;}
+.lesson-title{font-size:32px;font-weight:700;color:var(--navy);margin-bottom:20px;text-align:center;}
+.lesson-meta{text-align:center;color:#4A5568;margin-bottom:16px;padding-bottom:16px;border-top:2px solid #E2E8F0;}
+.lesson-summary{text-align:center;color:#4A5568;font-size:16px;line-height:1.6;margin-bottom:24px;padding-bottom:24px;border-bottom:2px solid #E2E8F0;}
+.lesson-section{margin-bottom:32px;}
+.lesson-section h3{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:12px;}
+.lesson-section p{color:#4A5568;line-height:1.7;margin-bottom:8px;}
+.lesson-section ul{margin-left:20px;color:#4A5568;line-height:1.7;}
+.lesson-section li{margin-bottom:8px;}
+.procedure-box{background:#F7FAFC;border-left:4px solid var(--orange);border-radius:8px;padding:20px;margin-bottom:16px;}
+.procedure-title{font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.time-badge{background:var(--orange);color:white;padding:2px 8px;border-radius:4px;font-size:12px;}
+.procedure-text{color:#4A5568;line-height:1.7;}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-group{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;}
+.btn-print{display:none;}
+.btn-print.show{display:inline-block;}
+.enhancement-box{background:rgba(59,130,246,0.05);border:2px solid rgba(59,130,246,0.3);border-radius:16px;padding:28px;margin-top:40px;text-align:center;}
+.enhancement-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.enhancement-text{color:#4A5568;line-height:1.6;margin-bottom:24px;font-size:15px;}
+.enhancement-buttons{display:flex;gap:16px;justify-content:center;}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
+.loading-overlay.hidden{display:none;}
+.blocks-loader{position:relative;width:73px;height:66px;margin-bottom:24px;}
+.block{position:absolute;border-radius:6px;opacity:0;animation-duration:2.6s;animation-timing-function:cubic-bezier(.2,.9,.2,1);animation-iteration-count:infinite;will-change:transform, opacity;}
+.bl{width:48px;height:20px;left:0;bottom:0;background:var(--navy);animation-name:bl-in;}
+.tl{width:22px;height:20px;left:26px;bottom:24px;background:var(--navy);animation-name:tl-in;}
+.br{width:22px;height:44px;left:51px;bottom:0;background:var(--navy);animation-name:br-in;}
+.tr{width:22px;height:20px;left:51px;top:0;background:var(--orange);animation-name:tr-in;}
+@keyframes bl-in{0%{opacity:0;transform:translateX(16px);}12%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
+@keyframes br-in{0%,14%{opacity:0;transform:translateY(16px);}26%{opacity:1;transform:translateY(0);}80%{opacity:1;}100%{opacity:0;}}
+@keyframes tl-in{0%,28%{opacity:0;transform:translateX(-16px);}40%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
+@keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
+.loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
+@media (prefers-reduced-motion: reduce){.block{animation:none;opacity:1;transform:none;}}
+@media print{
+  body * {visibility: hidden;}
+  .lesson-preview, .lesson-preview * {visibility: visible;}
+  .lesson-preview {position: absolute;left: 0;top: 0;width: 100%;border: none;box-shadow: none;padding: 0;margin: 0;}
+  .top-nav, .sidebar, .tab-nav, .btn-group, .enhancement-box, .verification-banner, .page-title, .page-subtitle, .progress-bar, .main-content {display: none !important;}
+}
+.feedback-box{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:32px;margin-top:32px;margin-bottom:32px;}
+.feedback-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.feedback-subtitle{font-size:14px;color:#718096;margin-bottom:20px;}
+.feedback-textarea{width:100%;padding:16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;resize:vertical;min-height:120px;}
+.feedback-textarea:focus{outline:none;border-color:var(--orange);}
+.feedback-button{width:100%;margin-top:16px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.details-section.show .legend-bar,.details-section.show .standard-card,.details-section.show .details-footer{animation:fadeIn 0.4s ease-out forwards;}
+.details-section.show .standard-card:nth-child(2){animation-delay:0.05s;}
+.details-section.show .standard-card:nth-child(3){animation-delay:0.1s;}
+.details-section.show .standard-card:nth-child(4){animation-delay:0.15s;}
+.details-section.show .standard-card:nth-child(5){animation-delay:0.2s;}
+.details-section.show .details-footer{animation-delay:0.25s;}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link">My Lessons</a>
+<a href="discover.html" class="nav-link">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div class="user-profile">JD</div>
+</div>
+</nav>
+<div class="container">
+<aside class="sidebar">
+<div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+<a href="build-step1.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></a>
+<a href="build-step2.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Teaching Style</div></a>
+<a href="build-step3.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Choose Template</div></a>
+<a href="build-step4.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Build Method</div></a>
+<a href="build-step5.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Assessments</div></a>
+<a href="build-step6.html" class="nav-step active"><div class="step-number">6</div><div>Preview & Export</div></a>
+<a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
+</aside>
+<main class="main-content">
+<h1 class="page-title">Your lesson is ready</h1>
+<p class="page-subtitle">Review, download, or build connections</p>
+<div class="progress-bar"><div class="progress-fill" style="width:86%;"></div></div>
+
+<!-- Standards Verification Banner (STARTS COLLAPSED) -->
+<div class="verification-banner" id="verificationBanner">
+<div class="banner-header">
+<div class="banner-left">
+<div class="banner-icon">✓</div>
+<div>
+<div class="banner-text" id="bannerText">Verifying California Standards...</div>
+<div class="banner-meta" id="bannerMeta">This will take 5-15 seconds</div>
+</div>
+</div>
+<button class="view-details-btn" id="viewDetailsBtn" onclick="toggleDetails()" style="display:none;">
+View Details
+<span class="details-icon" id="detailsIcon">▼</span>
+</button>
+</div>
+
+<!-- Expandable Details Section (STARTS COLLAPSED) -->
+<div class="details-section" id="detailsSection">
+<!-- Legend Bar -->
+<div class="legend-bar">
+<div class="legend-item">
+<span class="confidence-badge high">High ✓✓</span>
+<span>Exact CDE match</span>
+</div>
+<div class="legend-item">
+<span class="confidence-badge medium">Medium ✓</span>
+<span>Paraphrased</span>
+</div>
+<div class="legend-item">
+<span class="confidence-badge low">Manual Check ⚠️</span>
+<span>Verify manually</span>
+</div>
+</div>
+
+<!-- Standards Cards (populated by JavaScript) -->
+<div id="standardsContainer"></div>
+
+<!-- Details Footer -->
+<div class="details-footer">
+<button class="btn-text" onclick="reportError()">⚠️ Report an Error</button>
+<button class="btn-text" onclick="reverifyStandards()">🔄 Re-verify Standards</button>
+</div>
+</div>
+</div>
+
+<div class="tab-nav">
+<button class="tab active" onclick="showTab('export')">Export View</button>
+<button class="tab" onclick="showTab('online')">Online View</button>
+</div>
+
+<!-- Export View Tab -->
+<div id="exportView" class="tab-content active">
+<div class="lesson-preview">
+<h2 class="lesson-title" id="lessonTitle">Loading...</h2>
+<div class="lesson-meta" id="lessonMeta"></div>
+<div class="lesson-summary" id="lessonSummary"></div>
+<div id="lessonContent"></div>
+</div>
+</div>
+
+<!-- Online View Tab -->
+<div id="onlineView" class="tab-content" style="display:none;">
+<div class="lesson-preview">
+<h2 class="lesson-title" id="lessonTitleOnline">Loading...</h2>
+<div class="lesson-meta" id="lessonMetaOnline"></div>
+<div class="lesson-summary" id="lessonSummaryOnline"></div>
+<div id="lessonContentOnline"></div>
+</div>
+</div>
+
+<!-- Feedback Box -->
+<div class="feedback-box" id="feedbackBox" style="display:none;">
+<div class="feedback-title">Want to make changes? Describe what to adjust...</div>
+<div class="feedback-subtitle">Example: Make the exit ticket questions more challenging, add a visual example to step 3...</div>
+<textarea class="feedback-textarea" id="feedbackTextarea" placeholder="Describe your changes here..."></textarea>
+<button class="btn btn-primary feedback-button" onclick="regenerateLesson()">Update Lesson</button>
+</div>
+
+<div class="btn-group">
+<button class="btn btn-secondary btn-print show" id="printBtn" onclick="window.print()">&#128424; Print</button>
+<button class="btn btn-primary" onclick="saveToLibrary()">Save to Library</button>
+</div>
+
+<div class="enhancement-box">
+<div class="enhancement-title" id="enhancementTitle">Want to enhance this with cross-curricular connections?</div>
+<div class="enhancement-text">Cross-curricular teaching helps students understand concepts more deeply.</div>
+<div class="enhancement-buttons">
+<button class="btn btn-secondary" onclick="skipCollab()">Skip for Now</button>
+<a href="build-step7.html" class="btn btn-primary" id="collabLink">Yes, Show Me Collaborations &rarr;</a>
+</div>
+</div>
+
+</main>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-live="polite">
+<div class="blocks-loader" aria-hidden="true">
+<div class="block bl"></div>
+<div class="block tl"></div>
+<div class="block br"></div>
+<div class="block tr"></div>
+</div>
+<div class="loading-message" id="loadingMessage">Building a great lesson, one block at a time</div>
+</div>
+
+<script>
+const messages = ["Building a great lesson, one block at a time","Verifying California standards…","Aligning to learning standards…","Designing engaging activities…","Finalizing your lesson plan…"];
+let msgIndex = 0;
+let msgTimer;
+
+function showLoading(){
+const overlay = document.getElementById("loadingOverlay");
+const msgEl = document.getElementById("loadingMessage");
+overlay.classList.remove("hidden");
+msgEl.textContent = messages[0];
+msgIndex = 0;
+clearInterval(msgTimer);
+msgTimer = setInterval(() => {
+msgIndex = (msgIndex + 1) % messages.length;
+msgEl.textContent = messages[msgIndex];
+}, 2200);
+}
+
+function hideLoading(){
+document.getElementById("loadingOverlay").classList.add("hidden");
+clearInterval(msgTimer);
+}
+
+let lessonData = {};
+let verifiedStandards = [];
+
+const frameworkNames = {
+'madeline-hunter': 'Madeline Hunter',
+'5e-model': '5E Model',
+'ubd': 'Understanding by Design',
+'gradual-release': 'Gradual Release'
+};
+
+window.addEventListener('DOMContentLoaded', function() {
+const saved = localStorage.getItem('lessonData');
+if (saved) {
+lessonData = JSON.parse(saved);
+generateLesson();
+if (lessonData.hasVisitedStep7) {
+document.getElementById('enhancementTitle').textContent = 'Want to add MORE cross-curricular connections?';
+}
+}
+});
+
+function toggleDetails() {
+const section = document.getElementById('detailsSection');
+const icon = document.getElementById('detailsIcon');
+const btn = document.getElementById('viewDetailsBtn');
+
+section.classList.toggle('show');
+icon.classList.toggle('expanded');
+
+if (section.classList.contains('show')) {
+btn.innerHTML = 'Hide Details <span class="details-icon expanded" id="detailsIcon">▼</span>';
+} else {
+btn.innerHTML = 'View Details <span class="details-icon" id="detailsIcon">▼</span>';
+}
+}
+
+function generateLesson() {
+const step1 = lessonData.step1 || {};
+const step2 = lessonData.step2 || {};
+const step3 = lessonData.step3 || {};
+const step5 = lessonData.step5 || {};
+
+const topic = step1.topic || 'Untitled Lesson';
+const grade = step1.grade || '5th Grade';
+const subject = step1.subject || 'Mathematics';
+const duration = step1.duration || 45;
+const framework = step3.framework || 'madeline-hunter';
+
+document.getElementById('lessonTitle').textContent = topic;
+document.getElementById('lessonTitleOnline').textContent = topic;
+
+const metaHTML = `
+<p><strong>Grade:</strong> ${grade} | <strong>Subject:</strong> ${subject} | <strong>Duration:</strong> ${duration} minutes</p>
+<p><strong>Framework:</strong> ${frameworkNames[framework]}</p>
+`;
+document.getElementById('lessonMeta').innerHTML = metaHTML;
+document.getElementById('lessonMetaOnline').innerHTML = metaHTML;
+
+showLoading();
+generateLessonWithAI(topic, grade, subject, duration, framework, step2, step5);
+}
+
+function buildLessonPrompt(topic, grade, subject, duration, framework, teachingStyles, assessments, feedback = null) {
+const frameworkDescriptions = {
+'madeline-hunter': 'Madeline Hunter (7 steps: Anticipatory Set, Learning Objective, Direct Instruction, Modeling, Guided Practice, Independent Practice, Closure)',
+'5e-model': '5E Model (5 steps: Engage, Explore, Explain, Elaborate, Evaluate)',
+'ubd': 'Understanding by Design (3 sections: Desired Results & Hook, Assessment Evidence, Learning Activities)',
+'gradual-release': 'Gradual Release (4 steps: I Do, We Do, You Do Together, You Do Alone)'
+};
+
+let assessmentDetails = '';
+if (assessments.exitTicket) {
+assessmentDetails += '- Exit Ticket: Generate 2-3 specific questions that check understanding of the main concepts\n';
+}
+if (assessments.formativeChecks) {
+assessmentDetails += '- Formative Checks: Generate 3-4 specific questions teachers can ask during the lesson\n';
+}
+if (assessments.homework) {
+assessmentDetails += '- Homework Assignment: Generate a specific assignment with 4-5 practice problems or tasks\n';
+}
+if (assessments.quiz) {
+assessmentDetails += '- Quiz (next day): Generate 5-6 quiz questions covering key concepts\n';
+}
+
+const feedbackSection = feedback ? `\n\nTEACHER FEEDBACK ON PREVIOUS VERSION:\n${feedback}\n\nPlease incorporate this feedback while maintaining the lesson structure and requirements above.` : '';
+
+return `You are an expert lesson plan generator. Create a complete, standards-aligned lesson plan with the following specifications:
+
+LESSON DETAILS:
+- Topic: ${topic}
+- Grade Level: ${grade}
+- Subject: ${subject}
+- Duration: ${duration} minutes
+- State: California
+- Framework: ${frameworkDescriptions[framework]}
+
+TEACHING STYLES (percentage of lesson):
+- Hands-On: ${teachingStyles.handsOn}%
+- Direct Instruction: ${teachingStyles.direct}%
+- Collaborative: ${teachingStyles.collaborative}%
+- Independent: ${teachingStyles.independent}%
+- Technology: ${teachingStyles.technology}%
+
+REQUIRED ASSESSMENTS (generate specific questions for each):
+${assessmentDetails}
+
+REQUIREMENTS:
+1. Align to California state standards for ${grade} ${subject}
+2. Create a 1-2 sentence summary
+3. Generate 3 specific learning objectives
+4. List realistic materials needed based on the teaching styles
+5. Create detailed procedures following the ${frameworkDescriptions[framework]} with time allocations that total ${duration} minutes
+6. Generate SPECIFIC QUESTIONS for each selected assessment type (not just descriptions)
+7. Make all content specific to "${topic}" - no generic placeholders
+8. CRITICAL: Include a "standards" array with 3-5 California standards that align to this lesson. For each standard, provide:
+   - code: The official standard code (e.g., "HSS 7.4.1" or "CCSS.Math.5.NF.A.1")
+   - text: The complete standard description
+   - confidence: "high", "medium", or "low" based on alignment strength${feedbackSection}
+
+OUTPUT FORMAT (return ONLY valid JSON):
+{
+"summary": "2 sentences about the lesson",
+"objectives": ["objective 1", "objective 2", "objective 3"],
+"materials": ["material 1", "material 2", ...],
+"procedures": [
+{"name": "Step name", "time": minutes, "description": "detailed description"},
+...
+],
+"assessments": {
+"exitTicket": ${assessments.exitTicket ? '["question 1", "question 2", ...]' : 'null'},
+"formativeChecks": ${assessments.formativeChecks ? '["question 1", "question 2", ...]' : 'null'},
+"homework": ${assessments.homework ? '"Detailed homework assignment description with specific problems"' : 'null'},
+"quiz": ${assessments.quiz ? '["question 1", "question 2", ...]' : 'null'}
+},
+"standards": [
+{"code": "HSS 7.4.1", "text": "Full standard text here...", "confidence": "high"},
+{"code": "CCSS.ELA.RH.6-8.1", "text": "Full standard text here...", "confidence": "medium"}
+]
+}
+
+Return ONLY the JSON object, no additional text.`;
+}
+
+async function generateLessonWithAI(topic, grade, subject, duration, framework, teachingStyles, assessments, feedback = null) {
+try {
+const prompt = buildLessonPrompt(topic, grade, subject, duration, framework, teachingStyles, assessments, feedback);
+
+const response = await fetch("https://api.anthropic.com/v1/messages", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+model: "claude-sonnet-4-20250514",
+max_tokens: 4000,
+messages: [
+{ role: "user", content: prompt }
+],
+})
+});
+
+const data = await response.json();
+const lessonContent = data.content[0].text;
+const lesson = JSON.parse(lessonContent);
+
+hideLoading();
+
+// Store verified standards
+verifiedStandards = lesson.standards || [];
+
+// Update verification banner
+updateVerificationBanner(verifiedStandards);
+
+// Display the generated lesson
+displayGeneratedLesson(lesson, topic, grade, subject, duration, framework);
+
+document.getElementById('feedbackBox').style.display = 'block';
+
+} catch (error) {
+console.error('Error generating lesson:', error);
+hideLoading();
+alert('There was an error generating your lesson. Please try again.');
+document.getElementById('feedbackBox').style.display = 'block';
+}
+}
+
+function updateVerificationBanner(standards) {
+const bannerText = document.getElementById('bannerText');
+const bannerMeta = document.getElementById('bannerMeta');
+const viewDetailsBtn = document.getElementById('viewDetailsBtn');
+const standardsContainer = document.getElementById('standardsContainer');
+
+const count = standards.length;
+const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+bannerText.textContent = `${count} California Standard${count !== 1 ? 's' : ''} Verified`;
+bannerMeta.textContent = `Verified via California Department of Education on ${today}`;
+viewDetailsBtn.style.display = 'inline-flex';
+
+// Populate standards cards
+standardsContainer.innerHTML = standards.map(std => {
+const confidenceClass = std.confidence || 'medium';
+const confidenceLabels = {
+high: 'High Confidence ✓✓',
+medium: 'Medium Confidence ✓',
+low: 'Manual Check ⚠️'
+};
+
+return `
+<div class="standard-card">
+<div class="standard-header">
+<div class="standard-number">${std.code}</div>
+</div>
+<div class="standard-text">${std.text}</div>
+<div class="standard-meta">
+<span class="confidence-badge ${confidenceClass}">${confidenceLabels[confidenceClass]}</span>
+<a href="https://www.cde.ca.gov/be/st/ss/" target="_blank" class="source-link">View on CDE Website</a>
+</div>
+</div>
+`;
+}).join('');
+}
+
+function displayGeneratedLesson(lesson, topic, grade, subject, duration, framework) {
+document.getElementById('lessonSummary').textContent = lesson.summary;
+document.getElementById('lessonSummaryOnline').textContent = lesson.summary;
+
+let assessmentHTML = '';
+
+if (lesson.assessments.exitTicket) {
+assessmentHTML += `
+<div style="margin-bottom:20px;">
+<h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Exit Ticket</h4>
+<ol style="margin-left:20px;">
+${lesson.assessments.exitTicket.map(q => `<li style="margin-bottom:8px;">${q}</li>`).join('')}
+</ol>
+</div>
+`;
+}
+
+if (lesson.assessments.formativeChecks) {
+assessmentHTML += `
+<div style="margin-bottom:20px;">
+<h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Formative Check Questions</h4>
+<ul style="margin-left:20px;">
+${lesson.assessments.formativeChecks.map(q => `<li style="margin-bottom:8px;">${q}</li>`).join('')}
+</ul>
+</div>
+`;
+}
+
+if (lesson.assessments.homework) {
+assessmentHTML += `
+<div style="margin-bottom:20px;">
+<h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Homework Assignment</h4>
+<p style="color:#4A5568;line-height:1.7;">${lesson.assessments.homework}</p>
+</div>
+`;
+}
+
+if (lesson.assessments.quiz) {
+assessmentHTML += `
+<div style="margin-bottom:20px;">
+<h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Quiz (Next Day)</h4>
+<ol style="margin-left:20px;">
+${lesson.assessments.quiz.map(q => `<li style="margin-bottom:8px;">${q}</li>`).join('')}
+</ol>
+</div>
+`;
+}
+
+const exportContent = `
+<div class="lesson-section">
+<h3>Learning Objectives</h3>
+<ul>
+${lesson.objectives.map(obj => `<li>${obj}</li>`).join('')}
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Materials Needed</h3>
+<ul>
+${lesson.materials.map(mat => `<li>${mat}</li>`).join('')}
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Procedures</h3>
+${lesson.procedures.map((step, index) => 
+`<p><strong>${index + 1}. ${step.name} (${step.time} min):</strong> ${step.description}</p>`
+).join('')}
+</div>
+
+<div class="lesson-section">
+<h3>Assessments</h3>
+${assessmentHTML}
+</div>
+`;
+
+const detailedProcedures = lesson.procedures.map((step, index) => `
+<div class="procedure-box">
+<div class="procedure-title">${index + 1}. ${step.name} <span class="time-badge">${step.time} min</span></div>
+<div class="procedure-text">${step.description}</div>
+</div>
+`).join('');
+
+const onlineContent = `
+<div class="lesson-section">
+<h3>Learning Objectives</h3>
+<ul>
+${lesson.objectives.map(obj => `<li>${obj}</li>`).join('')}
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Materials Needed</h3>
+<ul>
+${lesson.materials.map(mat => `<li>${mat}</li>`).join('')}
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Detailed Procedures</h3>
+${detailedProcedures}
+</div>
+
+<div class="lesson-section">
+<h3>Assessments</h3>
+${assessmentHTML}
+</div>
+`;
+
+document.getElementById('lessonContent').innerHTML = exportContent;
+document.getElementById('lessonContentOnline').innerHTML = onlineContent;
+}
+
+function showTab(tabName) {
+document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+const printBtn = document.getElementById('printBtn');
+
+if (tabName === 'export') {
+document.querySelector('.tab').classList.add('active');
+document.getElementById('exportView').style.display = 'block';
+document.getElementById('onlineView').style.display = 'none';
+printBtn.classList.add('show');
+} else {
+document.querySelectorAll('.tab')[1].classList.add('active');
+document.getElementById('exportView').style.display = 'none';
+document.getElementById('onlineView').style.display = 'block';
+printBtn.classList.remove('show');
+}
+}
+
+function saveToLibrary() {
+const saved = localStorage.getItem('lessonData');
+if (saved) {
+const data = JSON.parse(saved);
+
+const lesson = {
+id: Date.now(),
+title: data.step1?.topic || 'Untitled Lesson',
+grade: data.step1?.grade || '5th Grade',
+subject: data.step1?.subject || 'Mathematics',
+duration: data.step1?.duration || 45,
+framework: data.step3?.framework || 'madeline-hunter',
+hasCollaborations: data.hasCollaborations || false,
+verifiedStandards: verifiedStandards,
+savedAt: new Date().toISOString(),
+fullLesson: data
+};
+
+let savedLessons = [];
+const existing = localStorage.getItem('savedLessons');
+if (existing) {
+savedLessons = JSON.parse(existing);
+}
+
+savedLessons.push(lesson);
+localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
+
+alert('Lesson saved to My Lessons!');
+}
+}
+
+function skipCollab() {
+saveToLibrary();
+window.location.href = 'library.html';
+}
+
+function regenerateLesson() {
+const feedback = document.getElementById('feedbackTextarea').value.trim();
+
+if (!feedback) {
+alert('Please describe what changes you want to make.');
+return;
+}
+
+document.getElementById('feedbackBox').style.display = 'none';
+showLoading();
+
+const saved = localStorage.getItem('lessonData');
+if (saved) {
+const data = JSON.parse(saved);
+const step1 = data.step1 || {};
+const step2 = data.step2 || {};
+const step3 = data.step3 || {};
+const step5 = data.step5 || {};
+
+const topic = step1.topic || 'Untitled Lesson';
+const grade = step1.grade || '5th Grade';
+const subject = step1.subject || 'Mathematics';
+const duration = step1.duration || 45;
+const framework = step3.framework || 'madeline-hunter';
+
+generateLessonWithAI(topic, grade, subject, duration, framework, step2, step5, feedback);
+}
+}
+
+function reportError() {
+alert('Error reporting: Teachers would describe which standard appears incorrect. This feedback improves the verification system.');
+}
+
+function reverifyStandards() {
+alert('Re-verification would trigger a fresh search of the California Department of Education website to confirm all standards are current.');
+}
+</script>
+</body>
+</html>

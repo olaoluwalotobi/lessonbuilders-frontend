@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Build Section by Section - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.container{max-width:900px;margin:0 auto;padding:40px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
+.progress-tracker{background:white;border:2px solid #E2E8F0;border-radius:12px;padding:20px;margin-bottom:32px;text-align:center;}
+.progress-text{font-size:16px;font-weight:600;color:var(--navy);}
+.section-card{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:32px;margin-bottom:32px;}
+.section-title{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.section-description{font-size:14px;color:#718096;margin-bottom:20px;}
+.form-label{display:block;font-weight:600;margin-bottom:8px;color:var(--navy);font-size:15px;}
+.form-textarea{width:100%;padding:12px 16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;resize:vertical;min-height:150px;}
+.form-textarea:focus{outline:none;border-color:var(--orange);}
+.recommendation-box{background:rgba(255,140,66,0.05);border:2px dashed rgba(255,140,66,0.3);border-radius:12px;padding:20px;margin-top:20px;cursor:pointer;transition:all 0.3s;}
+.recommendation-box:hover{background:rgba(255,140,66,0.1);}
+.recommendation-header{display:flex;align-items:center;justify-content:space-between;font-weight:600;color:var(--navy);font-size:16px;margin-bottom:0;user-select:none;}
+.recommendation-icon{font-size:18px;transition:transform 0.3s;}
+.recommendation-icon.expanded{transform:rotate(180deg);}
+.recommendation-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease;margin-top:0;}
+.recommendation-content.show{max-height:400px;margin-top:16px;}
+.recommendation-content p{color:#4A5568;line-height:1.7;font-size:15px;margin:0;}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link">My Lessons</a>
+<a href="discover.html" class="nav-link">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div class="user-profile">JD</div>
+</div>
+</nav>
+<div class="container">
+<h1 class="page-title">Build your lesson</h1>
+<p class="page-subtitle" id="frameworkName">Madeline Hunter Framework</p>
+
+<div class="progress-tracker">
+<div class="progress-text" id="progressText">Section 1 of 7</div>
+</div>
+
+<div class="section-card" id="sectionCard">
+<div class="section-title" id="sectionTitle">Anticipatory Set</div>
+<div class="section-description" id="sectionDescription">How will you hook students and activate prior knowledge?</div>
+<label class="form-label">Your notes:</label>
+<textarea class="form-textarea" id="sectionTextarea" placeholder="Example: Show a pizza cut into slices. Ask: If I eat 2 out of 8 slices, what fraction did I eat?"></textarea>
+
+<div class="recommendation-box" id="recommendationBox">
+<div class="recommendation-header" onclick="toggleRecommendation()">
+<span>Recommendation</span>
+<span class="recommendation-icon" id="recommendationIcon">&#9660;</span>
+</div>
+<div class="recommendation-content" id="recommendationContent">
+<p id="recommendationText">Loading recommendation...</p>
+</div>
+</div>
+</div>
+
+<div class="btn-group">
+<button class="btn btn-secondary" onclick="previousSection()" id="prevBtn">&larr; Back</button>
+<button class="btn btn-primary" onclick="nextSection()" id="nextBtn">Next Section &rarr;</button>
+</div>
+</div>
+
+<script>
+const frameworks = {
+  'madeline-hunter': {
+    name: 'Madeline Hunter',
+    sections: [
+      { title: 'Anticipatory Set', description: 'How will you hook students and activate prior knowledge?', placeholder: 'Example: Show a pizza cut into slices. Ask: If I eat 2 out of 8 slices, what fraction did I eat?' },
+      { title: 'Learning Objective', description: 'What will students learn? Make it clear and measurable.', placeholder: 'Example: Students will be able to identify and compare fractions using visual models.' },
+      { title: 'Input/Direct Instruction', description: 'What information and skills will you teach directly?', placeholder: 'Example: Explain numerator vs denominator. Show how to write fractions. Demonstrate with fraction circles.' },
+      { title: 'Modeling', description: 'How will you demonstrate the skill or process?', placeholder: 'Example: Think-aloud while comparing 1/2 and 1/4 using visual models. Show step-by-step reasoning.' },
+      { title: 'Guided Practice', description: 'How will students practice with your support?', placeholder: 'Example: Students work in pairs with fraction circles, teacher circulates and provides feedback.' },
+      { title: 'Independent Practice', description: 'How will students practice on their own?', placeholder: 'Example: Complete worksheet with fraction comparison problems. Draw visual models for 5 fractions.' },
+      { title: 'Closure', description: 'How will you wrap up and review key points?', placeholder: 'Example: Quick share - what is one thing you learned about fractions? Preview tomorrow&apos;s lesson on adding fractions.' }
+    ]
+  },
+  '5e-model': {
+    name: '5E Model',
+    sections: [
+      { title: 'Engage', description: 'How will you capture attention and generate interest?', placeholder: 'Example: Show real-world fraction examples - measuring cups, pizza slices, chocolate bars. Ask: Where do you see fractions?' },
+      { title: 'Explore', description: 'What hands-on activity will students do to explore the concept?', placeholder: 'Example: Students use fraction manipulatives to create and compare different fractions. Discover patterns.' },
+      { title: 'Explain', description: 'How will you introduce formal terms and explanations?', placeholder: 'Example: Define numerator and denominator. Explain why 1/2 is larger than 1/4 using student discoveries.' },
+      { title: 'Elaborate', description: 'How will students apply learning to new situations?', placeholder: 'Example: Real-world problem: You have 3/4 of a candy bar and your friend has 2/3. Who has more? Explain.' },
+      { title: 'Evaluate', description: 'How will you assess student understanding?', placeholder: 'Example: Exit ticket - draw and label 2/5, compare it to 1/2, explain your reasoning.' }
+    ]
+  },
+  'ubd': {
+    name: 'Understanding by Design',
+    sections: [
+      { title: 'Desired Results & Hook', description: 'What should students understand and be able to do? How will you hook them?', placeholder: 'Example: Students will understand that fractions represent parts of a whole and can be compared. Hook: Real pizza party scenario.' },
+      { title: 'Assessment Evidence', description: 'How will you know students have learned? What will they produce?', placeholder: 'Example: Students create a visual fraction guide showing 5 fractions with drawings and explanations of which is larger/smaller.' },
+      { title: 'Learning Activities & Performance Task', description: 'What activities and tasks will lead to the desired results?', placeholder: 'Example: Fraction circles exploration, comparing fractions worksheet, real-world fraction problems, create fraction visual aid.' }
+    ]
+  },
+  'gradual-release': {
+    name: 'Gradual Release',
+    sections: [
+      { title: 'I Do (Teacher Models)', description: 'How will you demonstrate the skill with full support?', placeholder: 'Example: Teacher shows how to identify fractions using fraction circles. Explains thinking aloud while comparing 1/2 and 1/3.' },
+      { title: 'We Do (Guided Practice)', description: 'How will you practice together with students?', placeholder: 'Example: As a class, work through 3 fraction problems together. Students suggest answers, teacher guides and corrects.' },
+      { title: 'You Do Together (Collaborative)', description: 'How will students practice with peers?', placeholder: 'Example: Partner work - use manipulatives to create and compare fractions. Check with each other before asking teacher.' },
+      { title: 'You Do Alone (Independent)', description: 'How will students demonstrate mastery independently?', placeholder: 'Example: Individual worksheet - identify, draw, and compare 8 different fractions. Complete exit ticket.' }
+    ]
+  }
+};
+
+let currentFramework = 'madeline-hunter';
+let currentSectionIndex = 0;
+let sectionData = {};
+let lessonInfo = {};
+
+// Recommendation templates for each framework section
+const recommendations = {
+  'madeline-hunter': [
+    { // Anticipatory Set
+      template: 'Show {topic_example} and ask students: "{question}" This activates prior knowledge while creating an engaging, relatable entry point that connects to their everyday experiences.'
+    },
+    { // Learning Objective
+      template: 'Students will be able to {skill} {topic}. Make it measurable and observable - use action verbs like "identify," "compare," "explain," or "demonstrate" so students know exactly what success looks like.'
+    },
+    { // Input/Direct Instruction
+      template: 'Explain the key concepts of {topic} using clear definitions and visual aids. Break down {topic} into manageable parts, showing how each piece connects. Use {grade_level} appropriate language and multiple representations.'
+    },
+    { // Modeling
+      template: 'Demonstrate {topic} step-by-step while thinking aloud. For example, show how to {action} while explaining your reasoning: "I\'m doing this because..." This makes your expert thinking visible to {grade_level} students.'
+    },
+    { // Guided Practice
+      template: 'Have students practice {topic} in pairs or small groups while you circulate. Provide immediate feedback and ask guiding questions like "How did you know?" or "What would happen if...?" This scaffolds their learning of {topic}.'
+    },
+    { // Independent Practice
+      template: 'Students work individually on {topic} problems or tasks. This might include a worksheet, project, or practice problems. Keep it focused on today\'s {grade_level} learning objective so you can assess true understanding.'
+    },
+    { // Closure
+      template: 'Wrap up with a quick review: "What did we learn about {topic} today?" Preview tomorrow\'s lesson and make the connection clear. This helps {grade_level} students consolidate learning and see the bigger picture.'
+    }
+  ],
+  '5e-model': [
+    { // Engage
+      template: 'Capture attention with a real-world connection to {topic}. Show {topic_example} and ask: "Where have you seen this before?" This hooks {grade_level} students by making {subject} relevant to their lives.'
+    },
+    { // Explore
+      template: 'Students explore {topic} hands-on with manipulatives, experiments, or activities. Let them discover patterns and relationships through guided exploration. For {grade_level}, focus on tangible, concrete experiences with {topic}.'
+    },
+    { // Explain
+      template: 'Introduce formal terminology and concepts of {topic} using student discoveries from exploration. Connect their observations to academic language. For example: "You noticed that... in {subject}, we call this {topic}."'
+    },
+    { // Elaborate
+      template: 'Students apply {topic} to new situations or more complex problems. Pose scenarios like: "How would {topic} work if...?" This deepens understanding by having {grade_level} students transfer knowledge beyond the original context.'
+    },
+    { // Evaluate
+      template: 'Assess understanding of {topic} through an exit ticket, quiz, or performance task. Make it clear what mastery looks like for {grade_level}. Include both recall and application questions about {topic}.'
+    }
+  ],
+  'ubd': [
+    { // Desired Results & Hook
+      template: 'Students will understand that {topic} {big_idea}. Hook them with {topic_example} that raises questions and creates curiosity. The hook should make {grade_level} students wonder "why?" or "how?" about {topic}.'
+    },
+    { // Assessment Evidence
+      template: 'Students will demonstrate understanding of {topic} by creating, solving, or explaining {assessment_task}. Design the assessment so {grade_level} students must show transfer - applying {topic} knowledge in authentic ways beyond simple recall.'
+    },
+    { // Learning Activities & Performance Task
+      template: 'Sequence activities that build toward the assessment: introduce {topic}, practice with scaffolding, then apply independently. Include varied approaches - direct instruction, collaborative work, and hands-on exploration of {topic} for {grade_level}.'
+    }
+  ],
+  'gradual-release': [
+    { // I Do
+      template: 'Model {topic} with full teacher demonstration. Show exactly how to {action} while explaining each step. Use think-alouds so {grade_level} students can see your expert thinking about {topic} in real-time.'
+    },
+    { // We Do
+      template: 'Practice {topic} together as a class. Work through 2-3 examples where students contribute ideas and you guide them to correct answers. Ask questions like "What should we do next?" to engage {grade_level} students in the process.'
+    },
+    { // You Do Together
+      template: 'Students practice {topic} in pairs or small groups with peer support. They should check their work with each other before asking for teacher help. This builds collaborative problem-solving skills around {topic} for {grade_level}.'
+    },
+    { // You Do Alone
+      template: 'Students work independently on {topic} to demonstrate individual mastery. Provide clear success criteria and minimize teacher support. This is where you assess whether each {grade_level} student truly understands {topic}.'
+    }
+  ]
+};
+
+window.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    if (data.step3 && data.step3.framework) {
+      currentFramework = data.step3.framework;
+    }
+    if (data.sectionBySection) {
+      sectionData = data.sectionBySection;
+    }
+    if (data.step1) {
+      lessonInfo = {
+        topic: data.step1.topic || 'this concept',
+        grade: data.step1.grade || '5th Grade',
+        subject: data.step1.subject || 'Mathematics'
+      };
+    }
+  }
+  
+  updateDisplay();
+});
+
+function updateDisplay() {
+  const framework = frameworks[currentFramework];
+  const sections = framework.sections;
+  const section = sections[currentSectionIndex];
+  
+  document.getElementById('frameworkName').textContent = framework.name + ' Framework';
+  document.getElementById('progressText').textContent = `Section ${currentSectionIndex + 1} of ${sections.length}`;
+  document.getElementById('sectionTitle').textContent = section.title;
+  document.getElementById('sectionDescription').textContent = section.description;
+  document.getElementById('sectionTextarea').placeholder = section.placeholder;
+  
+  const savedText = sectionData[currentSectionIndex] || '';
+  document.getElementById('sectionTextarea').value = savedText;
+  
+  // Update recommendation
+  updateRecommendation();
+  
+  // Reset recommendation to collapsed state
+  const content = document.getElementById('recommendationContent');
+  const icon = document.getElementById('recommendationIcon');
+  content.classList.remove('show');
+  icon.classList.remove('expanded');
+  
+  if (currentSectionIndex === 0) {
+    document.getElementById('prevBtn').textContent = '\u2190 Back to Method';
+  } else {
+    document.getElementById('prevBtn').textContent = '\u2190 Previous Section';
+  }
+  
+  if (currentSectionIndex === sections.length - 1) {
+    document.getElementById('nextBtn').textContent = 'Continue to Assessments \u2192';
+  } else {
+    document.getElementById('nextBtn').textContent = 'Next Section \u2192';
+  }
+}
+
+function updateRecommendation() {
+  const recTemplate = recommendations[currentFramework][currentSectionIndex];
+  let recText = recTemplate.template;
+  
+  // Generate contextual examples
+  const topicLower = lessonInfo.topic.toLowerCase();
+  let topicExample = 'a real-world example';
+  let question = 'What do you notice?';
+  let action = 'work with this concept';
+  let bigIdea = 'involves important patterns and relationships';
+  let assessmentTask = 'a project or problem';
+  let skill = 'understand';
+  
+  // Context-specific examples based on topic keywords
+  if (topicLower.includes('fraction')) {
+    topicExample = 'a real pizza cut into slices';
+    question = 'If I eat 2 out of 8 slices, what fraction did I eat?';
+    action = 'identify and compare fractions';
+    bigIdea = 'represents parts of a whole and can be compared';
+    assessmentTask = 'visual fraction models with written explanations';
+    skill = 'identify, represent, and compare';
+  } else if (topicLower.includes('photosynthesis') || topicLower.includes('plant')) {
+    topicExample = 'a real plant in sunlight';
+    question = 'How do you think plants make their own food?';
+    action = 'explain the photosynthesis process';
+    bigIdea = 'shows how energy transfers in living systems';
+    assessmentTask = 'a diagram with labels explaining each step';
+    skill = 'describe and explain';
+  } else if (topicLower.includes('multiplication') || topicLower.includes('multiply')) {
+    topicExample = 'groups of objects (like 3 bags with 4 apples each)';
+    question = 'How can we count these quickly?';
+    action = 'solve multiplication problems';
+    bigIdea = 'represents repeated addition and scaling';
+    assessmentTask = 'word problems requiring multiplication';
+    skill = 'solve and apply';
+  } else if (topicLower.includes('persuasive') || topicLower.includes('writing')) {
+    topicExample = 'two different advertisements';
+    question = 'Which one convinces you more? Why?';
+    action = 'write persuasively';
+    bigIdea = 'uses specific techniques to influence readers';
+    assessmentTask = 'a persuasive paragraph with clear evidence';
+    skill = 'write and support arguments';
+  }
+  
+  // Replace placeholders
+  recText = recText.replace(/{topic}/g, lessonInfo.topic);
+  recText = recText.replace(/{topic_example}/g, topicExample);
+  recText = recText.replace(/{question}/g, question);
+  recText = recText.replace(/{grade_level}/g, lessonInfo.grade);
+  recText = recText.replace(/{subject}/g, lessonInfo.subject);
+  recText = recText.replace(/{action}/g, action);
+  recText = recText.replace(/{big_idea}/g, bigIdea);
+  recText = recText.replace(/{assessment_task}/g, assessmentTask);
+  recText = recText.replace(/{skill}/g, skill);
+  
+  document.getElementById('recommendationText').textContent = recText;
+}
+
+function toggleRecommendation() {
+  const content = document.getElementById('recommendationContent');
+  const icon = document.getElementById('recommendationIcon');
+  content.classList.toggle('show');
+  icon.classList.toggle('expanded');
+}
+
+function saveCurrentSection() {
+  const text = document.getElementById('sectionTextarea').value;
+  sectionData[currentSectionIndex] = text;
+  
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    lessonData = JSON.parse(saved);
+  }
+  
+  lessonData.sectionBySection = sectionData;
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+}
+
+function previousSection() {
+  saveCurrentSection();
+  
+  if (currentSectionIndex === 0) {
+    window.location.href = 'build-step4.html';
+  } else {
+    currentSectionIndex--;
+    updateDisplay();
+  }
+}
+
+function nextSection() {
+  saveCurrentSection();
+  
+  const framework = frameworks[currentFramework];
+  const sections = framework.sections;
+  
+  if (currentSectionIndex === sections.length - 1) {
+    window.location.href = 'build-step5.html';
+  } else {
+    currentSectionIndex++;
+    updateDisplay();
+  }
+}
+</script>
+</body>
+</html>

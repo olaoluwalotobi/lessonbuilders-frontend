@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Basic Information - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.container{display:flex;max-width:1400px;margin:0 auto;}
+.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+.step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
+.nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
+.main-content{flex:1;padding:40px 60px;max-width:900px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
+.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+.form-group{margin-bottom:24px;}
+.form-label{display:block;font-weight:600;margin-bottom:8px;color:var(--navy);font-size:15px;}
+.form-input,.form-select{width:100%;padding:12px 16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--orange);}
+.slider{width:100%;height:8px;border-radius:4px;background:#E2E8F0;appearance:none;cursor:pointer;}
+.slider::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);cursor:pointer;}
+.slider-value{text-align:center;margin-top:8px;font-weight:600;color:var(--navy);}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+.optional-section{background:rgba(255,140,66,0.05);border:2px dashed rgba(255,140,66,0.3);border-radius:12px;padding:20px;margin:32px 0;transition:all 0.3s;}
+.optional-section:hover{background:rgba(255,140,66,0.1);}
+.optional-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.optional-title{font-weight:600;color:var(--navy);font-size:16px;}
+.optional-icon{font-size:20px;transition:transform 0.3s;}
+.optional-icon.expanded{transform:rotate(180deg);}
+.optional-content{max-height:0;overflow:hidden;transition:max-height 0.3s;}
+.optional-content.show{max-height:1000px;margin-top:24px;}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link">My Lessons</a>
+<a href="discover.html" class="nav-link">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div class="user-profile">JD</div>
+</div>
+</nav>
+<div class="container">
+<aside class="sidebar">
+<div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+<a href="build-step1.html" class="nav-step active"><div class="step-number">1</div><div>Basic Information</div></a>
+<a href="build-step2.html" class="nav-step"><div class="step-number">2</div><div>Teaching Style</div></a>
+<a href="build-step3.html" class="nav-step"><div class="step-number">3</div><div>Choose Template</div></a>
+<a href="build-step4.html" class="nav-step"><div class="step-number">4</div><div>Build Method</div></a>
+<a href="build-step5.html" class="nav-step"><div class="step-number">5</div><div>Assessments</div></a>
+<a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
+<a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
+</aside>
+<main class="main-content">
+<h1 class="page-title">Tell us what you need</h1>
+<p class="page-subtitle">We&apos;ll align it to California standards</p>
+<div class="progress-bar"><div class="progress-fill" style="width:12%;"></div></div>
+
+<div class="form-group">
+<label class="form-label">Grade Level</label>
+<select class="form-select" id="gradeSelect">
+<option>Kindergarten</option>
+<option>1st Grade</option>
+<option>2nd Grade</option>
+<option>3rd Grade</option>
+<option>4th Grade</option>
+<option selected>5th Grade</option>
+<option>6th Grade</option>
+<option>7th Grade</option>
+<option>8th Grade</option>
+<option>9th Grade</option>
+<option>10th Grade</option>
+<option>11th Grade</option>
+<option>12th Grade</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">Subject</label>
+<select class="form-select" id="subjectSelect">
+<option selected>Mathematics</option>
+<option>English Language Arts (ELA)</option>
+<option>Science</option>
+<option>Social Studies / History</option>
+<option>Physical Education</option>
+<option>Arts</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">Lesson Topic</label>
+<input type="text" class="form-input" id="topicInput" placeholder="Example: Introduction to fractions">
+</div>
+
+<div class="form-group">
+<label class="form-label">State</label>
+<select class="form-select" id="stateSelect">
+<option selected>California</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">Lesson Duration</label>
+<input type="range" min="15" max="120" value="45" class="slider" id="durationSlider">
+<div class="slider-value" id="durationValue">45 minutes</div>
+</div>
+
+<div class="optional-section" id="optionalSection">
+<div class="optional-header" id="optionalHeader">
+<div class="optional-title">+ Additional Details (Optional)</div>
+<div class="optional-icon" id="optionalIcon">&#9660;</div>
+</div>
+<div class="optional-content" id="optionalContent">
+<div class="form-group">
+<label class="form-label">Class Size</label>
+<select class="form-select" id="classSizeSelect">
+<option>Small (1-15 students)</option>
+<option selected>Medium (16-25 students)</option>
+<option>Large (26-35 students)</option>
+<option>Very large (36+ students)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">My students include (select all that apply)</label>
+<div style="display:grid;gap:8px;">
+<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb1"> English Language Learners</label>
+<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb2"> Students with IEPs</label>
+<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb3"> Students with 504 plans</label>
+<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb4"> Gifted/advanced learners</label>
+<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb5"> Below grade level</label>
+<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb6"> Mixed ability classroom</label>
+</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Focus on specific standard (optional)</label>
+<input type="text" class="form-input" id="standardInput" placeholder="e.g., 5.NF.A.1">
+<div style="font-size:13px;color:#718096;margin-top:4px;">Leave blank to auto-select best standards</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Prior knowledge</label>
+<select class="form-select" id="priorKnowledgeSelect">
+<option>First time seeing this concept</option>
+<option selected>Have some background</option>
+<option>Review/reinforcement</option>
+<option>Advanced/extension</option>
+</select>
+</div>
+
+<div class="form-group">
+<label class="form-label">Additional context</label>
+<textarea class="form-input" id="contextTextarea" rows="4" style="resize:vertical;" placeholder="Special needs, timing, classroom setup, etc."></textarea>
+</div>
+</div>
+</div>
+
+<div class="btn-group">
+<a href="index.html" class="btn btn-secondary">&larr; Back to Home</a>
+<button class="btn btn-primary" onclick="saveAndContinue()">Next: Teaching Style &rarr;</button>
+</div>
+</main>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const savedData = localStorage.getItem('lessonData');
+  if (savedData) {
+    const data = JSON.parse(savedData);
+    if (data.step1) {
+      document.getElementById('gradeSelect').value = data.step1.grade || '5th Grade';
+      document.getElementById('subjectSelect').value = data.step1.subject || 'Mathematics';
+      document.getElementById('topicInput').value = data.step1.topic || '';
+      document.getElementById('stateSelect').value = data.step1.state || 'California';
+      document.getElementById('durationSlider').value = data.step1.duration || 45;
+      document.getElementById('durationValue').textContent = (data.step1.duration || 45) + ' minutes';
+      
+      if (data.step1.classSize) {
+        document.getElementById('classSizeSelect').value = data.step1.classSize;
+      }
+      if (data.step1.standardFocus) {
+        document.getElementById('standardInput').value = data.step1.standardFocus;
+      }
+      if (data.step1.priorKnowledge) {
+        document.getElementById('priorKnowledgeSelect').value = data.step1.priorKnowledge;
+      }
+      if (data.step1.additionalContext) {
+        document.getElementById('contextTextarea').value = data.step1.additionalContext;
+      }
+      if (data.step1.studentNeeds) {
+        for (let i = 0; i < 6; i++) {
+          const cb = document.getElementById('cb' + (i+1));
+          if (cb && data.step1.studentNeeds[i]) {
+            cb.checked = true;
+          }
+        }
+      }
+    }
+  }
+});
+
+function saveAndContinue() {
+  const grade = document.getElementById('gradeSelect').value;
+  const subject = document.getElementById('subjectSelect').value;
+  const topic = document.getElementById('topicInput').value;
+  const state = document.getElementById('stateSelect').value;
+  const duration = document.getElementById('durationSlider').value;
+  
+  const classSize = document.getElementById('classSizeSelect').value;
+  const standardFocus = document.getElementById('standardInput').value;
+  const priorKnowledge = document.getElementById('priorKnowledgeSelect').value;
+  const additionalContext = document.getElementById('contextTextarea').value;
+  
+  const studentNeeds = [];
+  for (let i = 1; i <= 6; i++) {
+    const cb = document.getElementById('cb' + i);
+    studentNeeds.push(cb ? cb.checked : false);
+  }
+  
+  if (!topic.trim()) {
+    alert('Please enter a lesson topic');
+    return;
+  }
+  
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    lessonData = JSON.parse(saved);
+  }
+  
+  lessonData.step1 = {
+    grade,
+    subject,
+    topic,
+    state,
+    duration: parseInt(duration),
+    classSize,
+    standardFocus,
+    priorKnowledge,
+    additionalContext,
+    studentNeeds
+  };
+  
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+  window.location.href = 'build-step2.html';
+}
+
+document.getElementById('durationSlider').addEventListener('input', function(){
+  document.getElementById('durationValue').textContent = this.value + ' minutes';
+});
+
+const header = document.getElementById('optionalHeader');
+const content = document.getElementById('optionalContent');
+const icon = document.getElementById('optionalIcon');
+
+header.addEventListener('click', function(e){
+  e.stopPropagation();
+  content.classList.toggle('show');
+  icon.classList.toggle('expanded');
+});
+
+content.addEventListener('click', function(e){
+  e.stopPropagation();
+});
+</script>
+
+</body>
+</html>

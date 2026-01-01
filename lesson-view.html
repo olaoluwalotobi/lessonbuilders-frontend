@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>View Lesson - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:40px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:32px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.nav-link:hover{color:var(--navy);}
+.nav-link.active{color:var(--navy);font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:16px;position:relative;}
+.collab-badge-nav{position:absolute;top:-8px;right:-8px;width:36px;height:36px;background:var(--orange);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;border:3px solid white;display:none;}
+.collab-badge-nav.show{display:flex;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.content{max-width:1000px;margin:60px auto;padding:0 40px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#4A5568;font-weight:600;margin-bottom:24px;transition:color 0.2s;}
+.back-btn:hover{color:var(--orange);}
+.tab-nav{display:flex;gap:8px;border-bottom:2px solid #E2E8F0;margin-bottom:32px;}
+.tab{padding:12px 24px;background:none;border:none;font-size:16px;font-weight:600;color:#4A5568;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.tab:hover:not(.active){color:var(--navy);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.lesson-container{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:40px;margin-bottom:32px;}
+.lesson-title{font-family:'Crimson Pro',serif;font-size:36px;font-weight:700;color:var(--navy);margin-bottom:20px;text-align:center;}
+.lesson-meta{text-align:center;color:#4A5568;margin-bottom:24px;padding-bottom:24px;border-bottom:2px solid #E2E8F0;}
+.lesson-section{margin-bottom:32px;}
+.lesson-section h3{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:12px;}
+.lesson-section p{color:#4A5568;line-height:1.7;margin-bottom:8px;}
+.lesson-section ul{margin-left:20px;color:#4A5568;line-height:1.7;}
+.lesson-section li{margin-bottom:8px;}
+.procedure-box{background:#F7FAFC;border-left:4px solid var(--orange);border-radius:8px;padding:20px;margin-bottom:16px;}
+.procedure-title{font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.time-badge{background:var(--orange);color:white;padding:2px 8px;border-radius:4px;font-size:12px;}
+.procedure-text{color:#4A5568;line-height:1.7;}
+.action-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;}
+.btn{padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-danger{background:white;border:2px solid #EF4444;color:#EF4444;}
+.btn-danger:hover{background:#EF4444;color:white;}
+@media print{
+  .top-nav, .back-btn, .tab-nav, .action-buttons{display:none !important;}
+  .content{max-width:100%;padding:0;}
+  .lesson-container{border:none;box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+<div class="nav-left">
+<a href="index.html" class="logo-text">LessonBuilders</a>
+<div class="nav-menu">
+<a href="library.html" class="nav-link active">My Lessons</a>
+<a href="discover.html" class="nav-link">Discover</a>
+<a href="about.html" class="nav-link">Help</a>
+</div>
+</div>
+<div class="nav-right">
+<div style="position:relative;">
+<div class="user-profile">JD</div>
+<div class="collab-badge-nav" id="collabBadgeNav">C</div>
+</div>
+</div>
+</nav>
+<div class="content">
+<a href="library.html" class="back-btn">&larr; Back to My Lessons</a>
+
+<div class="action-buttons">
+<button class="btn btn-secondary" onclick="editLesson()">&#9998; Edit</button>
+<button class="btn btn-secondary" onclick="shareToDiscover()">&#128279; Share to Discover</button>
+<button class="btn btn-secondary" onclick="exportLesson()">&#128190; Export</button>
+<button class="btn btn-secondary" onclick="window.print()">&#128424; Print</button>
+<button class="btn btn-danger" onclick="deleteLesson()">&#128465; Delete</button>
+</div>
+
+<div class="tab-nav">
+<button class="tab active" onclick="showTab('export')">Export View</button>
+<button class="tab" onclick="showTab('online')">Online View</button>
+</div>
+
+<!-- Export View Tab -->
+<div id="exportView" class="tab-content active">
+<div class="lesson-container">
+<h1 class="lesson-title" id="lessonTitle">Introduction to Fractions</h1>
+<div class="lesson-meta">
+<p><strong>Grade:</strong> <span id="gradeDisplay">5th Grade</span> | <strong>Subject:</strong> <span id="subjectDisplay">Mathematics</span> | <strong>Duration:</strong> <span id="durationDisplay">45</span> minutes</p>
+<p><strong>Framework:</strong> <span id="frameworkDisplay">Madeline Hunter</span></p>
+</div>
+
+<div class="lesson-section">
+<h3>Learning Objectives</h3>
+<ul>
+<li>Students will identify and represent fractions using visual models</li>
+<li>Students will compare fractions with like and unlike denominators</li>
+<li>Students will explain fraction concepts using mathematical vocabulary</li>
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Materials Needed</h3>
+<ul>
+<li>Fraction circles (1 set per pair)</li>
+<li>Whiteboard and markers</li>
+<li>Student worksheets</li>
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Procedures</h3>
+<p><strong>1. Anticipatory Set (5 min):</strong> Show pizza slices and ask students what fractions they see.</p>
+<p><strong>2. Learning Objective (2 min):</strong> Today we&apos;ll learn to identify and compare fractions.</p>
+<p><strong>3. Direct Instruction (10 min):</strong> Demonstrate fractions using fraction circles.</p>
+<p><strong>4. Modeling (8 min):</strong> Model comparing 1/2 and 1/4 using think-aloud.</p>
+<p><strong>5. Guided Practice (12 min):</strong> Students work in pairs with manipulatives.</p>
+<p><strong>6. Independent Practice (5 min):</strong> Complete worksheet individually.</p>
+<p><strong>7. Closure (3 min):</strong> Quick review and preview tomorrow&apos;s lesson.</p>
+</div>
+
+<div class="lesson-section">
+<h3>Assessment</h3>
+<p><strong>Exit Ticket:</strong> Draw and compare two fractions</p>
+<p><strong>Formative Checks:</strong> Monitor during guided practice, ask clarifying questions</p>
+</div>
+</div>
+</div>
+
+<!-- Online View Tab -->
+<div id="onlineView" class="tab-content">
+<div class="lesson-container">
+<h1 class="lesson-title">Introduction to Fractions</h1>
+<div class="lesson-meta">
+<p><strong>Grade:</strong> 5th Grade | <strong>Subject:</strong> Mathematics | <strong>Duration:</strong> 45 minutes</p>
+<p><strong>Framework:</strong> Madeline Hunter</p>
+</div>
+
+<div class="lesson-section">
+<h3>Learning Objectives</h3>
+<ul>
+<li>Students will identify and represent fractions using visual models</li>
+<li>Students will compare fractions with like and unlike denominators</li>
+<li>Students will explain fraction concepts using mathematical vocabulary</li>
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Materials Needed</h3>
+<ul>
+<li>Fraction circles (1 set per pair)</li>
+<li>Whiteboard and markers</li>
+<li>Student worksheets</li>
+</ul>
+</div>
+
+<div class="lesson-section">
+<h3>Detailed Procedures</h3>
+
+<div class="procedure-box">
+<div class="procedure-title">1. Anticipatory Set <span class="time-badge">5 min</span></div>
+<div class="procedure-text">Show real pizza cut into slices. Ask: "What fractions do you see?" Allow students to share observations.</div>
+</div>
+
+<div class="procedure-box">
+<div class="procedure-title">2. Learning Objective <span class="time-badge">2 min</span></div>
+<div class="procedure-text">State clearly: "Today we&apos;ll learn to identify and compare fractions using visual models."</div>
+</div>
+
+<div class="procedure-box">
+<div class="procedure-title">3. Direct Instruction <span class="time-badge">10 min</span></div>
+<div class="procedure-text">Demonstrate how to identify numerator and denominator. Show multiple examples using fraction circles.</div>
+</div>
+
+<div class="procedure-box">
+<div class="procedure-title">4. Modeling <span class="time-badge">8 min</span></div>
+<div class="procedure-text">Think aloud while comparing 1/2 and 1/4. "I see that 1/2 takes up more space than 1/4..."</div>
+</div>
+
+<div class="procedure-box">
+<div class="procedure-title">5. Guided Practice <span class="time-badge">12 min</span></div>
+<div class="procedure-text">Students work in pairs with fraction circles. Teacher circulates and provides feedback.</div>
+</div>
+
+<div class="procedure-box">
+<div class="procedure-title">6. Independent Practice <span class="time-badge">5 min</span></div>
+<div class="procedure-text">Students complete worksheet individually showing understanding.</div>
+</div>
+
+<div class="procedure-box">
+<div class="procedure-title">7. Closure <span class="time-badge">3 min</span></div>
+<div class="procedure-text">Quick share: one thing learned about fractions. Preview adding fractions for tomorrow.</div>
+</div>
+</div>
+
+<div class="lesson-section">
+<h3>Assessment</h3>
+<p><strong>Exit Ticket:</strong> Draw and compare two fractions with explanation</p>
+<p><strong>Formative Checks:</strong> Monitor pair work, check for understanding during instruction</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+let currentLessonId = null;
+let currentLesson = null;
+
+window.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  currentLessonId = urlParams.get('id');
+  
+  if (currentLessonId) {
+    const saved = localStorage.getItem('savedLessons');
+    if (saved) {
+      const lessons = JSON.parse(saved);
+      currentLesson = lessons.find(l => l.id == currentLessonId);
+      
+      if (currentLesson) {
+        displayLesson(currentLesson);
+        return;
+      }
+    }
+  }
+  
+  displaySampleLesson();
+});
+
+function displayLesson(lesson) {
+  const titles = document.querySelectorAll('.lesson-title');
+  titles.forEach(t => t.textContent = lesson.title);
+  
+  document.getElementById('gradeDisplay').textContent = lesson.grade;
+  document.getElementById('subjectDisplay').textContent = lesson.subject;
+  document.getElementById('durationDisplay').textContent = lesson.duration;
+  
+  const frameworkNames = {
+    'madeline-hunter': 'Madeline Hunter',
+    '5e-model': '5E Model',
+    'ubd': 'Understanding by Design',
+    'gradual-release': 'Gradual Release'
+  };
+  document.getElementById('frameworkDisplay').textContent = frameworkNames[lesson.framework] || 'Madeline Hunter';
+  
+  if (lesson.hasCollaborations) {
+    document.getElementById('collabBadgeNav').classList.add('show');
+  }
+}
+
+function displaySampleLesson() {
+  console.log('No lesson ID provided, showing sample data');
+}
+
+function showTab(tabName) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  
+  if (tabName === 'export') {
+    document.getElementById('exportView').classList.add('active');
+  } else {
+    document.getElementById('onlineView').classList.add('active');
+  }
+}
+
+function editLesson() {
+  alert('Edit functionality coming soon! You&apos;ll be able to modify your lesson and save changes.');
+}
+
+function shareToDiscover() {
+  if (confirm('Share this lesson to the Discover community?')) {
+    alert('Lesson shared to Discover! Other teachers can now find and use your lesson.');
+  }
+}
+
+function exportLesson() {
+  alert('Export options coming soon! You&apos;ll be able to download as PDF, DOCX, or Google Docs.');
+}
+
+function deleteLesson() {
+  if (!currentLessonId) {
+    alert('Cannot delete sample lesson');
+    return;
+  }
+  
+  if (confirm('Are you sure you want to delete this lesson? This cannot be undone.')) {
+    const saved = localStorage.getItem('savedLessons');
+    if (saved) {
+      let lessons = JSON.parse(saved);
+      lessons = lessons.filter(l => l.id != currentLessonId);
+      localStorage.setItem('savedLessons', JSON.stringify(lessons));
+      alert('Lesson deleted successfully');
+      window.location.href = 'library.html';
+    }
+  }
+}
+</script>
+</body>
+</html>
