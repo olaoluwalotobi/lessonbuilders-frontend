@@ -494,6 +494,18 @@
             </div>
         </div>
     </footer>
+    
+<script type="module">
+  import { checkHealth } from "./api.js";
+
+  checkHealth()
+    .then(data => {
+      console.log("API OK:", data);
+    })
+    .catch(err => {
+      console.error("API ERROR:", err);
+    });
+</script>
 
 </body>
 </html>
