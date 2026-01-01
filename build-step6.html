@@ -533,4 +533,428 @@ function generateLesson() {
 
   const metaHTML = `
     <p><strong>Grade:</strong> ${grade} | <strong>Subject:</strong> ${subject} | <strong>Duration:</strong> ${duration} minutes</p>
-    <p><strong>Framework:</strong> ${frameworkNames[framework] || framework
+    <p><strong>Framework:</strong> ${frameworkNames[framework] || framework}</p>
+  `;
+  document.getElementById('lessonMeta').innerHTML = metaHTML;
+
+  setBannerVerifying();
+
+  showLoading();
+  generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback: null });
+}
+
+function setBannerVerifying() {
+  document.getElementById('bannerText').textContent = "Verifying California Standards...";
+  document.getElementById('bannerMeta').textContent = "This will take 5-15 seconds";
+  document.getElementById('viewDetailsBtn').style.display = "none";
+  document.getElementById('standardsContainer').innerHTML = "";
+  document.getElementById('detailsSection').classList.remove('show');
+}
+
+function setBannerFallback(message) {
+  document.getElementById('bannerText').textContent = "Standards verification unavailable";
+  document.getElementById('bannerMeta').textContent = message || "Continuing without verified standards.";
+  document.getElementById('viewDetailsBtn').style.display = "none";
+  document.getElementById('standardsContainer').innerHTML = "";
+  document.getElementById('detailsSection').classList.remove('show');
+}
+
+async function safeJson(res) {
+  const text = await res.text();
+  try { return JSON.parse(text); } catch { return { _raw: text }; }
+}
+
+function normalizeLessonFromBackend(payload) {
+  if (!payload) return null;
+  if (payload.error) throw new Error(payload.error);
+
+  // If your backend returns Anthropic-like structure
+  if (payload.content && Array.isArray(payload.content) && payload.content[0] && typeof payload.content[0].text === "string") {
+    const t = payload.content[0].text.trim();
+    const match = t.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error("Could not parse lesson JSON from AI response.");
+    return JSON.parse(match[0]);
+  }
+
+  // If backend already returns a lesson JSON
+  if (payload.summary && payload.objectives && payload.procedures) return payload;
+
+  if (payload._raw && typeof payload._raw === "string") {
+    const match = payload._raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error("Could not parse lesson JSON from server response.");
+    return JSON.parse(match[0]);
+  }
+
+  throw new Error("Unexpected response format from backend.");
+}
+
+function persistVerifiedStandards(standardsArr) {
+  try {
+    if (!lessonData || typeof lessonData !== "object") lessonData = {};
+    lessonData.verifiedStandards = Array.isArray(standardsArr) ? standardsArr : [];
+    localStorage.setItem("lessonData", JSON.stringify(lessonData));
+  } catch (e) {
+    console.warn("Could not persist verifiedStandards:", e);
+  }
+}
+
+function getStandardsForDisplay(lesson) {
+  const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : null;
+  const b = Array.isArray(lesson?.standards) ? lesson.standards : null;
+  const c = Array.isArray(verifiedStandards) ? verifiedStandards : null;
+  const d = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
+  return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : (d && d.length ? d : []))));
+}
+
+/**
+ * ✅ Document standards renderer (print-safe)
+ * - NO Source links here.
+ * - Links remain only in the Verification banner.
+ */
+function renderStandardsSectionForDocument(standardsArr) {
+  if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
+
+  const items = standardsArr.map(std => {
+    const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
+    const text = escapeHtml((std.text || std.description || "").toString());
+    return `
+      <li style="margin-bottom:10px;">
+        ${code ? `<strong style="color:var(--navy);">${code}</strong><br>` : ""}
+        <span style="color:#4A5568;line-height:1.6;">${text}</span>
+      </li>
+    `;
+  }).join("");
+
+  return `
+    <div class="lesson-section">
+      <h3>California Standards (Verified)</h3>
+      <ul>
+        ${items}
+      </ul>
+    </div>
+  `;
+}
+
+async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
+  try {
+    // 1) Verify standards (best-effort)
+    let standards = [];
+    try {
+      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ grade, subject, topic })
+      });
+      const verifyData = await safeJson(verifyRes);
+
+      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
+        standards = verifyData.standards;
+        verifiedStandards = standards;
+        persistVerifiedStandards(verifiedStandards);
+        updateVerificationBanner(standards, verifyData.source);
+      } else {
+        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
+      }
+    } catch (e) {
+      console.warn("Standards verification failed (continuing):", e);
+      setBannerFallback("Continuing without verified standards.");
+    }
+
+    // 2) Generate lesson (send verified standards if we got any)
+    const lessonPayload = {
+      step1: { topic, grade, subject, duration },
+      step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
+      step3: { framework },
+      step5: step5 || { exitTicket: true, formativeChecks: true, homework: false, quiz: false },
+      verifiedStandards: standards && standards.length ? standards : []
+    };
+
+    if (feedback) lessonPayload.feedback = feedback;
+
+    const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(lessonPayload)
+    });
+
+    const genData = await safeJson(genRes);
+    if (!genRes.ok) {
+      throw new Error(genData?.error || genData?.details || "Lesson generation failed.");
+    }
+
+    const lesson = normalizeLessonFromBackend(genData);
+    lastLessonJSON = lesson;
+
+    // Inject verified standards so renderer always has them
+    lesson.verifiedStandards = Array.isArray(standards) && standards.length
+      ? standards
+      : (Array.isArray(verifiedStandards) ? verifiedStandards : []);
+
+    hideLoading();
+
+    displayGeneratedLesson(lesson);
+    document.getElementById('feedbackBox').style.display = 'block';
+
+  } catch (error) {
+    console.error("Error generating lesson:", error);
+    hideLoading();
+    alert("There was an error generating your lesson. Please try again.\n\n" + (error.message || ""));
+    document.getElementById('feedbackBox').style.display = 'block';
+  }
+}
+
+function updateVerificationBanner(standards, source) {
+  const bannerText = document.getElementById('bannerText');
+  const bannerMeta = document.getElementById('bannerMeta');
+  const viewDetailsBtn = document.getElementById('viewDetailsBtn');
+  const standardsContainer = document.getElementById('standardsContainer');
+
+  const count = standards.length;
+  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  bannerText.textContent = `${count} California Standard${count !== 1 ? 's' : ''} Verified`;
+  bannerMeta.textContent = `Verified on ${today}${source ? ` (${source})` : ""}`;
+  viewDetailsBtn.style.display = 'inline-flex';
+
+  standardsContainer.innerHTML = standards.map(std => {
+    const confidenceClass = (std.confidence || 'medium').toLowerCase();
+    const confidenceLabels = {
+      high: 'High Confidence ✓✓',
+      medium: 'Medium Confidence ✓',
+      low: 'Manual Check ⚠️'
+    };
+
+    const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
+    const safeCode = (std.code || "").toString();
+    const safeText = (std.text || "").toString();
+
+    return `
+      <div class="standard-card">
+        <div class="standard-header">
+          <div class="standard-number">${escapeHtml(safeCode)}</div>
+        </div>
+        <div class="standard-text">${escapeHtml(safeText)}</div>
+        <div class="standard-meta">
+          <span class="confidence-badge ${confidenceClass}">${confidenceLabels[confidenceClass] || confidenceLabels.medium}</span>
+          <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link">View Source</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function displayGeneratedLesson(lesson) {
+  document.getElementById('lessonSummary').textContent = lesson.summary || "";
+
+  const standardsForDoc = getStandardsForDisplay(lesson);
+  const standardsHTML = renderStandardsSectionForDocument(standardsForDoc);
+
+  let assessmentHTML = '';
+  const a = lesson.assessments || {};
+
+  if (Array.isArray(a.exitTicket)) {
+    assessmentHTML += `
+      <div style="margin-bottom:20px;">
+        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Exit Ticket</h4>
+        <ol style="margin-left:20px;">
+          ${a.exitTicket.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
+        </ol>
+      </div>
+    `;
+  }
+
+  if (Array.isArray(a.formativeChecks)) {
+    assessmentHTML += `
+      <div style="margin-bottom:20px;">
+        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Formative Check Questions</h4>
+        <ul style="margin-left:20px;">
+          ${a.formativeChecks.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  if (typeof a.homework === "string" && a.homework.trim()) {
+    assessmentHTML += `
+      <div style="margin-bottom:20px;">
+        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Homework Assignment</h4>
+        <p style="color:#4A5568;line-height:1.7;">${escapeHtml(a.homework)}</p>
+      </div>
+    `;
+  }
+
+  if (Array.isArray(a.quiz)) {
+    assessmentHTML += `
+      <div style="margin-bottom:20px;">
+        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Quiz (Next Day)</h4>
+        <ol style="margin-left:20px;">
+          ${a.quiz.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
+        </ol>
+      </div>
+    `;
+  }
+
+  const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
+  const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
+  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+
+  const proceduresHTML = procedures.map((step, index) => `
+    <div class="procedure-box">
+      <div class="procedure-title">${index + 1}. ${escapeHtml(step.name || "Step")} <span class="time-badge">${escapeHtml(String(step.time ?? ""))} min</span></div>
+      <div class="procedure-text">${escapeHtml(step.description || "")}</div>
+    </div>
+  `).join('');
+
+  const content = `
+    ${standardsHTML}
+
+    <div class="lesson-section">
+      <h3>Learning Objectives</h3>
+      <ul>
+        ${objectives.map(obj => `<li>${escapeHtml(obj)}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="lesson-section">
+      <h3>Materials Needed</h3>
+      <ul>
+        ${materials.map(mat => `<li>${escapeHtml(mat)}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="lesson-section">
+      <h3>Procedures</h3>
+      ${proceduresHTML || `<p style="color:#4A5568;">No procedures generated.</p>`}
+    </div>
+
+    <div class="lesson-section">
+      <h3>Assessments</h3>
+      ${assessmentHTML || `<p style="color:#4A5568;">No assessments selected.</p>`}
+    </div>
+  `;
+
+  document.getElementById('lessonContent').innerHTML = content;
+}
+
+function saveToLibrary() {
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+
+    const lesson = {
+      id: Date.now(),
+      title: data.step1?.topic || 'Untitled Lesson',
+      grade: data.step1?.grade || '5th Grade',
+      subject: data.step1?.subject || 'Mathematics',
+      duration: data.step1?.duration || 45,
+      framework: data.step3?.framework || 'madeline-hunter',
+      hasCollaborations: data.hasCollaborations || false,
+      verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
+      savedAt: new Date().toISOString(),
+      generatedLesson: lastLessonJSON || null,
+      fullLesson: data
+    };
+
+    let savedLessons = [];
+    const existing = localStorage.getItem('savedLessons');
+    if (existing) savedLessons = JSON.parse(existing);
+
+    savedLessons.push(lesson);
+    localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
+
+    alert('Lesson saved to My Lessons!');
+  }
+}
+
+function skipCollab() {
+  saveToLibrary();
+  window.location.href = 'library.html';
+}
+
+function regenerateLesson() {
+  const feedback = document.getElementById('feedbackTextarea').value.trim();
+  if (!feedback) {
+    alert('Please describe what changes you want to make.');
+    return;
+  }
+
+  document.getElementById('feedbackBox').style.display = 'none';
+  showLoading();
+
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    const step1 = data.step1 || {};
+    const step2 = data.step2 || {};
+    const step3 = data.step3 || {};
+    const step5 = data.step5 || {};
+
+    const topic = step1.topic || 'Untitled Lesson';
+    const grade = step1.grade || '5th Grade';
+    const subject = step1.subject || 'Mathematics';
+    const duration = step1.duration || 45;
+    const framework = step3.framework || 'madeline-hunter';
+
+    generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
+  }
+}
+
+function reportError() {
+  alert('Error reporting: Teachers would describe which standard appears incorrect. This feedback improves the verification system.');
+}
+
+function reverifyStandards() {
+  const step1 = lessonData.step1 || {};
+  const topic = step1.topic || '';
+  const grade = step1.grade || '';
+  const subject = step1.subject || '';
+
+  if (!topic || !grade || !subject) {
+    alert("Missing topic/grade/subject. Go back to Step 1.");
+    return;
+  }
+
+  setBannerVerifying();
+  showLoading();
+
+  (async () => {
+    try {
+      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ grade, subject, topic })
+      });
+      const verifyData = await safeJson(verifyRes);
+
+      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
+        verifiedStandards = verifyData.standards;
+        persistVerifiedStandards(verifiedStandards);
+        updateVerificationBanner(verifiedStandards, verifyData.source);
+        hideLoading();
+
+        if (lastLessonJSON) {
+          lastLessonJSON.verifiedStandards = verifiedStandards;
+          displayGeneratedLesson(lastLessonJSON);
+        }
+      } else {
+        hideLoading();
+        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
+      }
+    } catch (e) {
+      hideLoading();
+      setBannerFallback("Continuing without verified standards.");
+    }
+  })();
+}
+
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+</script>
+</body>
+</html>
