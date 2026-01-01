@@ -67,11 +67,11 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .lesson-section ul{margin-left:18px;color:#4A5568;line-height:1.55;}
 .lesson-section li{margin-bottom:6px;}
 
-/* compact procedures (no big cards) */
-.proc-list{margin-left:18px;color:#4A5568;line-height:1.55;}
+/* compact procedures */
+.proc-list{margin-left:0;color:#4A5568;line-height:1.55;}
 .proc-item{margin-bottom:10px;}
 .proc-head{font-weight:700;color:var(--navy);}
-.proc-time{display:inline-block;margin-left:8px;font-size:12px;background:rgba(255,140,66,0.12);color:var(--navy);padding:2px 8px;border-radius:999px;}
+.proc-time-text{font-weight:500;color:#718096;font-size:13px;margin-left:6px;}
 
 .btn{padding:14px 22px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.25s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
@@ -98,7 +98,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 @keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
 .loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
 
-/* ✅ Print: never blank */
+/* Print: never blank */
 @media print{
   body{background:white;}
   .top-nav, .sidebar, #feedbackBox, .btn-row, .verification-banner { display:none !important; }
@@ -133,7 +133,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     <a href="build-step3.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Choose Template</div></a>
     <a href="build-step4.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Build Method</div></a>
     <a href="build-step5.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Assessments</div></a>
-    < prove to step 6 -->
     <a href="build-step6.html" class="nav-step active"><div class="step-number">6</div><div>Preview & Export</div></a>
     <a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
   </aside>
@@ -143,7 +142,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     <p class="page-subtitle">Review, export, then continue to collaborations</p>
     <div class="progress-bar"><div class="progress-fill" style="width:86%;"></div></div>
 
-    <!-- Standards banner -->
     <div class="verification-banner" id="verificationBanner">
       <div class="banner-header">
         <div class="banner-left">
@@ -162,7 +160,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       </div>
     </div>
 
-    <!-- Lesson -->
     <div class="lesson-preview" id="lessonPreview">
       <h2 class="lesson-title" id="lessonTitle">Loading...</h2>
       <div class="lesson-meta" id="lessonMeta"></div>
@@ -170,7 +167,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       <div id="lessonContent"></div>
     </div>
 
-    <!-- Update Lesson -->
     <div id="feedbackBox" style="display:none;background:white;border:2px solid #E2E8F0;border-radius:16px;padding:18px;margin-top:12px;">
       <div style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px;">Want to make changes?</div>
       <div style="font-size:14px;color:#718096;margin-bottom:10px;">Example: tighten procedure steps, adjust pacing, add a hands-on demo...</div>
@@ -178,7 +174,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       <button class="btn btn-primary" style="width:100%;margin-top:10px;" onclick="regenerateLesson()">Update Lesson</button>
     </div>
 
-    <!-- Buttons row: Continue bottom-right -->
     <div class="btn-row">
       <div class="export-group">
         <span class="export-label">Export</span>
@@ -194,7 +189,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   </main>
 </div>
 
-<!-- Loading Overlay -->
 <div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-live="polite">
   <div class="blocks-loader" aria-hidden="true">
     <div class="block bl"></div>
@@ -259,9 +253,6 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-/* -----------------------
-   Standards banner UI
------------------------- */
 function toggleDetails() {
   const section = document.getElementById('detailsSection');
   const icon = document.getElementById('detailsIcon');
@@ -281,17 +272,17 @@ function setBannerVerifying() {
   document.getElementById('detailsSection').classList.remove('show');
 }
 
-function setBannerNoMatch(message) {
-  document.getElementById('bannerText').textContent = "0 California Standards Found";
-  document.getElementById('bannerMeta').textContent = message || "No local standards matched yet (backend returned 0).";
+function setBannerFallback(message) {
+  document.getElementById('bannerText').textContent = "Standards verification unavailable";
+  document.getElementById('bannerMeta').textContent = message || "Continuing without verified standards.";
   document.getElementById('viewDetailsBtn').style.display = "none";
   document.getElementById('standardsContainer').innerHTML = "";
   document.getElementById('detailsSection').classList.remove('show');
 }
 
-function setBannerFallback(message) {
-  document.getElementById('bannerText').textContent = "Standards verification unavailable";
-  document.getElementById('bannerMeta').textContent = message || "Continuing without verified standards.";
+function setBannerNoMatch(message) {
+  document.getElementById('bannerText').textContent = "0 California Standards Found";
+  document.getElementById('bannerMeta').textContent = message || "Backend returned 0 matches (still using local CA standards lookup).";
   document.getElementById('viewDetailsBtn').style.display = "none";
   document.getElementById('standardsContainer').innerHTML = "";
   document.getElementById('detailsSection').classList.remove('show');
@@ -325,9 +316,6 @@ function updateVerificationBanner(standards, source) {
   }).join('');
 }
 
-/* -----------------------
-   Utilities
------------------------- */
 async function safeJson(res) {
   const text = await res.text();
   try { return JSON.parse(text); } catch { return { _raw: text }; }
@@ -366,19 +354,39 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-function normalizeGradeForVerify(gradeRaw){
-  const g = String(gradeRaw || "").trim();
-  // "5th Grade" -> "5"
-  const m = g.match(/\b(\d{1,2})\b/);
-  if (m) return m[1];
-  // "Grade 5" -> "5"
-  const m2 = g.match(/grade\s*(\d{1,2})/i);
-  if (m2) return m2[1];
-  return g; // fallback
-}
+/* ✅ Framework enforcement: Madeline Hunter 7 steps */
+function applyFrameworkStepNames(frameworkKey, procedures){
+  if (!Array.isArray(procedures)) return [];
+  const out = procedures.map(p => ({...p}));
 
-function normalizeSubjectForVerify(subjectRaw){
-  return String(subjectRaw || "").trim().toLowerCase();
+  if (frameworkKey === "madeline-hunter") {
+    const names = [
+      "Anticipatory Set (Hook)",
+      "Objective & Purpose",
+      "Input",
+      "Modeling",
+      "Check for Understanding",
+      "Guided Practice",
+      "Independent Practice",
+      "Closure"
+    ];
+
+    // If Claude returned 7 items, use first 7. If 8+, use first 8.
+    const targetLen = out.length >= 8 ? 8 : 7;
+
+    for (let i = 0; i < Math.min(targetLen, out.length); i++){
+      out[i].name = `Step ${i+1}: ${names[i] || (out[i].name || `Step ${i+1}`)}`;
+    }
+
+    // If Claude used generic names, still enforce "Step X:" prefix for rest
+    for (let i = targetLen; i < out.length; i++){
+      if (!String(out[i].name || "").toLowerCase().startsWith("step ")) {
+        out[i].name = `Step ${i+1}: ${out[i].name || "Additional Step"}`;
+      }
+    }
+  }
+
+  return out;
 }
 
 function getStandardsForDisplay(lesson) {
@@ -415,9 +423,6 @@ function renderStandardsSection(standardsArr, includeSourceLinks=true) {
   `;
 }
 
-/* -----------------------
-   Main generation
------------------------- */
 function generateLesson() {
   const step1 = lessonData.step1 || {};
   const step2 = lessonData.step2 || {};
@@ -446,13 +451,16 @@ function generateLesson() {
 
 async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
   try {
-    // 1) Verify standards (local-first backend)
+    // ✅ Standards: DO NOT change what worked.
+    // Send grade/subject EXACTLY as stored, plus optional normalized fields (won’t break your backend).
     let standards = [];
     try {
       const verifyBody = {
-        grade: normalizeGradeForVerify(grade),
-        subject: normalizeSubjectForVerify(subject),
-        topic
+        grade,
+        subject,
+        topic,
+        gradeNormalized: String(grade).match(/\b(\d{1,2})\b/)?.[1] || grade,
+        subjectNormalized: String(subject || "").toLowerCase().trim()
       };
 
       const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
@@ -478,7 +486,6 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       setBannerFallback("Continuing without verified standards.");
     }
 
-    // 2) Generate lesson
     const payload = {
       step1: { topic, grade, subject, duration },
       step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
@@ -497,7 +504,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     const genData = await safeJson(genRes);
     if (!genRes.ok) throw new Error(genData?.error || genData?.message || "Lesson generation failed.");
 
-    const lesson = genData; // backend returns clean JSON
+    const lesson = genData;
     lastLessonJSON = lesson;
     persistGeneratedLessonToLessonData(lastLessonJSON);
 
@@ -505,7 +512,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     lesson.verifiedStandards = standards && standards.length ? standards : getStandardsForDisplay(lesson);
 
     hideLoading();
-    displayGeneratedLesson(lesson);
+    displayGeneratedLesson(lesson, framework);
     document.getElementById('feedbackBox').style.display = 'block';
 
   } catch (err) {
@@ -516,7 +523,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
   }
 }
 
-function displayGeneratedLesson(lesson) {
+function displayGeneratedLesson(lesson, frameworkKey) {
   document.getElementById('lessonSummary').textContent = lesson.summary || "";
 
   const standardsHTML = renderStandardsSection(getStandardsForDisplay(lesson), true);
@@ -524,8 +531,9 @@ function displayGeneratedLesson(lesson) {
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const keyVocab = Array.isArray(lesson.keyVocabulary) ? lesson.keyVocabulary : [];
-  const udl = lesson.udlConnections || null;
-  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+  const udl = lesson.udlConnections || {};
+  const proceduresRaw = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+  const procedures = applyFrameworkStepNames(frameworkKey, proceduresRaw);
 
   const keyVocabHTML = `
     <div class="lesson-section">
@@ -537,9 +545,9 @@ function displayGeneratedLesson(lesson) {
   const udlHTML = `
     <div class="lesson-section">
       <h3>UDL Connections</h3>
-      <p><strong>Engagement:</strong> ${escapeHtml(udl?.engagement || "")}</p>
-      <p><strong>Representation:</strong> ${escapeHtml(udl?.representation || "")}</p>
-      <p><strong>Action &amp; Expression:</strong> ${escapeHtml(udl?.actionExpression || "")}</p>
+      <p><strong>Engagement:</strong> ${escapeHtml(udl.engagement || "")}</p>
+      <p><strong>Representation:</strong> ${escapeHtml(udl.representation || "")}</p>
+      <p><strong>Action &amp; Expression:</strong> ${escapeHtml(udl.actionExpression || "")}</p>
     </div>
   `;
 
@@ -549,8 +557,9 @@ function displayGeneratedLesson(lesson) {
       <div class="proc-list">
         ${procedures.map((p, i) => `
           <div class="proc-item">
-            <div class="proc-head">${escapeHtml(p.name || `Step ${i+1}`)}
-              ${p.time !== undefined && p.time !== null ? `<span class="proc-time">${escapeHtml(String(p.time))} min</span>` : ""}
+            <div class="proc-head">
+              ${escapeHtml(p.name || `Step ${i+1}`)}
+              ${(p.time !== undefined && p.time !== null && String(p.time).trim() !== "") ? `<span class="proc-time-text">(${escapeHtml(String(p.time))} min)</span>` : ""}
             </div>
             <div>${escapeHtml(p.description || "")}</div>
           </div>
@@ -609,13 +618,7 @@ function regenerateLesson() {
   generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
 }
 
-/* -----------------------
-   Export + Continue
------------------------- */
-function exportPDF(){
-  // PDF export = print dialog (user chooses Save as PDF)
-  window.print();
-}
+function exportPDF(){ window.print(); }
 
 function exportDOC(){
   if (!lastLessonJSON) { alert("Lesson not ready yet."); return; }
@@ -624,69 +627,60 @@ function exportDOC(){
   const step1 = lessonData.step1 || {};
   const title = (step1.topic || "Lesson").replace(/[^\w\-]+/g,'_');
 
-  // DOC should not include source links
   const standardsHTML = renderStandardsSection(getStandardsForDisplay(lesson), false);
-
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const keyVocab = Array.isArray(lesson.keyVocabulary) ? lesson.keyVocabulary : [];
   const udl = lesson.udlConnections || {};
-  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+  const frameworkKey = (lessonData.step3 || {}).framework || "madeline-hunter";
+  const procedures = applyFrameworkStepNames(frameworkKey, Array.isArray(lesson.procedures) ? lesson.procedures : []);
 
   const docHtml = `
-  <html>
-    <head>
-      <meta charset="utf-8">
-      <title>${escapeHtml(step1.topic || "Lesson")}</title>
-      <style>
-        body{font-family:Arial, sans-serif; color:#111; line-height:1.35;}
-        h1{font-size:22px; text-align:center; margin:0 0 10px;}
-        h2{font-size:16px; margin:16px 0 6px;}
-        .meta{font-size:12px; color:#333; text-align:center; margin-bottom:10px;}
-        ul{margin:0 0 10px 18px;}
-        li{margin-bottom:5px;}
-        .step{margin-bottom:8px;}
-        .step-title{font-weight:700;}
-      </style>
-    </head>
-    <body>
-      <h1>${escapeHtml(step1.topic || "Lesson")}</h1>
-      <div class="meta">
-        Grade: ${escapeHtml(step1.grade || "")} | Subject: ${escapeHtml(step1.subject || "")} | Duration: ${escapeHtml(String(step1.duration || ""))} minutes
+  <html><head><meta charset="utf-8">
+  <title>${escapeHtml(step1.topic || "Lesson")}</title>
+  <style>
+    body{font-family:Arial, sans-serif; color:#111; line-height:1.35;}
+    h1{font-size:22px; text-align:center; margin:0 0 10px;}
+    h2{font-size:16px; margin:16px 0 6px;}
+    .meta{font-size:12px; color:#333; text-align:center; margin-bottom:10px;}
+    ul{margin:0 0 10px 18px;}
+    li{margin-bottom:5px;}
+    .step{margin-bottom:8px;}
+    .step-title{font-weight:700;}
+  </style></head><body>
+    <h1>${escapeHtml(step1.topic || "Lesson")}</h1>
+    <div class="meta">
+      Grade: ${escapeHtml(step1.grade || "")} | Subject: ${escapeHtml(step1.subject || "")} | Duration: ${escapeHtml(String(step1.duration || ""))} minutes
+    </div>
+
+    ${standardsHTML}
+
+    <h2>Summary</h2><div>${escapeHtml(lesson.summary || "")}</div>
+
+    <h2>Learning Objectives</h2>
+    <ul>${objectives.map(o=>`<li>${escapeHtml(o)}</li>`).join("")}</ul>
+
+    <h2>Materials Needed</h2>
+    <ul>${materials.map(m=>`<li>${escapeHtml(m)}</li>`).join("")}</ul>
+
+    <h2>Key Vocabulary</h2>
+    <ul>${keyVocab.map(v=>`<li>${escapeHtml(v)}</li>`).join("")}</ul>
+
+    <h2>UDL Connections</h2>
+    <div><b>Engagement:</b> ${escapeHtml(udl.engagement || "")}</div>
+    <div><b>Representation:</b> ${escapeHtml(udl.representation || "")}</div>
+    <div><b>Action & Expression:</b> ${escapeHtml(udl.actionExpression || "")}</div>
+
+    <h2>Procedures</h2>
+    ${procedures.map((p,i)=>`
+      <div class="step">
+        <div class="step-title">${escapeHtml(p.name || `Step ${i+1}`)}${(p.time!==undefined && p.time!==null && String(p.time).trim()!=="")?` (${escapeHtml(String(p.time))} min)`:``}</div>
+        <div>${escapeHtml(p.description || "")}</div>
       </div>
+    `).join("")}
 
-      ${standardsHTML}
-
-      <h2>Summary</h2>
-      <div>${escapeHtml(lesson.summary || "")}</div>
-
-      <h2>Learning Objectives</h2>
-      <ul>${objectives.map(o=>`<li>${escapeHtml(o)}</li>`).join("")}</ul>
-
-      <h2>Materials Needed</h2>
-      <ul>${materials.map(m=>`<li>${escapeHtml(m)}</li>`).join("")}</ul>
-
-      <h2>Key Vocabulary</h2>
-      <ul>${keyVocab.map(v=>`<li>${escapeHtml(v)}</li>`).join("")}</ul>
-
-      <h2>UDL Connections</h2>
-      <div><b>Engagement:</b> ${escapeHtml(udl.engagement || "")}</div>
-      <div><b>Representation:</b> ${escapeHtml(udl.representation || "")}</div>
-      <div><b>Action & Expression:</b> ${escapeHtml(udl.actionExpression || "")}</div>
-
-      <h2>Procedures</h2>
-      ${procedures.map((p,i)=>`
-        <div class="step">
-          <div class="step-title">${escapeHtml(p.name || `Step ${i+1}`)}${(p.time!==undefined&&p.time!==null)?` (${escapeHtml(String(p.time))} min)`:``}</div>
-          <div>${escapeHtml(p.description || "")}</div>
-        </div>
-      `).join("")}
-
-      <h2>Assessment Summary</h2>
-      <div>${escapeHtml(lesson.assessmentSummary || "")}</div>
-    </body>
-  </html>
-  `;
+    <h2>Assessment Summary</h2><div>${escapeHtml(lesson.assessmentSummary || "")}</div>
+  </body></html>`;
 
   const blob = new Blob([docHtml], { type: "application/msword;charset=utf-8" });
   const url = URL.createObjectURL(blob);
