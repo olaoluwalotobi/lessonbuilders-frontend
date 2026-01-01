@@ -80,13 +80,9 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .lesson-summary{text-align:center;color:#4A5568;font-size:16px;line-height:1.6;margin-bottom:24px;padding-bottom:24px;border-bottom:2px solid #E2E8F0;}
 .lesson-section{margin-bottom:32px;}
 .lesson-section h3{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:12px;}
-.lesson-section p{color:#4A5568;line-height:1.7;margin-bottom:8px;}
+.lesson-section p{color:#4A5568;line-height:1.7;margin-bottom:10px;}
 .lesson-section ul{margin-left:20px;color:#4A5568;line-height:1.7;}
 .lesson-section li{margin-bottom:8px;}
-.procedure-box{background:#F7FAFC;border-left:4px solid var(--orange);border-radius:8px;padding:20px;margin-bottom:16px;}
-.procedure-title{font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-.time-badge{background:var(--orange);color:white;padding:2px 8px;border-radius:4px;font-size:12px;}
-.procedure-text{color:#4A5568;line-height:1.7;}
 
 /* Buttons */
 .btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
@@ -129,12 +125,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .export-item:hover{background:rgba(255,140,66,0.08);}
 .export-sub{font-size:12px;color:#718096;font-weight:500;margin-top:2px;}
 .export-sep{height:1px;background:#E2E8F0;margin:8px 0;}
-.export-hint{
-  padding:10px 12px;
-  font-size:12px;
-  color:#718096;
-  line-height:1.5;
-}
 
 /* Enhancement box */
 .enhancement-box{background:rgba(59,130,246,0.05);border:2px solid rgba(59,130,246,0.3);border-radius:16px;padding:28px;margin-top:40px;text-align:center;}
@@ -158,7 +148,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
 @media (prefers-reduced-motion: reduce){.block{animation:none;opacity:1;transform:none;}}
 
-/* ✅ FIXED PRINT: do NOT hide .main-content (ancestor), only hide UI chrome */
+/* ✅ PRINT: keep lesson visible; hide UI chrome */
 @media print{
   body * {visibility: hidden;}
 
@@ -186,7 +176,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     display: none !important;
   }
 
-  /* If dropdown is open, ensure it doesn't print */
   .export-menu{display:none !important;}
 }
 
@@ -197,14 +186,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .feedback-textarea{width:100%;padding:16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;resize:vertical;min-height:120px;}
 .feedback-textarea:focus{outline:none;border-color:var(--orange);}
 .feedback-button{width:100%;margin-top:16px;}
-
-@keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
-.details-section.show .legend-bar,.details-section.show .standard-card,.details-section.show .details-footer{animation:fadeIn 0.4s ease-out forwards;}
-.details-section.show .standard-card:nth-child(2){animation-delay:0.05s;}
-.details-section.show .standard-card:nth-child(3){animation-delay:0.1s;}
-.details-section.show .standard-card:nth-child(4){animation-delay:0.15s;}
-.details-section.show .standard-card:nth-child(5){animation-delay:0.2s;}
-.details-section.show .details-footer{animation-delay:0.25s;}
 </style>
 </head>
 <body>
@@ -239,7 +220,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     <p class="page-subtitle">Review, download, or build connections</p>
     <div class="progress-bar"><div class="progress-fill" style="width:86%;"></div></div>
 
-    <!-- Standards Verification Banner (STARTS COLLAPSED) -->
+    <!-- Standards Verification Banner -->
     <div class="verification-banner" id="verificationBanner">
       <div class="banner-header">
         <div class="banner-left">
@@ -255,7 +236,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
         </button>
       </div>
 
-      <!-- Expandable Details Section (STARTS COLLAPSED) -->
       <div class="details-section" id="detailsSection">
         <div class="legend-bar">
           <div class="legend-item">
@@ -281,7 +261,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       </div>
     </div>
 
-    <!-- Single canonical lesson document -->
+    <!-- Lesson document -->
     <div class="lesson-preview" id="lessonPreview">
       <h2 class="lesson-title" id="lessonTitle">Loading...</h2>
       <div class="lesson-meta" id="lessonMeta"></div>
@@ -319,22 +299,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
             </div>
             <span>→</span>
           </button>
-          <button class="export-item" onclick="exportGoogleDocHint()">
-            <div>
-              Google Doc
-              <div class="export-sub">Upload the DOC to Drive to convert</div>
-            </div>
-            <span>→</span>
-          </button>
-          <div class="export-sep"></div>
-          <div class="export-hint">
-            Full “Create Google Doc automatically” requires Google sign-in + API (we can add later).
-          </div>
         </div>
       </div>
 
       <button class="btn btn-primary" onclick="saveToLibrary()">Save to Library</button>
-
       <span class="spacer"></span>
     </div>
 
@@ -361,12 +329,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
-/**
- * Step 6 (single view):
- * - Verify standards via backend
- * - Generate lesson via backend
- * - Render ONE canonical lesson document (print/export/save)
- */
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
 // Loading overlay messages
@@ -407,6 +369,40 @@ const frameworkNames = {
   '5e-model': '5E Model',
   'ubd': 'Understanding by Design',
   'gradual-release': 'Gradual Release'
+};
+
+// Used to render "Step 1: Hook ..." explicitly in the document
+const frameworkStepLabels = {
+  "madeline-hunter": [
+    "Hook / Anticipatory Set",
+    "Objective & Purpose",
+    "Direct Instruction (Input/Modeling)",
+    "Guided Practice",
+    "Check for Understanding",
+    "Independent Practice",
+    "Closure"
+  ],
+  "5e-model": [
+    "Engage",
+    "Explore",
+    "Explain",
+    "Elaborate",
+    "Evaluate"
+  ],
+  "ubd": [
+    "Essential Question / Big Idea",
+    "Learning Goals & Success Criteria",
+    "Learning Plan (Activities)",
+    "Formative Checks",
+    "Closure / Reflection"
+  ],
+  "gradual-release": [
+    "I Do (Model)",
+    "We Do (Guided)",
+    "You Do Together (Collaborative)",
+    "You Do Alone (Independent)",
+    "Closure"
+  ]
 };
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -461,7 +457,6 @@ function toggleExportMenu(evt){
 }
 
 function exportPDF(){
-  // Minimal, reliable: print dialog → Save as PDF
   document.getElementById('exportMenu').classList.remove('show');
   window.print();
 }
@@ -469,8 +464,6 @@ function exportPDF(){
 function exportDOC(){
   document.getElementById('exportMenu').classList.remove('show');
 
-  // Create a .doc file (HTML-based) from the lesson preview.
-  // This is "good enough" for Word + Google Drive conversion, without extra libraries.
   const title = (lastLessonJSON?.title || lessonData?.step1?.topic || "Lesson").toString();
   const safeName = title.replace(/[^\w\-]+/g, "_").slice(0, 80) || "Lesson";
 
@@ -504,17 +497,6 @@ ${html}
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-}
-
-function exportGoogleDocHint(){
-  document.getElementById('exportMenu').classList.remove('show');
-  alert(
-    "Google Doc export (for now):\n\n" +
-    "1) Click Export → DOC\n" +
-    "2) Upload the downloaded .doc into Google Drive\n" +
-    "3) Open it in Drive → it will convert to a Google Doc\n\n" +
-    "We can add one-click Google Doc creation later (requires Google sign-in)."
-  );
 }
 
 function generateLesson() {
@@ -568,7 +550,6 @@ function normalizeLessonFromBackend(payload) {
   if (!payload) return null;
   if (payload.error) throw new Error(payload.error);
 
-  // If your backend returns Anthropic-like structure
   if (payload.content && Array.isArray(payload.content) && payload.content[0] && typeof payload.content[0].text === "string") {
     const t = payload.content[0].text.trim();
     const match = t.match(/\{[\s\S]*\}/);
@@ -576,7 +557,6 @@ function normalizeLessonFromBackend(payload) {
     return JSON.parse(match[0]);
   }
 
-  // If backend already returns a lesson JSON
   if (payload.summary && payload.objectives && payload.procedures) return payload;
 
   if (payload._raw && typeof payload._raw === "string") {
@@ -586,6 +566,17 @@ function normalizeLessonFromBackend(payload) {
   }
 
   throw new Error("Unexpected response format from backend.");
+}
+
+// ✅ Assessments selection normalization
+function normalizeAssessmentSelections(step5) {
+  const s = step5 || {};
+  return {
+    exitTicket: !!(s.exitTicket ?? s.exit_ticket ?? s.exitTicketSelected ?? s?.assessments?.exitTicket),
+    formativeChecks: !!(s.formativeChecks ?? s.formative_checks ?? s.formativeSelected ?? s?.assessments?.formativeChecks),
+    homework: !!(s.homework ?? s.home_work ?? s.homeworkSelected ?? s?.assessments?.homework),
+    quiz: !!(s.quiz ?? s.quizSelected ?? s?.assessments?.quiz)
+  };
 }
 
 function persistVerifiedStandards(standardsArr) {
@@ -606,11 +597,7 @@ function getStandardsForDisplay(lesson) {
   return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : (d && d.length ? d : []))));
 }
 
-/**
- * ✅ Document standards renderer (print-safe)
- * - NO Source links here.
- * - Links remain only in the Verification banner.
- */
+// ✅ Document standards renderer (NO source links)
 function renderStandardsSectionForDocument(standardsArr) {
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
 
@@ -627,7 +614,7 @@ function renderStandardsSectionForDocument(standardsArr) {
 
   return `
     <div class="lesson-section">
-      <h3>California Standards (Verified)</h3>
+      <h3>California Standards</h3>
       <ul>
         ${items}
       </ul>
@@ -637,7 +624,7 @@ function renderStandardsSectionForDocument(standardsArr) {
 
 async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
   try {
-    // 1) Verify standards (best-effort)
+    // 1) Verify standards
     let standards = [];
     try {
       const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
@@ -660,16 +647,26 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       setBannerFallback("Continuing without verified standards.");
     }
 
-    // 2) Generate lesson (send verified standards if we got any)
+    // 2) Generate lesson
+    const assessmentSelections = normalizeAssessmentSelections(step5);
+
     const lessonPayload = {
       step1: { topic, grade, subject, duration },
       step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
       step3: { framework },
-      step5: step5 || { exitTicket: true, formativeChecks: true, homework: false, quiz: false },
+
+      // clean flags
+      step5: assessmentSelections,
+
+      // raw step5 for compatibility/debugging
+      step5Raw: step5 || {},
+
       verifiedStandards: standards && standards.length ? standards : []
     };
 
     if (feedback) lessonPayload.feedback = feedback;
+
+    console.log("Lesson payload (step5 flags):", lessonPayload.step5);
 
     const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
       method: "POST",
@@ -682,17 +679,22 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       throw new Error(genData?.error || genData?.details || "Lesson generation failed.");
     }
 
-    const lesson = normalizeLessonFromBackend(genData);
+    let lesson = normalizeLessonFromBackend(genData);
+
+    // Normalize possible backend keys
+    if (!lesson.assessments && lesson.assessment) lesson.assessments = lesson.assessment;
+    if (!lesson.assessments && lesson.evaluations) lesson.assessments = lesson.evaluations;
+
     lastLessonJSON = lesson;
 
-    // Inject verified standards so renderer always has them
+    // Inject verified standards for renderer
     lesson.verifiedStandards = Array.isArray(standards) && standards.length
       ? standards
       : (Array.isArray(verifiedStandards) ? verifiedStandards : []);
 
     hideLoading();
 
-    displayGeneratedLesson(lesson);
+    displayGeneratedLesson(lesson, assessmentSelections);
     document.getElementById('feedbackBox').style.display = 'block';
 
   } catch (error) {
@@ -743,16 +745,30 @@ function updateVerificationBanner(standards, source) {
   }).join('');
 }
 
-function displayGeneratedLesson(lesson) {
+// ✅ Render lesson using framework-explicit steps
+function displayGeneratedLesson(lesson, assessmentSelections) {
   document.getElementById('lessonSummary').textContent = lesson.summary || "";
 
   const standardsForDoc = getStandardsForDisplay(lesson);
   const standardsHTML = renderStandardsSectionForDocument(standardsForDoc);
 
+  const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
+  const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
+  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+
+  const chosenFramework = lessonData?.step3?.framework || "madeline-hunter";
+  const labels = frameworkStepLabels[chosenFramework] || [];
+
+  const proceduresHTML = procedures.map((step, index) => {
+    const label = labels[index] ? labels[index] : (step.name || `Step ${index+1}`);
+    return `<p><strong>Step ${index + 1}: ${escapeHtml(label)} (${escapeHtml(String(step.time ?? ""))} min):</strong> ${escapeHtml(step.description || "")}</p>`;
+  }).join('');
+
+  // Assessments rendering (robust)
   let assessmentHTML = '';
   const a = lesson.assessments || {};
 
-  if (Array.isArray(a.exitTicket)) {
+  if (Array.isArray(a.exitTicket) && a.exitTicket.length) {
     assessmentHTML += `
       <div style="margin-bottom:20px;">
         <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Exit Ticket</h4>
@@ -763,7 +779,7 @@ function displayGeneratedLesson(lesson) {
     `;
   }
 
-  if (Array.isArray(a.formativeChecks)) {
+  if (Array.isArray(a.formativeChecks) && a.formativeChecks.length) {
     assessmentHTML += `
       <div style="margin-bottom:20px;">
         <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Formative Check Questions</h4>
@@ -783,7 +799,7 @@ function displayGeneratedLesson(lesson) {
     `;
   }
 
-  if (Array.isArray(a.quiz)) {
+  if (Array.isArray(a.quiz) && a.quiz.length) {
     assessmentHTML += `
       <div style="margin-bottom:20px;">
         <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Quiz (Next Day)</h4>
@@ -794,16 +810,24 @@ function displayGeneratedLesson(lesson) {
     `;
   }
 
-  const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
-  const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
-  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+  const selections = assessmentSelections || normalizeAssessmentSelections(lessonData.step5 || {});
+  const teacherSelectedAny = !!(selections.exitTicket || selections.formativeChecks || selections.homework || selections.quiz);
 
-  const proceduresHTML = procedures.map((step, index) => `
-    <div class="procedure-box">
-      <div class="procedure-title">${index + 1}. ${escapeHtml(step.name || "Step")} <span class="time-badge">${escapeHtml(String(step.time ?? ""))} min</span></div>
-      <div class="procedure-text">${escapeHtml(step.description || "")}</div>
-    </div>
-  `).join('');
+  const hasAnyAssessment =
+    (Array.isArray(a.exitTicket) && a.exitTicket.length) ||
+    (Array.isArray(a.formativeChecks) && a.formativeChecks.length) ||
+    (typeof a.homework === "string" && a.homework.trim()) ||
+    (Array.isArray(a.quiz) && a.quiz.length);
+
+  if (!hasAnyAssessment) {
+    if (teacherSelectedAny) {
+      assessmentHTML = `<p style="color:#4A5568;">Assessments were selected, but none were generated. Click “Update Lesson” and write: “Include the exit ticket and formative checks.”</p>`;
+    } else {
+      assessmentHTML = `<p style="color:#4A5568;">No assessments selected.</p>`;
+    }
+  }
+
+  console.log("Lesson assessments returned:", lesson.assessments);
 
   const content = `
     ${standardsHTML}
@@ -829,7 +853,7 @@ function displayGeneratedLesson(lesson) {
 
     <div class="lesson-section">
       <h3>Assessments</h3>
-      ${assessmentHTML || `<p style="color:#4A5568;">No assessments selected.</p>`}
+      ${assessmentHTML}
     </div>
   `;
 
@@ -934,7 +958,8 @@ function reverifyStandards() {
 
         if (lastLessonJSON) {
           lastLessonJSON.verifiedStandards = verifiedStandards;
-          displayGeneratedLesson(lastLessonJSON);
+          const selections = normalizeAssessmentSelections(lessonData.step5 || {});
+          displayGeneratedLesson(lastLessonJSON, selections);
         }
       } else {
         hideLoading();
