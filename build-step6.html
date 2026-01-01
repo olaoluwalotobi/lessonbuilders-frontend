@@ -98,12 +98,26 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 @keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
 .loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
 
-/* Print: never blank */
+/* ✅ Print requirements:
+   - Start at lesson Title
+   - End at Assessment Summary
+   - Hide page chrome + meta/summary
+   - No blank pages
+*/
 @media print{
   body{background:white;}
-  .top-nav, .sidebar, #feedbackBox, .btn-row, .verification-banner { display:none !important; }
+  .top-nav,
+  .sidebar,
+  .verification-banner,
+  #feedbackBox,
+  .btn-row,
+  .page-title,
+  .page-subtitle,
+  .progress-bar { display:none !important; }
+
   .container { display:block !important; }
   .main-content { padding:0 !important; max-width:none !important; }
+  .lesson-meta, .lesson-summary { display:none !important; }
   .lesson-preview { border:none !important; padding:0 !important; margin:0 !important; }
   .source-link { display:none !important; }
   @page { margin: 0.6in; }
@@ -370,15 +384,10 @@ function applyFrameworkStepNames(frameworkKey, procedures){
       "Independent Practice",
       "Closure"
     ];
-
-    // If Claude returned 7 items, use first 7. If 8+, use first 8.
     const targetLen = out.length >= 8 ? 8 : 7;
-
     for (let i = 0; i < Math.min(targetLen, out.length); i++){
       out[i].name = `Step ${i+1}: ${names[i] || (out[i].name || `Step ${i+1}`)}`;
     }
-
-    // If Claude used generic names, still enforce "Step X:" prefix for rest
     for (let i = targetLen; i < out.length; i++){
       if (!String(out[i].name || "").toLowerCase().startsWith("step ")) {
         out[i].name = `Step ${i+1}: ${out[i].name || "Additional Step"}`;
@@ -451,16 +460,18 @@ function generateLesson() {
 
 async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
   try {
-    // ✅ Standards: DO NOT change what worked.
-    // Send grade/subject EXACTLY as stored, plus optional normalized fields (won’t break your backend).
+    // ✅ Standards: send grade as numeric (for local match), but keep gradeLabel too.
     let standards = [];
     try {
+      const gradeRaw = grade;
+      const gradeNum = String(gradeRaw).match(/\b(\d{1,2})\b/)?.[1] || String(gradeRaw).trim();
+
       const verifyBody = {
-        grade,
-        subject,
-        topic,
-        gradeNormalized: String(grade).match(/\b(\d{1,2})\b/)?.[1] || grade,
-        subjectNormalized: String(subject || "").toLowerCase().trim()
+        grade: gradeNum,                 // ✅ IMPORTANT: "5"
+        gradeLabel: gradeRaw,            // keep "5th Grade"
+        subject: subject,                // keep original ("Science")
+        subjectNormalized: String(subject || "").toLowerCase().trim(),
+        topic
       };
 
       const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
@@ -508,7 +519,6 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     lastLessonJSON = lesson;
     persistGeneratedLessonToLessonData(lastLessonJSON);
 
-    // ensure renderer has standards even if lesson object doesn't
     lesson.verifiedStandards = standards && standards.length ? standards : getStandardsForDisplay(lesson);
 
     hideLoading();
