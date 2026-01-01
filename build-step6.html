@@ -9,94 +9,88 @@
 :root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
-.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-.nav-left{display:flex;align-items:center;gap:40px;}
-.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
-.nav-menu{display:flex;gap:32px;align-items:center;}
-.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+.top-nav{background:white;border-bottom:1px solid rgba(13,40,71,0.12);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-left{display:flex;align-items:center;gap:34px;}
+.logo-text{font-family:'Crimson Pro',serif;font-size:22px;font-weight:700;color:var(--navy);text-decoration:none;}
+.nav-menu{display:flex;gap:26px;align-items:center;}
+.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:14px;transition:color 0.2s;}
 .nav-link:hover{color:var(--navy);}
 .nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.user-profile{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:13px;cursor:pointer;}
+
 .container{display:flex;max-width:1400px;margin:0 auto;}
-.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
-.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
-.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+.sidebar{width:270px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:24px 18px;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:10px;margin-bottom:6px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;border-radius:8px;}
+.nav-step.active{background:rgba(255,140,66,0.10);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
 .nav-step.completed{color:#10B981;}
-.step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
+.step-number{width:26px;height:26px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#999;}
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
 .nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
-.main-content{flex:1;padding:40px 60px;max-width:900px;}
-.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
-.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
-.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
+
+.main-content{flex:1;padding:28px 44px;max-width:980px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:34px;font-weight:700;margin-bottom:6px;color:var(--navy);}
+.page-subtitle{font-size:15px;color:#4A5568;margin-bottom:18px;}
+.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:18px;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
 
 /* Standards Verification Banner */
-.verification-banner{background:rgba(16,185,129,0.05);border:2px solid rgba(16,185,129,0.2);border-radius:12px;padding:16px 20px;margin-bottom:24px;transition:all 0.3s;}
-.verification-banner:hover{border-color:rgba(16,185,129,0.4);box-shadow:0 2px 8px rgba(16,185,129,0.1);}
+.verification-banner{background:rgba(16,185,129,0.05);border:2px solid rgba(16,185,129,0.18);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
 .banner-header{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .banner-left{display:flex;align-items:center;gap:10px;}
-.banner-icon{font-size:22px;color:var(--green);display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(16,185,129,0.1);}
-.banner-text{font-weight:600;color:var(--navy);font-size:16px;}
-.banner-meta{font-size:13px;color:#718096;margin-left:42px;margin-top:4px;}
-.view-details-btn{background:white;border:2px solid rgba(16,185,129,0.3);color:var(--green);padding:8px 16px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.banner-icon{font-size:18px;color:var(--green);display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(16,185,129,0.12);}
+.banner-text{font-weight:700;color:var(--navy);font-size:15px;}
+.banner-meta{font-size:12px;color:#718096;margin-left:40px;margin-top:3px;}
+.view-details-btn{background:white;border:2px solid rgba(16,185,129,0.25);color:var(--green);padding:7px 12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
 .view-details-btn:hover{background:rgba(16,185,129,0.05);border-color:var(--green);transform:translateY(-1px);}
-.details-icon{font-size:12px;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);}
+.details-icon{font-size:11px;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);}
 .details-icon.expanded{transform:rotate(180deg);}
 
-/* Expandable Details Section */
 .details-section{max-height:0;overflow:hidden;transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1);}
-.details-section.show{max-height:1400px;padding-top:20px;}
+.details-section.show{max-height:1400px;padding-top:14px;}
 
-/* Legend Bar */
-.legend-bar{background:white;border:2px solid rgba(59,130,246,0.2);border-radius:10px;padding:14px 20px;margin-bottom:20px;display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap;}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#4A5568;font-weight:500;}
+.legend-bar{background:white;border:2px solid rgba(59,130,246,0.18);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:#4A5568;font-weight:600;}
 
-/* Standard Card */
-.standard-card{background:white;border:2px solid #E2E8F0;border-radius:12px;padding:18px;margin-bottom:12px;transition:all 0.2s;}
-.standard-card:hover{border-color:var(--orange);box-shadow:0 4px 12px rgba(255,140,66,0.1);}
-.standard-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
-.standard-number{font-weight:700;color:var(--orange);font-size:16px;background:rgba(255,140,66,0.1);padding:4px 12px;border-radius:6px;}
-.standard-text{color:#4A5568;line-height:1.7;margin-bottom:14px;font-size:14px;}
-.standard-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:12px;border-top:1px solid #E2E8F0;}
-.confidence-badge{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
-.confidence-badge.high{background:rgba(16,185,129,0.1);color:#059669;}
-.confidence-badge.medium{background:rgba(245,158,11,0.1);color:#D97706;}
-.confidence-badge.low{background:rgba(239,68,68,0.1);color:#DC2626;}
-.source-link{color:var(--blue);text-decoration:none;font-size:13px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px;}
+.standard-card{background:white;border:2px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:10px;}
+.standard-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;}
+.standard-number{font-weight:800;color:var(--orange);font-size:14px;background:rgba(255,140,66,0.10);padding:3px 10px;border-radius:6px;}
+.standard-text{color:#4A5568;line-height:1.55;margin-bottom:10px;font-size:13px;}
+.standard-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:10px;border-top:1px solid #E2E8F0;}
+.confidence-badge{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:4px;}
+.confidence-badge.high{background:rgba(16,185,129,0.10);color:#059669;}
+.confidence-badge.medium{background:rgba(245,158,11,0.10);color:#B45309;}
+.confidence-badge.low{background:rgba(239,68,68,0.10);color:#B91C1C;}
+.source-link{color:var(--blue);text-decoration:none;font-size:12px;font-weight:800;transition:all 0.2s;display:inline-flex;align-items:center;gap:4px;}
 .source-link:hover{color:var(--orange);}
-.source-link::after{content:'→';transition:transform 0.2s;}
-.source-link:hover::after{transform:translateX(3px);}
 
-/* Details Footer */
-.details-footer{margin-top:20px;padding-top:16px;border-top:1px solid #E2E8F0;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
-.btn-text{background:none;border:none;color:#718096;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;font-weight:500;padding:8px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;}
+.details-footer{margin-top:12px;padding-top:12px;border-top:1px solid #E2E8F0;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.btn-text{background:none;border:none;color:#718096;font-size:12px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;font-weight:700;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;}
 .btn-text:hover{color:var(--orange);background:rgba(255,140,66,0.05);}
 
-/* Lesson Preview */
-.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:40px;margin-bottom:28px;}
-.lesson-title{font-size:32px;font-weight:700;color:var(--navy);margin-bottom:20px;text-align:center;}
-.lesson-meta{text-align:center;color:#4A5568;margin-bottom:16px;padding-bottom:16px;border-top:2px solid #E2E8F0;}
-.lesson-summary{text-align:center;color:#4A5568;font-size:16px;line-height:1.6;margin-bottom:24px;padding-bottom:24px;border-bottom:2px solid #E2E8F0;}
-.lesson-section{margin-bottom:32px;}
-.lesson-section h3{font-size:24px;font-weight:700;color:var(--navy);margin-bottom:12px;}
-.lesson-section p{color:#4A5568;line-height:1.7;margin-bottom:10px;}
-.lesson-section ul{margin-left:20px;color:#4A5568;line-height:1.7;}
-.lesson-section li{margin-bottom:8px;}
+/* Lesson Preview (tight + teacher friendly) */
+.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:14px;padding:22px;margin-bottom:14px;}
+.lesson-title{font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px;text-align:center;}
+.lesson-meta{text-align:center;color:#4A5568;margin-bottom:10px;padding-bottom:10px;border-bottom:2px solid #E2E8F0;font-size:13px;line-height:1.4;}
+.lesson-summary{text-align:left;color:#4A5568;font-size:14px;line-height:1.45;margin:12px 0 12px 0;}
+.lesson-section{margin-bottom:14px;}
+.lesson-section h3{font-size:18px;font-weight:900;color:var(--navy);margin-bottom:6px;}
+.lesson-section p{color:#4A5568;line-height:1.42;margin-bottom:6px;font-size:13.5px;}
+.lesson-section ul{margin-left:18px;color:#4A5568;line-height:1.42;font-size:13.5px;}
+.lesson-section li{margin-bottom:5px;}
+
+.rule-line{height:1px;background:#E2E8F0;margin:10px 0;}
 
 /* Buttons */
-.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn{padding:12px 18px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.35);}
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
-.btn-group{display:flex;gap:16px;margin-top:0;flex-wrap:wrap;align-items:center;}
-.btn-group .spacer{flex:1;}
+.btn-group{display:flex;gap:12px;margin-top:0;flex-wrap:wrap;align-items:center;}
 
-/* Export dropdown */
 .export-wrap{position:relative;display:inline-block;}
 .export-menu{
-  position:absolute; top:54px; left:0;
+  position:absolute; top:48px; left:0;
   background:white; border:2px solid #E2E8F0; border-radius:12px;
   box-shadow:0 10px 30px rgba(0,0,0,0.10);
   min-width:260px;
@@ -108,34 +102,49 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .export-item{
   width:100%;
   text-align:left;
-  padding:12px 12px;
+  padding:10px 10px;
   border-radius:10px;
   border:none;
   background:white;
   cursor:pointer;
   font-family:'DM Sans',sans-serif;
   color:var(--navy);
-  font-size:14px;
-  font-weight:600;
+  font-size:13px;
+  font-weight:900;
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
 }
 .export-item:hover{background:rgba(255,140,66,0.08);}
-.export-sub{font-size:12px;color:#718096;font-weight:500;margin-top:2px;}
+.export-sub{font-size:12px;color:#718096;font-weight:700;margin-top:2px;}
 .export-sep{height:1px;background:#E2E8F0;margin:8px 0;}
 
-/* Enhancement box */
-.enhancement-box{background:rgba(59,130,246,0.05);border:2px solid rgba(59,130,246,0.3);border-radius:16px;padding:28px;margin-top:40px;text-align:center;}
-.enhancement-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
-.enhancement-text{color:#4A5568;line-height:1.6;margin-bottom:24px;font-size:15px;}
-.enhancement-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+/* Feedback */
+.feedback-box{background:white;border:2px solid #E2E8F0;border-radius:14px;padding:18px;margin-top:14px;margin-bottom:14px;}
+.feedback-title{font-size:16px;font-weight:900;color:var(--navy);margin-bottom:6px;}
+.feedback-subtitle{font-size:12px;color:#718096;margin-bottom:12px;}
+.feedback-textarea{width:100%;padding:12px;border:2px solid #E2E8F0;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;transition:all 0.2s;resize:vertical;min-height:110px;}
+.feedback-textarea:focus{outline:none;border-color:var(--orange);}
+.feedback-button{width:100%;margin-top:12px;}
+
+/* Errors (no silent fallback) */
+.hard-error{
+  background:rgba(239,68,68,0.06);
+  border:2px solid rgba(239,68,68,0.25);
+  border-radius:14px;
+  padding:16px;
+  margin:14px 0;
+}
+.hard-error h4{font-size:14px;font-weight:900;color:#991B1B;margin-bottom:6px;}
+.hard-error p{font-size:13px;color:#7F1D1D;line-height:1.4;margin-bottom:10px;}
+.hard-error ul{margin-left:18px;color:#7F1D1D;font-size:13px;line-height:1.4;}
+.hard-error .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
 
 /* Loading */
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
 .loading-overlay.hidden{display:none;}
-.blocks-loader{position:relative;width:73px;height:66px;margin-bottom:24px;}
+.blocks-loader{position:relative;width:73px;height:66px;margin-bottom:18px;}
 .block{position:absolute;border-radius:6px;opacity:0;animation-duration:2.6s;animation-timing-function:cubic-bezier(.2,.9,.2,1);animation-iteration-count:infinite;will-change:transform, opacity;}
 .bl{width:48px;height:20px;left:0;bottom:0;background:var(--navy);animation-name:bl-in;}
 .tl{width:22px;height:20px;left:26px;bottom:24px;background:var(--navy);animation-name:tl-in;}
@@ -144,48 +153,16 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 @keyframes bl-in{0%{opacity:0;transform:translateX(16px);}12%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
 @keyframes br-in{0%,14%{opacity:0;transform:translateY(16px);}26%{opacity:1;transform:translateY(0);}80%{opacity:1;}100%{opacity:0;}}
 @keyframes tl-in{0%,28%{opacity:0;transform:translateX(-16px);}40%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
-@keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
-.loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
-@media (prefers-reduced-motion: reduce){.block{animation:none;opacity:1;transform:none;}}
+@keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
+.loading-message{font-size:14px;color:var(--navy);font-weight:800;text-align:center;min-height:24px;padding:0 16px;}
 
-/* ✅ PRINT: keep lesson visible; hide UI chrome */
 @media print{
   body * {visibility: hidden;}
-
   .lesson-preview, .lesson-preview * {visibility: visible;}
-  .lesson-preview {
-    position: absolute;
-    left: 0; top: 0;
-    width: 100%;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .top-nav,
-  .sidebar,
-  .btn-group,
-  .enhancement-box,
-  .verification-banner,
-  .page-title,
-  .page-subtitle,
-  .progress-bar,
-  .feedback-box,
-  #loadingOverlay {
-    display: none !important;
-  }
-
+  .lesson-preview {position:absolute;left:0;top:0;width:100%;border:none;box-shadow:none;padding:0;margin:0;}
+  .top-nav,.sidebar,.btn-group,.verification-banner,.page-title,.page-subtitle,.progress-bar,.feedback-box,#loadingOverlay,.hard-error{display:none !important;}
   .export-menu{display:none !important;}
 }
-
-/* Feedback */
-.feedback-box{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:32px;margin-top:32px;margin-bottom:32px;}
-.feedback-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
-.feedback-subtitle{font-size:14px;color:#718096;margin-bottom:20px;}
-.feedback-textarea{width:100%;padding:16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;resize:vertical;min-height:120px;}
-.feedback-textarea:focus{outline:none;border-color:var(--orange);}
-.feedback-button{width:100%;margin-top:16px;}
 </style>
 </head>
 <body>
@@ -205,7 +182,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 <div class="container">
   <aside class="sidebar">
-    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+    <div style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:12px;">BUILD LESSON</div>
     <a href="build-step1.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></a>
     <a href="build-step2.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Teaching Style</div></a>
     <a href="build-step3.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Choose Template</div></a>
@@ -217,7 +194,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
   <main class="main-content">
     <h1 class="page-title">Your lesson is ready</h1>
-    <p class="page-subtitle">Review, download, or build connections</p>
+    <p class="page-subtitle">Review, export, or save</p>
     <div class="progress-bar"><div class="progress-fill" style="width:86%;"></div></div>
 
     <!-- Standards Verification Banner -->
@@ -238,81 +215,57 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
       <div class="details-section" id="detailsSection">
         <div class="legend-bar">
-          <div class="legend-item">
-            <span class="confidence-badge high">High ✓✓</span>
-            <span>Exact CDE match</span>
-          </div>
-          <div class="legend-item">
-            <span class="confidence-badge medium">Medium ✓</span>
-            <span>Paraphrased</span>
-          </div>
-          <div class="legend-item">
-            <span class="confidence-badge low">Manual Check ⚠️</span>
-            <span>Verify manually</span>
-          </div>
+          <div class="legend-item"><span class="confidence-badge high">High ✓✓</span><span>Exact match</span></div>
+          <div class="legend-item"><span class="confidence-badge medium">Medium ✓</span><span>Paraphrased</span></div>
+          <div class="legend-item"><span class="confidence-badge low">Manual ⚠️</span><span>Check</span></div>
         </div>
 
         <div id="standardsContainer"></div>
 
         <div class="details-footer">
           <button class="btn-text" onclick="reportError()">⚠️ Report an Error</button>
-          <button class="btn-text" onclick="reverifyStandards()">🔄 Re-verify Standards</button>
+          <button class="btn-text" onclick="reverifyStandards()">🔄 Re-verify</button>
         </div>
       </div>
     </div>
 
-    <!-- Lesson document -->
+    <!-- Hard error area (no silent fallbacks) -->
+    <div id="hardError" class="hard-error" style="display:none;"></div>
+
+    <!-- Lesson -->
     <div class="lesson-preview" id="lessonPreview">
-      <h2 class="lesson-title" id="lessonTitle">Loading...</h2>
+      <div class="lesson-title" id="lessonTitle">Loading...</div>
       <div class="lesson-meta" id="lessonMeta"></div>
       <div class="lesson-summary" id="lessonSummary"></div>
       <div id="lessonContent"></div>
     </div>
 
-    <!-- Feedback Box -->
+    <!-- Feedback -->
     <div class="feedback-box" id="feedbackBox" style="display:none;">
-      <div class="feedback-title">Want to make changes? Describe what to adjust...</div>
-      <div class="feedback-subtitle">Example: Make the exit ticket questions more challenging, add a visual example to step 3...</div>
+      <div class="feedback-title">Want changes? Describe what to adjust.</div>
+      <div class="feedback-subtitle">Example: “Make the hook more engaging” or “Differentiate for EL students.”</div>
       <textarea class="feedback-textarea" id="feedbackTextarea" placeholder="Describe your changes here..."></textarea>
-      <button class="btn btn-primary feedback-button" onclick="regenerateLesson()">Update Lesson</button>
+      <button class="btn btn-primary feedback-button" id="updateLessonBtn" onclick="regenerateLesson()">Update Lesson</button>
     </div>
 
     <!-- Actions -->
     <div class="btn-group">
-      <button class="btn btn-secondary" id="printBtn" onclick="window.print()">&#128424; Print</button>
+      <button class="btn btn-secondary" id="printBtn" onclick="window.print()">🖨 Print</button>
 
       <div class="export-wrap">
-        <button class="btn btn-secondary" id="exportBtn" onclick="toggleExportMenu(event)">&#8681; Export</button>
+        <button class="btn btn-secondary" id="exportBtn" onclick="toggleExportMenu(event)">⬇ Export</button>
         <div class="export-menu" id="exportMenu" role="menu" aria-label="Export options">
           <button class="export-item" onclick="exportPDF()">
-            <div>
-              PDF
-              <div class="export-sub">Uses Print → Save as PDF</div>
-            </div>
-            <span>→</span>
+            <div>PDF<div class="export-sub">Uses Print → Save as PDF</div></div><span>→</span>
           </button>
           <div class="export-sep"></div>
           <button class="export-item" onclick="exportDOC()">
-            <div>
-              DOC
-              <div class="export-sub">Downloads .doc (HTML-based)</div>
-            </div>
-            <span>→</span>
+            <div>DOC<div class="export-sub">Downloads .doc (HTML-based)</div></div><span>→</span>
           </button>
         </div>
       </div>
 
       <button class="btn btn-primary" onclick="saveToLibrary()">Save to Library</button>
-      <span class="spacer"></span>
-    </div>
-
-    <div class="enhancement-box">
-      <div class="enhancement-title" id="enhancementTitle">Want to enhance this with cross-curricular connections?</div>
-      <div class="enhancement-text">Cross-curricular teaching helps students understand concepts more deeply.</div>
-      <div class="enhancement-buttons">
-        <button class="btn btn-secondary" onclick="skipCollab()">Skip for Now</button>
-        <a href="build-step7.html" class="btn btn-primary" id="collabLink">Yes, Show Me Collaborations &rarr;</a>
-      </div>
     </div>
   </main>
 </div>
@@ -329,9 +282,15 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
+/**
+ * Step 6 (strict):
+ * - Standards show in banner AND inside lesson document + print (no source links in document)
+ * - Claude MUST provide: keyVocabulary, udlConnections, assessmentSummary
+ * - If missing, Step 6 does NOT fallback. It shows a hard error and retries once.
+ * - Update Lesson always sends feedback and triggers regeneration.
+ */
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
-// Loading overlay messages
 const messages = [
   "Building a great lesson, one block at a time",
   "Verifying California standards…",
@@ -354,7 +313,6 @@ function showLoading(){
     msgEl.textContent = messages[msgIndex];
   }, 2200);
 }
-
 function hideLoading(){
   document.getElementById("loadingOverlay").classList.add("hidden");
   clearInterval(msgTimer);
@@ -364,14 +322,13 @@ let lessonData = {};
 let verifiedStandards = [];
 let lastLessonJSON = null;
 
+// Framework labels (explicit “Step 1: Hook”, etc.)
 const frameworkNames = {
   'madeline-hunter': 'Madeline Hunter',
   '5e-model': '5E Model',
   'ubd': 'Understanding by Design',
   'gradual-release': 'Gradual Release'
 };
-
-// Used to render "Step 1: Hook ..." explicitly in the document
 const frameworkStepLabels = {
   "madeline-hunter": [
     "Hook / Anticipatory Set",
@@ -382,13 +339,7 @@ const frameworkStepLabels = {
     "Independent Practice",
     "Closure"
   ],
-  "5e-model": [
-    "Engage",
-    "Explore",
-    "Explain",
-    "Elaborate",
-    "Evaluate"
-  ],
+  "5e-model": ["Engage","Explore","Explain","Elaborate","Evaluate"],
   "ubd": [
     "Essential Question / Big Idea",
     "Learning Goals & Success Criteria",
@@ -405,35 +356,72 @@ const frameworkStepLabels = {
   ]
 };
 
+// Export menu close on outside click / escape
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('exportMenu');
+  const btn = document.getElementById('exportBtn');
+  if (!menu.classList.contains('show')) return;
+  if (menu.contains(e.target) || btn.contains(e.target)) return;
+  menu.classList.remove('show');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.getElementById('exportMenu').classList.remove('show');
+});
+
 window.addEventListener('DOMContentLoaded', function() {
   const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    lessonData = JSON.parse(saved);
-    verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
-    generateLesson();
-
-    if (lessonData.hasVisitedStep7) {
-      document.getElementById('enhancementTitle').textContent = 'Want to add MORE cross-curricular connections?';
-    }
-  } else {
+  if (!saved) {
     document.getElementById('lessonTitle').textContent = "Missing lesson data";
     document.getElementById('lessonSummary').textContent = "Go back to Step 1 to start building a lesson.";
+    return;
   }
 
-  // Close export menu when clicking outside
-  document.addEventListener('click', (e) => {
-    const menu = document.getElementById('exportMenu');
-    const btn = document.getElementById('exportBtn');
-    if (!menu.classList.contains('show')) return;
-    if (menu.contains(e.target) || btn.contains(e.target)) return;
-    menu.classList.remove('show');
-  });
+  lessonData = JSON.parse(saved);
+  verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
 
-  // Escape closes export menu
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') document.getElementById('exportMenu').classList.remove('show');
-  });
+  generateLesson({ feedback: null, strictRetry: false });
 });
+
+function toggleExportMenu(evt){
+  evt.preventDefault();
+  document.getElementById('exportMenu').classList.toggle('show');
+}
+function exportPDF(){
+  document.getElementById('exportMenu').classList.remove('show');
+  window.print();
+}
+function exportDOC(){
+  document.getElementById('exportMenu').classList.remove('show');
+
+  const title = (lastLessonJSON?.title || lessonData?.step1?.topic || "Lesson").toString();
+  const safeName = title.replace(/[^\w\-]+/g, "_").slice(0, 80) || "Lesson";
+  const preview = document.getElementById('lessonPreview');
+  const html = preview.outerHTML;
+
+  const doc =
+`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(title)}</title>
+<style>
+  body{font-family:Arial, sans-serif; color:#0D2847;}
+  .lesson-preview{border:none; padding:0; margin:0;}
+</style>
+</head>
+<body>${html}</body>
+</html>`;
+
+  const blob = new Blob([doc], { type: "application/msword" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${safeName}.doc`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
 function toggleDetails() {
   const section = document.getElementById('detailsSection');
@@ -450,81 +438,6 @@ function toggleDetails() {
   }
 }
 
-function toggleExportMenu(evt){
-  evt.preventDefault();
-  const menu = document.getElementById('exportMenu');
-  menu.classList.toggle('show');
-}
-
-function exportPDF(){
-  document.getElementById('exportMenu').classList.remove('show');
-  window.print();
-}
-
-function exportDOC(){
-  document.getElementById('exportMenu').classList.remove('show');
-
-  const title = (lastLessonJSON?.title || lessonData?.step1?.topic || "Lesson").toString();
-  const safeName = title.replace(/[^\w\-]+/g, "_").slice(0, 80) || "Lesson";
-
-  const preview = document.getElementById('lessonPreview');
-  const html = preview.outerHTML;
-
-  const doc =
-`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>${escapeHtml(title)}</title>
-<style>
-  body{font-family:Arial, sans-serif; color:#0D2847;}
-  .lesson-preview{border:none; padding:0; margin:0;}
-  a{color:#0D2847; text-decoration:none;}
-</style>
-</head>
-<body>
-${html}
-</body>
-</html>`;
-
-  const blob = new Blob([doc], { type: "application/msword" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${safeName}.doc`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function generateLesson() {
-  const step1 = lessonData.step1 || {};
-  const step2 = lessonData.step2 || {};
-  const step3 = lessonData.step3 || {};
-  const step5 = lessonData.step5 || {};
-
-  const topic = step1.topic || 'Untitled Lesson';
-  const grade = step1.grade || '5th Grade';
-  const subject = step1.subject || 'Mathematics';
-  const duration = step1.duration || 45;
-  const framework = step3.framework || 'madeline-hunter';
-
-  document.getElementById('lessonTitle').textContent = topic;
-
-  const metaHTML = `
-    <p><strong>Grade:</strong> ${grade} | <strong>Subject:</strong> ${subject} | <strong>Duration:</strong> ${duration} minutes</p>
-    <p><strong>Framework:</strong> ${frameworkNames[framework] || framework}</p>
-  `;
-  document.getElementById('lessonMeta').innerHTML = metaHTML;
-
-  setBannerVerifying();
-
-  showLoading();
-  generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback: null });
-}
-
 function setBannerVerifying() {
   document.getElementById('bannerText').textContent = "Verifying California Standards...";
   document.getElementById('bannerMeta').textContent = "This will take 5-15 seconds";
@@ -532,7 +445,6 @@ function setBannerVerifying() {
   document.getElementById('standardsContainer').innerHTML = "";
   document.getElementById('detailsSection').classList.remove('show');
 }
-
 function setBannerFallback(message) {
   document.getElementById('bannerText').textContent = "Standards verification unavailable";
   document.getElementById('bannerMeta').textContent = message || "Continuing without verified standards.";
@@ -550,6 +462,7 @@ function normalizeLessonFromBackend(payload) {
   if (!payload) return null;
   if (payload.error) throw new Error(payload.error);
 
+  // If backend returns Anthropic format
   if (payload.content && Array.isArray(payload.content) && payload.content[0] && typeof payload.content[0].text === "string") {
     const t = payload.content[0].text.trim();
     const match = t.match(/\{[\s\S]*\}/);
@@ -557,6 +470,7 @@ function normalizeLessonFromBackend(payload) {
     return JSON.parse(match[0]);
   }
 
+  // If backend returns lesson JSON directly
   if (payload.summary && payload.objectives && payload.procedures) return payload;
 
   if (payload._raw && typeof payload._raw === "string") {
@@ -568,15 +482,53 @@ function normalizeLessonFromBackend(payload) {
   throw new Error("Unexpected response format from backend.");
 }
 
-// ✅ Assessments selection normalization
-function normalizeAssessmentSelections(step5) {
-  const s = step5 || {};
-  return {
-    exitTicket: !!(s.exitTicket ?? s.exit_ticket ?? s.exitTicketSelected ?? s?.assessments?.exitTicket),
-    formativeChecks: !!(s.formativeChecks ?? s.formative_checks ?? s.formativeSelected ?? s?.assessments?.formativeChecks),
-    homework: !!(s.homework ?? s.home_work ?? s.homeworkSelected ?? s?.assessments?.homework),
-    quiz: !!(s.quiz ?? s.quizSelected ?? s?.assessments?.quiz)
-  };
+/**
+ * STRICT: Required core fields.
+ * No placeholders. No defaults. If missing => hard error + retry once.
+ */
+function validateRequiredLessonFields(lesson){
+  const missing = [];
+
+  const vocab = lesson?.keyVocabulary;
+  if (!Array.isArray(vocab) || vocab.length < 6 || !vocab.every(v => typeof v === "string" && v.trim().length)) {
+    missing.push("keyVocabulary (array of 6+ topic-specific terms)");
+  }
+
+  const udl = lesson?.udlConnections;
+  if (!udl || typeof udl !== "object") {
+    missing.push("udlConnections (object with engagement, representation, actionExpression)");
+  } else {
+    if (typeof udl.engagement !== "string" || !udl.engagement.trim()) missing.push("udlConnections.engagement");
+    if (typeof udl.representation !== "string" || !udl.representation.trim()) missing.push("udlConnections.representation");
+    if (typeof udl.actionExpression !== "string" || !udl.actionExpression.trim()) missing.push("udlConnections.actionExpression");
+  }
+
+  if (typeof lesson?.assessmentSummary !== "string" || !lesson.assessmentSummary.trim()) {
+    missing.push("assessmentSummary (a paragraph describing how learning is assessed)");
+  }
+
+  return missing;
+}
+
+function showHardError(title, message, items, actionsHtml){
+  const box = document.getElementById('hardError');
+  const list = (items && items.length)
+    ? `<ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>`
+    : "";
+
+  box.innerHTML = `
+    <h4>${escapeHtml(title)}</h4>
+    <p>${escapeHtml(message)}</p>
+    ${list}
+    ${actionsHtml || ""}
+  `;
+  box.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function clearHardError(){
+  const box = document.getElementById('hardError');
+  box.style.display = 'none';
+  box.innerHTML = '';
 }
 
 function persistVerifiedStandards(standardsArr) {
@@ -589,120 +541,265 @@ function persistVerifiedStandards(standardsArr) {
   }
 }
 
-function getStandardsForDisplay(lesson) {
-  const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : null;
-  const b = Array.isArray(lesson?.standards) ? lesson.standards : null;
+function getStandardsForDocument() {
+  const a = Array.isArray(lastLessonJSON?.verifiedStandards) ? lastLessonJSON.verifiedStandards : null;
+  const b = Array.isArray(lastLessonJSON?.standards) ? lastLessonJSON.standards : null;
   const c = Array.isArray(verifiedStandards) ? verifiedStandards : null;
   const d = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
-  return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : (d && d.length ? d : []))));
+  const picked = (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : (d && d.length ? d : []))));
+  return Array.isArray(picked) ? picked : [];
 }
 
-// ✅ Document standards renderer (NO source links)
+// Document standards renderer (NO links, NO “Verified” label)
 function renderStandardsSectionForDocument(standardsArr) {
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
-
   const items = standardsArr.map(std => {
     const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
     const text = escapeHtml((std.text || std.description || "").toString());
     return `
-      <li style="margin-bottom:10px;">
+      <li>
         ${code ? `<strong style="color:var(--navy);">${code}</strong><br>` : ""}
-        <span style="color:#4A5568;line-height:1.6;">${text}</span>
+        <span>${text}</span>
       </li>
     `;
   }).join("");
-
   return `
     <div class="lesson-section">
       <h3>California Standards</h3>
-      <ul>
-        ${items}
-      </ul>
+      <ul>${items}</ul>
     </div>
   `;
 }
 
-async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
+async function generateLesson({ feedback, strictRetry }) {
+  clearHardError();
+
+  const step1 = lessonData.step1 || {};
+  const step2 = lessonData.step2 || {};
+  const step3 = lessonData.step3 || {};
+  const step5 = lessonData.step5 || {};
+
+  const topic = step1.topic || 'Untitled Lesson';
+  const grade = step1.grade || '5th Grade';
+  const subject = step1.subject || 'Mathematics';
+  const duration = step1.duration || 45;
+  const framework = step3.framework || 'madeline-hunter';
+
+  document.getElementById('lessonTitle').textContent = topic;
+  document.getElementById('lessonMeta').innerHTML = `
+    <div><strong>Grade:</strong> ${escapeHtml(grade)} &nbsp;|&nbsp; <strong>Subject:</strong> ${escapeHtml(subject)} &nbsp;|&nbsp; <strong>Duration:</strong> ${escapeHtml(String(duration))} min</div>
+    <div><strong>Framework:</strong> ${escapeHtml(frameworkNames[framework] || framework)}</div>
+  `;
+
+  setBannerVerifying();
+  showLoading();
+
+  // 1) Verify standards (best-effort — lesson still generates even if this fails)
+  let standards = [];
   try {
-    // 1) Verify standards
-    let standards = [];
-    try {
-      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ grade, subject, topic })
-      });
-      const verifyData = await safeJson(verifyRes);
-
-      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
-        standards = verifyData.standards;
-        verifiedStandards = standards;
-        persistVerifiedStandards(verifiedStandards);
-        updateVerificationBanner(standards, verifyData.source);
-      } else {
-        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
-      }
-    } catch (e) {
-      console.warn("Standards verification failed (continuing):", e);
-      setBannerFallback("Continuing without verified standards.");
+    const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ grade, subject, topic })
+    });
+    const verifyData = await safeJson(verifyRes);
+    if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
+      standards = verifyData.standards;
+      verifiedStandards = standards;
+      persistVerifiedStandards(verifiedStandards);
+      updateVerificationBanner(standards, verifyData.source);
+    } else {
+      setBannerFallback(verifyData?.message || "Continuing without verified standards.");
     }
+  } catch (e) {
+    setBannerFallback("Continuing without verified standards.");
+  }
 
-    // 2) Generate lesson
-    const assessmentSelections = normalizeAssessmentSelections(step5);
+  // 2) Generate lesson
+  const payload = {
+    step1: { topic, grade, subject, duration },
+    step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
+    step3: { framework },
+    step5: step5 || {},
+    verifiedStandards: standards && standards.length ? standards : (Array.isArray(verifiedStandards) ? verifiedStandards : [])
+  };
 
-    const lessonPayload = {
-      step1: { topic, grade, subject, duration },
-      step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
-      step3: { framework },
+  // feedback MUST flow to backend
+  if (feedback && typeof feedback === "string" && feedback.trim()) {
+    payload.feedback = feedback.trim();
+  }
 
-      // clean flags
-      step5: assessmentSelections,
+  // strict retry hint (works only if backend passes feedback into Claude prompt)
+  if (strictRetry) {
+    payload.feedback = (payload.feedback ? payload.feedback + "\n\n" : "") +
+      "CRITICAL: Output MUST include: keyVocabulary (6-12 terms), udlConnections {engagement,representation,actionExpression}, and assessmentSummary. Do not omit these fields.";
+  }
 
-      // raw step5 for compatibility/debugging
-      step5Raw: step5 || {},
-
-      verifiedStandards: standards && standards.length ? standards : []
-    };
-
-    if (feedback) lessonPayload.feedback = feedback;
-
-    console.log("Lesson payload (step5 flags):", lessonPayload.step5);
-
+  try {
     const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(lessonPayload)
+      body: JSON.stringify(payload)
     });
 
     const genData = await safeJson(genRes);
-    if (!genRes.ok) {
-      throw new Error(genData?.error || genData?.details || "Lesson generation failed.");
+    if (!genRes.ok) throw new Error(genData?.error || genData?.details || "Lesson generation failed.");
+
+    const lesson = normalizeLessonFromBackend(genData);
+
+    // Keep last lesson + standards for document
+    lastLessonJSON = lesson;
+    lastLessonJSON.verifiedStandards = Array.isArray(payload.verifiedStandards) ? payload.verifiedStandards : [];
+
+    // STRICT validation (no fallback)
+    const missing = validateRequiredLessonFields(lesson);
+
+    // If missing and we haven't retried yet: retry ONCE automatically
+    if (missing.length && !strictRetry) {
+      hideLoading();
+      showHardError(
+        "Claude returned an incomplete lesson",
+        "LessonBuilders requires UDL, Vocabulary, and Assessment Summary for every lesson. Retrying once with stricter instructions…",
+        missing,
+        `<div class="row">
+           <button class="btn btn-secondary" onclick="retryStrict()">Retry Now</button>
+         </div>`
+      );
+      return;
     }
 
-    let lesson = normalizeLessonFromBackend(genData);
-
-    // Normalize possible backend keys
-    if (!lesson.assessments && lesson.assessment) lesson.assessments = lesson.assessment;
-    if (!lesson.assessments && lesson.evaluations) lesson.assessments = lesson.evaluations;
-
-    lastLessonJSON = lesson;
-
-    // Inject verified standards for renderer
-    lesson.verifiedStandards = Array.isArray(standards) && standards.length
-      ? standards
-      : (Array.isArray(verifiedStandards) ? verifiedStandards : []);
+    // If still missing after strict retry: hard stop (visible)
+    if (missing.length && strictRetry) {
+      hideLoading();
+      showHardError(
+        "Lesson generation failed validation",
+        "The backend/Claude response is missing required fields. This must be fixed in the backend prompt/schema. Step 6 will not show placeholders for core product fields.",
+        missing,
+        `<div class="row">
+           <button class="btn btn-secondary" onclick="retryStrict()">Retry Again</button>
+           <button class="btn btn-primary" onclick="copyDebug()">Copy Debug</button>
+         </div>`
+      );
+      return;
+    }
 
     hideLoading();
-
-    displayGeneratedLesson(lesson, assessmentSelections);
+    displayLessonStrict(lesson, framework);
     document.getElementById('feedbackBox').style.display = 'block';
 
-  } catch (error) {
-    console.error("Error generating lesson:", error);
+  } catch (err) {
     hideLoading();
-    alert("There was an error generating your lesson. Please try again.\n\n" + (error.message || ""));
-    document.getElementById('feedbackBox').style.display = 'block';
+    showHardError(
+      "Lesson generation error",
+      err?.message || "Unknown error.",
+      [],
+      `<div class="row">
+         <button class="btn btn-secondary" onclick="retryStrict()">Retry</button>
+       </div>`
+    );
   }
+}
+
+function retryStrict(){
+  const feedback = document.getElementById('feedbackTextarea')?.value || null;
+  generateLesson({ feedback, strictRetry: true });
+}
+
+function copyDebug(){
+  try{
+    const payload = {
+      lessonData,
+      verifiedStandards,
+      lastLessonJSON
+    };
+    navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+    alert("Debug copied to clipboard.");
+  }catch(e){
+    alert("Could not copy debug.");
+  }
+}
+
+function displayLessonStrict(lesson, framework) {
+  clearHardError();
+
+  document.getElementById('lessonSummary').textContent = lesson.summary || "";
+
+  // Standards
+  const standardsHTML = renderStandardsSectionForDocument(getStandardsForDocument());
+
+  // Required core sections (no fallbacks)
+  const vocab = lesson.keyVocabulary;
+  const udl = lesson.udlConnections;
+  const assessmentSummary = lesson.assessmentSummary;
+
+  const vocabHTML = `
+    <div class="lesson-section">
+      <h3>Key Vocabulary</h3>
+      <ul>${vocab.map(v => `<li>${escapeHtml(v)}</li>`).join('')}</ul>
+    </div>
+  `;
+
+  const udlHTML = `
+    <div class="lesson-section">
+      <h3>UDL Connections</h3>
+      <p><strong>Engagement:</strong> ${escapeHtml(udl.engagement)}</p>
+      <p><strong>Representation:</strong> ${escapeHtml(udl.representation)}</p>
+      <p><strong>Action & Expression:</strong> ${escapeHtml(udl.actionExpression)}</p>
+    </div>
+  `;
+
+  const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
+  const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
+  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
+
+  const labels = frameworkStepLabels[framework] || [];
+
+  const proceduresHTML = procedures.map((step, index) => {
+    const label = labels[index] ? labels[index] : (step.name || `Step ${index+1}`);
+    return `<p><strong>Step ${index + 1}: ${escapeHtml(label)} (${escapeHtml(String(step.time ?? ""))} min):</strong> ${escapeHtml(step.description || "")}</p>`;
+  }).join('');
+
+  const assessmentHTML = `
+    <div class="lesson-section">
+      <h3>Assessment Summary</h3>
+      <p>${escapeHtml(assessmentSummary)}</p>
+    </div>
+  `;
+
+  const content = `
+    ${standardsHTML}
+    ${udlHTML}
+    ${vocabHTML}
+
+    <div class="lesson-section">
+      <h3>Learning Objectives</h3>
+      <ul>${objectives.map(obj => `<li>${escapeHtml(obj)}</li>`).join('')}</ul>
+    </div>
+
+    <div class="lesson-section">
+      <h3>Materials Needed</h3>
+      <ul>${materials.map(mat => `<li>${escapeHtml(mat)}</li>`).join('')}</ul>
+    </div>
+
+    <div class="lesson-section">
+      <h3>Procedures</h3>
+      ${proceduresHTML}
+    </div>
+
+    ${assessmentHTML}
+  `;
+
+  document.getElementById('lessonContent').innerHTML = content;
+}
+
+function regenerateLesson() {
+  const feedback = document.getElementById('feedbackTextarea').value.trim();
+  if (!feedback) {
+    alert('Please describe what changes you want to make.');
+    return;
+  }
+  showLoading();
+  generateLesson({ feedback, strictRetry: false });
 }
 
 function updateVerificationBanner(standards, source) {
@@ -712,7 +809,7 @@ function updateVerificationBanner(standards, source) {
   const standardsContainer = document.getElementById('standardsContainer');
 
   const count = standards.length;
-  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   bannerText.textContent = `${count} California Standard${count !== 1 ? 's' : ''} Verified`;
   bannerMeta.textContent = `Verified on ${today}${source ? ` (${source})` : ""}`;
@@ -720,21 +817,14 @@ function updateVerificationBanner(standards, source) {
 
   standardsContainer.innerHTML = standards.map(std => {
     const confidenceClass = (std.confidence || 'medium').toLowerCase();
-    const confidenceLabels = {
-      high: 'High Confidence ✓✓',
-      medium: 'Medium Confidence ✓',
-      low: 'Manual Check ⚠️'
-    };
-
+    const confidenceLabels = { high: 'High ✓✓', medium: 'Medium ✓', low: 'Manual ⚠️' };
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
     const safeCode = (std.code || "").toString();
     const safeText = (std.text || "").toString();
 
     return `
       <div class="standard-card">
-        <div class="standard-header">
-          <div class="standard-number">${escapeHtml(safeCode)}</div>
-        </div>
+        <div class="standard-header"><div class="standard-number">${escapeHtml(safeCode)}</div></div>
         <div class="standard-text">${escapeHtml(safeText)}</div>
         <div class="standard-meta">
           <span class="confidence-badge ${confidenceClass}">${confidenceLabels[confidenceClass] || confidenceLabels.medium}</span>
@@ -745,231 +835,41 @@ function updateVerificationBanner(standards, source) {
   }).join('');
 }
 
-// ✅ Render lesson using framework-explicit steps
-function displayGeneratedLesson(lesson, assessmentSelections) {
-  document.getElementById('lessonSummary').textContent = lesson.summary || "";
+function reverifyStandards() {
+  // Keep this best-effort. Regeneration uses the latest stored verifiedStandards.
+  generateLesson({ feedback: null, strictRetry: false });
+}
 
-  const standardsForDoc = getStandardsForDisplay(lesson);
-  const standardsHTML = renderStandardsSectionForDocument(standardsForDoc);
-
-  const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
-  const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
-  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
-
-  const chosenFramework = lessonData?.step3?.framework || "madeline-hunter";
-  const labels = frameworkStepLabels[chosenFramework] || [];
-
-  const proceduresHTML = procedures.map((step, index) => {
-    const label = labels[index] ? labels[index] : (step.name || `Step ${index+1}`);
-    return `<p><strong>Step ${index + 1}: ${escapeHtml(label)} (${escapeHtml(String(step.time ?? ""))} min):</strong> ${escapeHtml(step.description || "")}</p>`;
-  }).join('');
-
-  // Assessments rendering (robust)
-  let assessmentHTML = '';
-  const a = lesson.assessments || {};
-
-  if (Array.isArray(a.exitTicket) && a.exitTicket.length) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Exit Ticket</h4>
-        <ol style="margin-left:20px;">
-          ${a.exitTicket.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
-        </ol>
-      </div>
-    `;
-  }
-
-  if (Array.isArray(a.formativeChecks) && a.formativeChecks.length) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Formative Check Questions</h4>
-        <ul style="margin-left:20px;">
-          ${a.formativeChecks.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
-        </ul>
-      </div>
-    `;
-  }
-
-  if (typeof a.homework === "string" && a.homework.trim()) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Homework Assignment</h4>
-        <p style="color:#4A5568;line-height:1.7;">${escapeHtml(a.homework)}</p>
-      </div>
-    `;
-  }
-
-  if (Array.isArray(a.quiz) && a.quiz.length) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Quiz (Next Day)</h4>
-        <ol style="margin-left:20px;">
-          ${a.quiz.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
-        </ol>
-      </div>
-    `;
-  }
-
-  const selections = assessmentSelections || normalizeAssessmentSelections(lessonData.step5 || {});
-  const teacherSelectedAny = !!(selections.exitTicket || selections.formativeChecks || selections.homework || selections.quiz);
-
-  const hasAnyAssessment =
-    (Array.isArray(a.exitTicket) && a.exitTicket.length) ||
-    (Array.isArray(a.formativeChecks) && a.formativeChecks.length) ||
-    (typeof a.homework === "string" && a.homework.trim()) ||
-    (Array.isArray(a.quiz) && a.quiz.length);
-
-  if (!hasAnyAssessment) {
-    if (teacherSelectedAny) {
-      assessmentHTML = `<p style="color:#4A5568;">Assessments were selected, but none were generated. Click “Update Lesson” and write: “Include the exit ticket and formative checks.”</p>`;
-    } else {
-      assessmentHTML = `<p style="color:#4A5568;">No assessments selected.</p>`;
-    }
-  }
-
-  console.log("Lesson assessments returned:", lesson.assessments);
-
-  const content = `
-    ${standardsHTML}
-
-    <div class="lesson-section">
-      <h3>Learning Objectives</h3>
-      <ul>
-        ${objectives.map(obj => `<li>${escapeHtml(obj)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="lesson-section">
-      <h3>Materials Needed</h3>
-      <ul>
-        ${materials.map(mat => `<li>${escapeHtml(mat)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="lesson-section">
-      <h3>Procedures</h3>
-      ${proceduresHTML || `<p style="color:#4A5568;">No procedures generated.</p>`}
-    </div>
-
-    <div class="lesson-section">
-      <h3>Assessments</h3>
-      ${assessmentHTML}
-    </div>
-  `;
-
-  document.getElementById('lessonContent').innerHTML = content;
+function reportError() {
+  alert('Error reporting: Teachers can describe which standard appears incorrect. This feedback improves verification.');
 }
 
 function saveToLibrary() {
   const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    const data = JSON.parse(saved);
+  if (!saved) return;
 
-    const lesson = {
-      id: Date.now(),
-      title: data.step1?.topic || 'Untitled Lesson',
-      grade: data.step1?.grade || '5th Grade',
-      subject: data.step1?.subject || 'Mathematics',
-      duration: data.step1?.duration || 45,
-      framework: data.step3?.framework || 'madeline-hunter',
-      hasCollaborations: data.hasCollaborations || false,
-      verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
-      savedAt: new Date().toISOString(),
-      generatedLesson: lastLessonJSON || null,
-      fullLesson: data
-    };
+  const data = JSON.parse(saved);
+  const lesson = {
+    id: Date.now(),
+    title: data.step1?.topic || 'Untitled Lesson',
+    grade: data.step1?.grade || '5th Grade',
+    subject: data.step1?.subject || 'Mathematics',
+    duration: data.step1?.duration || 45,
+    framework: data.step3?.framework || 'madeline-hunter',
+    verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
+    savedAt: new Date().toISOString(),
+    generatedLesson: lastLessonJSON || null,
+    fullLesson: data
+  };
 
-    let savedLessons = [];
-    const existing = localStorage.getItem('savedLessons');
-    if (existing) savedLessons = JSON.parse(existing);
+  let savedLessons = [];
+  const existing = localStorage.getItem('savedLessons');
+  if (existing) savedLessons = JSON.parse(existing);
 
-    savedLessons.push(lesson);
-    localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
+  savedLessons.push(lesson);
+  localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
 
-    alert('Lesson saved to My Lessons!');
-  }
-}
-
-function skipCollab() {
-  saveToLibrary();
-  window.location.href = 'library.html';
-}
-
-function regenerateLesson() {
-  const feedback = document.getElementById('feedbackTextarea').value.trim();
-  if (!feedback) {
-    alert('Please describe what changes you want to make.');
-    return;
-  }
-
-  document.getElementById('feedbackBox').style.display = 'none';
-  showLoading();
-
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    const data = JSON.parse(saved);
-    const step1 = data.step1 || {};
-    const step2 = data.step2 || {};
-    const step3 = data.step3 || {};
-    const step5 = data.step5 || {};
-
-    const topic = step1.topic || 'Untitled Lesson';
-    const grade = step1.grade || '5th Grade';
-    const subject = step1.subject || 'Mathematics';
-    const duration = step1.duration || 45;
-    const framework = step3.framework || 'madeline-hunter';
-
-    generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
-  }
-}
-
-function reportError() {
-  alert('Error reporting: Teachers would describe which standard appears incorrect. This feedback improves the verification system.');
-}
-
-function reverifyStandards() {
-  const step1 = lessonData.step1 || {};
-  const topic = step1.topic || '';
-  const grade = step1.grade || '';
-  const subject = step1.subject || '';
-
-  if (!topic || !grade || !subject) {
-    alert("Missing topic/grade/subject. Go back to Step 1.");
-    return;
-  }
-
-  setBannerVerifying();
-  showLoading();
-
-  (async () => {
-    try {
-      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ grade, subject, topic })
-      });
-      const verifyData = await safeJson(verifyRes);
-
-      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
-        verifiedStandards = verifyData.standards;
-        persistVerifiedStandards(verifiedStandards);
-        updateVerificationBanner(verifiedStandards, verifyData.source);
-        hideLoading();
-
-        if (lastLessonJSON) {
-          lastLessonJSON.verifiedStandards = verifiedStandards;
-          const selections = normalizeAssessmentSelections(lessonData.step5 || {});
-          displayGeneratedLesson(lastLessonJSON, selections);
-        }
-      } else {
-        hideLoading();
-        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
-      }
-    } catch (e) {
-      hideLoading();
-      setBannerFallback("Continuing without verified standards.");
-    }
-  })();
+  alert('Lesson saved to My Lessons!');
 }
 
 function escapeHtml(str) {
