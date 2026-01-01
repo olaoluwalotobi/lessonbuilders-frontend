@@ -73,11 +73,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .btn-text{background:none;border:none;color:#718096;font-size:13px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;font-weight:500;padding:8px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:6px;}
 .btn-text:hover{color:var(--orange);background:rgba(255,140,66,0.05);}
 
-.tab-nav{display:flex;gap:8px;border-bottom:2px solid #E2E8F0;margin-bottom:32px;}
-.tab{padding:12px 24px;background:none;border:none;font-size:16px;font-weight:600;color:#4A5568;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
-.tab.active{color:var(--orange);border-bottom-color:var(--orange);}
-.tab:hover:not(.active){color:var(--navy);}
-.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:40px;margin-bottom:40px;}
+/* Lesson Preview */
+.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:40px;margin-bottom:28px;}
 .lesson-title{font-size:32px;font-weight:700;color:var(--navy);margin-bottom:20px;text-align:center;}
 .lesson-meta{text-align:center;color:#4A5568;margin-bottom:16px;padding-bottom:16px;border-top:2px solid #E2E8F0;}
 .lesson-summary{text-align:center;color:#4A5568;font-size:16px;line-height:1.6;margin-bottom:24px;padding-bottom:24px;border-bottom:2px solid #E2E8F0;}
@@ -90,18 +87,62 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .procedure-title{font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
 .time-badge{background:var(--orange);color:white;padding:2px 8px;border-radius:4px;font-size:12px;}
 .procedure-text{color:#4A5568;line-height:1.7;}
+
+/* Buttons */
 .btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
-.btn-group{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;}
-.btn-print{display:none;}
-.btn-print.show{display:inline-block;}
+.btn-group{display:flex;gap:16px;margin-top:0;flex-wrap:wrap;align-items:center;}
+.btn-group .spacer{flex:1;}
+
+/* Export dropdown */
+.export-wrap{position:relative;display:inline-block;}
+.export-menu{
+  position:absolute; top:54px; left:0;
+  background:white; border:2px solid #E2E8F0; border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.10);
+  min-width:260px;
+  padding:10px;
+  z-index:1500;
+  display:none;
+}
+.export-menu.show{display:block;}
+.export-item{
+  width:100%;
+  text-align:left;
+  padding:12px 12px;
+  border-radius:10px;
+  border:none;
+  background:white;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  color:var(--navy);
+  font-size:14px;
+  font-weight:600;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.export-item:hover{background:rgba(255,140,66,0.08);}
+.export-sub{font-size:12px;color:#718096;font-weight:500;margin-top:2px;}
+.export-sep{height:1px;background:#E2E8F0;margin:8px 0;}
+.export-hint{
+  padding:10px 12px;
+  font-size:12px;
+  color:#718096;
+  line-height:1.5;
+}
+
+/* Enhancement box */
 .enhancement-box{background:rgba(59,130,246,0.05);border:2px solid rgba(59,130,246,0.3);border-radius:16px;padding:28px;margin-top:40px;text-align:center;}
 .enhancement-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
 .enhancement-text{color:#4A5568;line-height:1.6;margin-bottom:24px;font-size:15px;}
-.enhancement-buttons{display:flex;gap:16px;justify-content:center;}
+.enhancement-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+/* Loading */
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
 .loading-overlay.hidden{display:none;}
 .blocks-loader{position:relative;width:73px;height:66px;margin-bottom:24px;}
@@ -116,18 +157,47 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 @keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
 .loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
 @media (prefers-reduced-motion: reduce){.block{animation:none;opacity:1;transform:none;}}
+
+/* ✅ FIXED PRINT: do NOT hide .main-content (ancestor), only hide UI chrome */
 @media print{
   body * {visibility: hidden;}
+
   .lesson-preview, .lesson-preview * {visibility: visible;}
-  .lesson-preview {position: absolute;left: 0;top: 0;width: 100%;border: none;box-shadow: none;padding: 0;margin: 0;}
-  .top-nav, .sidebar, .tab-nav, .btn-group, .enhancement-box, .verification-banner, .page-title, .page-subtitle, .progress-bar, .main-content {display: none !important;}
+  .lesson-preview {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .top-nav,
+  .sidebar,
+  .btn-group,
+  .enhancement-box,
+  .verification-banner,
+  .page-title,
+  .page-subtitle,
+  .progress-bar,
+  .feedback-box,
+  #loadingOverlay {
+    display: none !important;
+  }
+
+  /* If dropdown is open, ensure it doesn't print */
+  .export-menu{display:none !important;}
 }
+
+/* Feedback */
 .feedback-box{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:32px;margin-top:32px;margin-bottom:32px;}
 .feedback-title{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:8px;}
 .feedback-subtitle{font-size:14px;color:#718096;margin-bottom:20px;}
 .feedback-textarea{width:100%;padding:16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;resize:vertical;min-height:120px;}
 .feedback-textarea:focus{outline:none;border-color:var(--orange);}
 .feedback-button{width:100%;margin-top:16px;}
+
 @keyframes fadeIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
 .details-section.show .legend-bar,.details-section.show .standard-card,.details-section.show .details-footer{animation:fadeIn 0.4s ease-out forwards;}
 .details-section.show .standard-card:nth-child(2){animation-delay:0.05s;}
@@ -187,7 +257,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
       <!-- Expandable Details Section (STARTS COLLAPSED) -->
       <div class="details-section" id="detailsSection">
-        <!-- Legend Bar -->
         <div class="legend-bar">
           <div class="legend-item">
             <span class="confidence-badge high">High ✓✓</span>
@@ -203,10 +272,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
           </div>
         </div>
 
-        <!-- Standards Cards -->
         <div id="standardsContainer"></div>
 
-        <!-- Details Footer -->
         <div class="details-footer">
           <button class="btn-text" onclick="reportError()">⚠️ Report an Error</button>
           <button class="btn-text" onclick="reverifyStandards()">🔄 Re-verify Standards</button>
@@ -214,29 +281,12 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       </div>
     </div>
 
-    <div class="tab-nav">
-      <button class="tab active" onclick="showTab('export')">Export View</button>
-      <button class="tab" onclick="showTab('online')">Online View</button>
-    </div>
-
-    <!-- Export View Tab -->
-    <div id="exportView" class="tab-content active">
-      <div class="lesson-preview">
-        <h2 class="lesson-title" id="lessonTitle">Loading...</h2>
-        <div class="lesson-meta" id="lessonMeta"></div>
-        <div class="lesson-summary" id="lessonSummary"></div>
-        <div id="lessonContent"></div>
-      </div>
-    </div>
-
-    <!-- Online View Tab -->
-    <div id="onlineView" class="tab-content" style="display:none;">
-      <div class="lesson-preview">
-        <h2 class="lesson-title" id="lessonTitleOnline">Loading...</h2>
-        <div class="lesson-meta" id="lessonMetaOnline"></div>
-        <div class="lesson-summary" id="lessonSummaryOnline"></div>
-        <div id="lessonContentOnline"></div>
-      </div>
+    <!-- Single canonical lesson document -->
+    <div class="lesson-preview" id="lessonPreview">
+      <h2 class="lesson-title" id="lessonTitle">Loading...</h2>
+      <div class="lesson-meta" id="lessonMeta"></div>
+      <div class="lesson-summary" id="lessonSummary"></div>
+      <div id="lessonContent"></div>
     </div>
 
     <!-- Feedback Box -->
@@ -247,9 +297,45 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       <button class="btn btn-primary feedback-button" onclick="regenerateLesson()">Update Lesson</button>
     </div>
 
+    <!-- Actions -->
     <div class="btn-group">
-      <button class="btn btn-secondary btn-print show" id="printBtn" onclick="window.print()">&#128424; Print</button>
+      <button class="btn btn-secondary" id="printBtn" onclick="window.print()">&#128424; Print</button>
+
+      <div class="export-wrap">
+        <button class="btn btn-secondary" id="exportBtn" onclick="toggleExportMenu(event)">&#8681; Export</button>
+        <div class="export-menu" id="exportMenu" role="menu" aria-label="Export options">
+          <button class="export-item" onclick="exportPDF()">
+            <div>
+              PDF
+              <div class="export-sub">Uses Print → Save as PDF</div>
+            </div>
+            <span>→</span>
+          </button>
+          <div class="export-sep"></div>
+          <button class="export-item" onclick="exportDOC()">
+            <div>
+              DOC
+              <div class="export-sub">Downloads .doc (HTML-based)</div>
+            </div>
+            <span>→</span>
+          </button>
+          <button class="export-item" onclick="exportGoogleDocHint()">
+            <div>
+              Google Doc
+              <div class="export-sub">Upload the DOC to Drive to convert</div>
+            </div>
+            <span>→</span>
+          </button>
+          <div class="export-sep"></div>
+          <div class="export-hint">
+            Full “Create Google Doc automatically” requires Google sign-in + API (we can add later).
+          </div>
+        </div>
+      </div>
+
       <button class="btn btn-primary" onclick="saveToLibrary()">Save to Library</button>
+
+      <span class="spacer"></span>
     </div>
 
     <div class="enhancement-box">
@@ -276,11 +362,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 <script>
 /**
- * ✅ STEP 6 UPDATED:
- * - No direct Anthropic calls from the browser
- * - Uses your Railway backend:
- *     POST /api/verify-standards
- *     POST /api/generate-lesson
+ * Step 6 (single view):
+ * - Verify standards via backend
+ * - Generate lesson via backend
+ * - Render ONE canonical lesson document (print/export/save)
  */
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
@@ -328,11 +413,7 @@ window.addEventListener('DOMContentLoaded', function() {
   const saved = localStorage.getItem('lessonData');
   if (saved) {
     lessonData = JSON.parse(saved);
-
-    // ✅ NEW: if verified standards already exist (ex: coming back to step 6),
-    // load them so they can render in the document too.
     verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
-
     generateLesson();
 
     if (lessonData.hasVisitedStep7) {
@@ -340,10 +421,22 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   } else {
     document.getElementById('lessonTitle').textContent = "Missing lesson data";
-    document.getElementById('lessonTitleOnline').textContent = "Missing lesson data";
     document.getElementById('lessonSummary').textContent = "Go back to Step 1 to start building a lesson.";
-    document.getElementById('lessonSummaryOnline').textContent = "Go back to Step 1 to start building a lesson.";
   }
+
+  // Close export menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('exportMenu');
+    const btn = document.getElementById('exportBtn');
+    if (!menu.classList.contains('show')) return;
+    if (menu.contains(e.target) || btn.contains(e.target)) return;
+    menu.classList.remove('show');
+  });
+
+  // Escape closes export menu
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.getElementById('exportMenu').classList.remove('show');
+  });
 });
 
 function toggleDetails() {
@@ -361,6 +454,69 @@ function toggleDetails() {
   }
 }
 
+function toggleExportMenu(evt){
+  evt.preventDefault();
+  const menu = document.getElementById('exportMenu');
+  menu.classList.toggle('show');
+}
+
+function exportPDF(){
+  // Minimal, reliable: print dialog → Save as PDF
+  document.getElementById('exportMenu').classList.remove('show');
+  window.print();
+}
+
+function exportDOC(){
+  document.getElementById('exportMenu').classList.remove('show');
+
+  // Create a .doc file (HTML-based) from the lesson preview.
+  // This is "good enough" for Word + Google Drive conversion, without extra libraries.
+  const title = (lastLessonJSON?.title || lessonData?.step1?.topic || "Lesson").toString();
+  const safeName = title.replace(/[^\w\-]+/g, "_").slice(0, 80) || "Lesson";
+
+  const preview = document.getElementById('lessonPreview');
+  const html = preview.outerHTML;
+
+  const doc =
+`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(title)}</title>
+<style>
+  body{font-family:Arial, sans-serif; color:#0D2847;}
+  .lesson-preview{border:none; padding:0; margin:0;}
+  a{color:#0D2847; text-decoration:none;}
+</style>
+</head>
+<body>
+${html}
+</body>
+</html>`;
+
+  const blob = new Blob([doc], { type: "application/msword" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${safeName}.doc`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportGoogleDocHint(){
+  document.getElementById('exportMenu').classList.remove('show');
+  alert(
+    "Google Doc export (for now):\n\n" +
+    "1) Click Export → DOC\n" +
+    "2) Upload the downloaded .doc into Google Drive\n" +
+    "3) Open it in Drive → it will convert to a Google Doc\n\n" +
+    "We can add one-click Google Doc creation later (requires Google sign-in)."
+  );
+}
+
 function generateLesson() {
   const step1 = lessonData.step1 || {};
   const step2 = lessonData.step2 || {};
@@ -374,504 +530,7 @@ function generateLesson() {
   const framework = step3.framework || 'madeline-hunter';
 
   document.getElementById('lessonTitle').textContent = topic;
-  document.getElementById('lessonTitleOnline').textContent = topic;
 
   const metaHTML = `
     <p><strong>Grade:</strong> ${grade} | <strong>Subject:</strong> ${subject} | <strong>Duration:</strong> ${duration} minutes</p>
-    <p><strong>Framework:</strong> ${frameworkNames[framework] || framework}</p>
-  `;
-  document.getElementById('lessonMeta').innerHTML = metaHTML;
-  document.getElementById('lessonMetaOnline').innerHTML = metaHTML;
-
-  setBannerVerifying();
-
-  showLoading();
-  generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback: null });
-}
-
-function setBannerVerifying() {
-  const bannerText = document.getElementById('bannerText');
-  const bannerMeta = document.getElementById('bannerMeta');
-  const viewDetailsBtn = document.getElementById('viewDetailsBtn');
-  const standardsContainer = document.getElementById('standardsContainer');
-
-  bannerText.textContent = "Verifying California Standards...";
-  bannerMeta.textContent = "This will take 5-15 seconds";
-  viewDetailsBtn.style.display = "none";
-  standardsContainer.innerHTML = "";
-  document.getElementById('detailsSection').classList.remove('show');
-}
-
-function setBannerFallback(message) {
-  const bannerText = document.getElementById('bannerText');
-  const bannerMeta = document.getElementById('bannerMeta');
-  const viewDetailsBtn = document.getElementById('viewDetailsBtn');
-
-  bannerText.textContent = "Standards verification unavailable";
-  bannerMeta.textContent = message || "Continuing without verified standards.";
-  viewDetailsBtn.style.display = "none";
-  document.getElementById('standardsContainer').innerHTML = "";
-  document.getElementById('detailsSection').classList.remove('show');
-}
-
-async function safeJson(res) {
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { return { _raw: text }; }
-}
-
-function normalizeLessonFromBackend(payload) {
-  if (!payload) return null;
-  if (payload.error) throw new Error(payload.error);
-
-  if (payload.content && Array.isArray(payload.content) && payload.content[0] && typeof payload.content[0].text === "string") {
-    const t = payload.content[0].text.trim();
-    const match = t.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("Could not parse lesson JSON from AI response.");
-    return JSON.parse(match[0]);
-  }
-
-  if (payload.summary && payload.objectives && payload.procedures) return payload;
-
-  if (payload._raw && typeof payload._raw === "string") {
-    const match = payload._raw.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error("Could not parse lesson JSON from server response.");
-    return JSON.parse(match[0]);
-  }
-
-  throw new Error("Unexpected response format from backend.");
-}
-
-// ✅ NEW: persist verifiedStandards into localStorage.lessonData
-function persistVerifiedStandards(standardsArr) {
-  try {
-    if (!lessonData || typeof lessonData !== "object") lessonData = {};
-    lessonData.verifiedStandards = Array.isArray(standardsArr) ? standardsArr : [];
-    localStorage.setItem("lessonData", JSON.stringify(lessonData));
-  } catch (e) {
-    console.warn("Could not persist verifiedStandards:", e);
-  }
-}
-
-// ✅ NEW: pick standards from (lesson.verifiedStandards → lesson.standards → verifiedStandards → lessonData.verifiedStandards)
-function getStandardsForDisplay(lesson) {
-  const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : null;
-  const b = Array.isArray(lesson?.standards) ? lesson.standards : null;
-  const c = Array.isArray(verifiedStandards) ? verifiedStandards : null;
-  const d = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
-  return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : (d && d.length ? d : []))));
-}
-
-// ✅ NEW: render standards section HTML (for the lesson document)
-function renderStandardsSection(standardsArr) {
-  if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
-
-  const items = standardsArr.map(std => {
-    const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
-    const text = escapeHtml((std.text || std.description || "").toString());
-    const link = std.sourceURL || std.sourceUrl || "";
-    const linkHtml = link ? ` <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link" style="font-size:12px;">Source</a>` : "";
-
-    // show code on its own line if present, otherwise just show text
-    return `
-      <li style="margin-bottom:10px;">
-        ${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}
-        <span style="color:#4A5568;line-height:1.6;">${text}</span>
-      </li>
-    `;
-  }).join("");
-
-  return `
-    <div class="lesson-section">
-      <h3>California Standards (Verified)</h3>
-      <ul>
-        ${items}
-      </ul>
-    </div>
-  `;
-}
-
-async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
-  try {
-    // 1) Verify standards (best-effort)
-    let standards = [];
-    try {
-      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ grade, subject, topic })
-      });
-      const verifyData = await safeJson(verifyRes);
-
-      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
-        standards = verifyData.standards;
-
-        verifiedStandards = standards;
-
-        // ✅ NEW: store verified standards in lessonData so step 6 + future screens can read them
-        persistVerifiedStandards(verifiedStandards);
-
-        updateVerificationBanner(standards, verifyData.source);
-      } else {
-        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
-      }
-    } catch (e) {
-      console.warn("Standards verification failed (continuing):", e);
-      setBannerFallback("Continuing without verified standards.");
-    }
-
-    // 2) Generate lesson (send verified standards if we got any)
-    const lessonPayload = {
-      step1: { topic, grade, subject, duration },
-      step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
-      step3: { framework },
-      step5: step5 || { exitTicket: true, formativeChecks: true, homework: false, quiz: false },
-      verifiedStandards: standards && standards.length ? standards : []
-    };
-
-    if (feedback) lessonPayload.feedback = feedback;
-
-    const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(lessonPayload)
-    });
-
-    const genData = await safeJson(genRes);
-    if (!genRes.ok) {
-      throw new Error(genData?.error || genData?.details || "Lesson generation failed.");
-    }
-
-    const lesson = normalizeLessonFromBackend(genData);
-    lastLessonJSON = lesson;
-
-    // ✅ NEW: Inject verified standards into the lesson object used by the renderer
-    // so BOTH Online/Export document templates can show them.
-    lesson.verifiedStandards = Array.isArray(standards) && standards.length
-      ? standards
-      : (Array.isArray(verifiedStandards) ? verifiedStandards : []);
-
-    hideLoading();
-
-    displayGeneratedLesson(lesson);
-    document.getElementById('feedbackBox').style.display = 'block';
-
-  } catch (error) {
-    console.error("Error generating lesson:", error);
-    hideLoading();
-    alert("There was an error generating your lesson. Please try again.\n\n" + (error.message || ""));
-    document.getElementById('feedbackBox').style.display = 'block';
-  }
-}
-
-function updateVerificationBanner(standards, source) {
-  const bannerText = document.getElementById('bannerText');
-  const bannerMeta = document.getElementById('bannerMeta');
-  const viewDetailsBtn = document.getElementById('viewDetailsBtn');
-  const standardsContainer = document.getElementById('standardsContainer');
-
-  const count = standards.length;
-  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
-  bannerText.textContent = `${count} California Standard${count !== 1 ? 's' : ''} Verified`;
-  bannerMeta.textContent = `Verified via California Department of Education on ${today}${source ? ` (${source})` : ""}`;
-  viewDetailsBtn.style.display = 'inline-flex';
-
-  standardsContainer.innerHTML = standards.map(std => {
-    const confidenceClass = (std.confidence || 'medium').toLowerCase();
-    const confidenceLabels = {
-      high: 'High Confidence ✓✓',
-      medium: 'Medium Confidence ✓',
-      low: 'Manual Check ⚠️'
-    };
-
-    const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
-    const safeCode = (std.code || "").toString();
-    const safeText = (std.text || "").toString();
-
-    return `
-      <div class="standard-card">
-        <div class="standard-header">
-          <div class="standard-number">${escapeHtml(safeCode)}</div>
-        </div>
-        <div class="standard-text">${escapeHtml(safeText)}</div>
-        <div class="standard-meta">
-          <span class="confidence-badge ${confidenceClass}">${confidenceLabels[confidenceClass] || confidenceLabels.medium}</span>
-          <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link">View Source</a>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function displayGeneratedLesson(lesson) {
-  // Summary
-  document.getElementById('lessonSummary').textContent = lesson.summary || "";
-  document.getElementById('lessonSummaryOnline').textContent = lesson.summary || "";
-
-  // ✅ NEW: standards section for document views
-  const standardsForDoc = getStandardsForDisplay(lesson);
-  const standardsHTML = renderStandardsSection(standardsForDoc);
-
-  // Assessments HTML
-  let assessmentHTML = '';
-  const a = lesson.assessments || {};
-
-  if (Array.isArray(a.exitTicket)) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Exit Ticket</h4>
-        <ol style="margin-left:20px;">
-          ${a.exitTicket.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
-        </ol>
-      </div>
-    `;
-  }
-
-  if (Array.isArray(a.formativeChecks)) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Formative Check Questions</h4>
-        <ul style="margin-left:20px;">
-          ${a.formativeChecks.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
-        </ul>
-      </div>
-    `;
-  }
-
-  if (typeof a.homework === "string" && a.homework.trim()) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Homework Assignment</h4>
-        <p style="color:#4A5568;line-height:1.7;">${escapeHtml(a.homework)}</p>
-      </div>
-    `;
-  }
-
-  if (Array.isArray(a.quiz)) {
-    assessmentHTML += `
-      <div style="margin-bottom:20px;">
-        <h4 style="font-weight:700;color:var(--navy);margin-bottom:8px;">Quiz (Next Day)</h4>
-        <ol style="margin-left:20px;">
-          ${a.quiz.map(q => `<li style="margin-bottom:8px;">${escapeHtml(q)}</li>`).join('')}
-        </ol>
-      </div>
-    `;
-  }
-
-  const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
-  const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
-  const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
-
-  const exportContent = `
-    ${standardsHTML}
-
-    <div class="lesson-section">
-      <h3>Learning Objectives</h3>
-      <ul>
-        ${objectives.map(obj => `<li>${escapeHtml(obj)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="lesson-section">
-      <h3>Materials Needed</h3>
-      <ul>
-        ${materials.map(mat => `<li>${escapeHtml(mat)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="lesson-section">
-      <h3>Procedures</h3>
-      ${procedures.map((step, index) =>
-        `<p><strong>${index + 1}. ${escapeHtml(step.name || "Step")} (${escapeHtml(String(step.time ?? ""))} min):</strong> ${escapeHtml(step.description || "")}</p>`
-      ).join('')}
-    </div>
-
-    <div class="lesson-section">
-      <h3>Assessments</h3>
-      ${assessmentHTML || `<p style="color:#4A5568;">No assessments selected.</p>`}
-    </div>
-  `;
-
-  const detailedProcedures = procedures.map((step, index) => `
-    <div class="procedure-box">
-      <div class="procedure-title">${index + 1}. ${escapeHtml(step.name || "Step")} <span class="time-badge">${escapeHtml(String(step.time ?? ""))} min</span></div>
-      <div class="procedure-text">${escapeHtml(step.description || "")}</div>
-    </div>
-  `).join('');
-
-  const onlineContent = `
-    ${standardsHTML}
-
-    <div class="lesson-section">
-      <h3>Learning Objectives</h3>
-      <ul>
-        ${objectives.map(obj => `<li>${escapeHtml(obj)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="lesson-section">
-      <h3>Materials Needed</h3>
-      <ul>
-        ${materials.map(mat => `<li>${escapeHtml(mat)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="lesson-section">
-      <h3>Detailed Procedures</h3>
-      ${detailedProcedures}
-    </div>
-
-    <div class="lesson-section">
-      <h3>Assessments</h3>
-      ${assessmentHTML || `<p style="color:#4A5568;">No assessments selected.</p>`}
-    </div>
-  `;
-
-  document.getElementById('lessonContent').innerHTML = exportContent;
-  document.getElementById('lessonContentOnline').innerHTML = onlineContent;
-}
-
-function showTab(tabName) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  const printBtn = document.getElementById('printBtn');
-
-  if (tabName === 'export') {
-    document.querySelector('.tab').classList.add('active');
-    document.getElementById('exportView').style.display = 'block';
-    document.getElementById('onlineView').style.display = 'none';
-    printBtn.classList.add('show');
-  } else {
-    document.querySelectorAll('.tab')[1].classList.add('active');
-    document.getElementById('exportView').style.display = 'none';
-    document.getElementById('onlineView').style.display = 'block';
-    printBtn.classList.remove('show');
-  }
-}
-
-function saveToLibrary() {
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    const data = JSON.parse(saved);
-
-    const lesson = {
-      id: Date.now(),
-      title: data.step1?.topic || 'Untitled Lesson',
-      grade: data.step1?.grade || '5th Grade',
-      subject: data.step1?.subject || 'Mathematics',
-      duration: data.step1?.duration || 45,
-      framework: data.step3?.framework || 'madeline-hunter',
-      hasCollaborations: data.hasCollaborations || false,
-      verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
-      savedAt: new Date().toISOString(),
-      generatedLesson: lastLessonJSON || null,
-      fullLesson: data
-    };
-
-    let savedLessons = [];
-    const existing = localStorage.getItem('savedLessons');
-    if (existing) savedLessons = JSON.parse(existing);
-
-    savedLessons.push(lesson);
-    localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
-
-    alert('Lesson saved to My Lessons!');
-  }
-}
-
-function skipCollab() {
-  saveToLibrary();
-  window.location.href = 'library.html';
-}
-
-function regenerateLesson() {
-  const feedback = document.getElementById('feedbackTextarea').value.trim();
-  if (!feedback) {
-    alert('Please describe what changes you want to make.');
-    return;
-  }
-
-  document.getElementById('feedbackBox').style.display = 'none';
-  showLoading();
-
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    const data = JSON.parse(saved);
-    const step1 = data.step1 || {};
-    const step2 = data.step2 || {};
-    const step3 = data.step3 || {};
-    const step5 = data.step5 || {};
-
-    const topic = step1.topic || 'Untitled Lesson';
-    const grade = step1.grade || '5th Grade';
-    const subject = step1.subject || 'Mathematics';
-    const duration = step1.duration || 45;
-    const framework = step3.framework || 'madeline-hunter';
-
-    generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
-  }
-}
-
-function reportError() {
-  alert('Error reporting: Teachers would describe which standard appears incorrect. This feedback improves the verification system.');
-}
-
-function reverifyStandards() {
-  const step1 = lessonData.step1 || {};
-  const topic = step1.topic || '';
-  const grade = step1.grade || '';
-  const subject = step1.subject || '';
-
-  if (!topic || !grade || !subject) {
-    alert("Missing topic/grade/subject. Go back to Step 1.");
-    return;
-  }
-
-  setBannerVerifying();
-  showLoading();
-
-  (async () => {
-    try {
-      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ grade, subject, topic })
-      });
-      const verifyData = await safeJson(verifyRes);
-
-      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
-        verifiedStandards = verifyData.standards;
-
-        // ✅ NEW: persist again
-        persistVerifiedStandards(verifiedStandards);
-
-        updateVerificationBanner(verifiedStandards, verifyData.source);
-        hideLoading();
-
-        // ✅ OPTIONAL: If you want the lesson document to update immediately after reverify,
-        // you can re-render using lastLessonJSON:
-        if (lastLessonJSON) {
-          lastLessonJSON.verifiedStandards = verifiedStandards;
-          displayGeneratedLesson(lastLessonJSON);
-        }
-      } else {
-        hideLoading();
-        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
-      }
-    } catch (e) {
-      hideLoading();
-      setBannerFallback("Continuing without verified standards.");
-    }
-  })();
-}
-
-function escapeHtml(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-</script>
-</body>
-</html>
+    <p><strong>Framework:</strong> ${frameworkNames[framework] || framework
