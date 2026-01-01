@@ -281,8 +281,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
  * - Uses your Railway backend:
  *     POST /api/verify-standards
  *     POST /api/generate-lesson
- *
- * Set API_URL to your Railway public domain (no trailing slash).
  */
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
@@ -330,12 +328,17 @@ window.addEventListener('DOMContentLoaded', function() {
   const saved = localStorage.getItem('lessonData');
   if (saved) {
     lessonData = JSON.parse(saved);
+
+    // ✅ NEW: if verified standards already exist (ex: coming back to step 6),
+    // load them so they can render in the document too.
+    verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
+
     generateLesson();
+
     if (lessonData.hasVisitedStep7) {
       document.getElementById('enhancementTitle').textContent = 'Want to add MORE cross-curricular connections?';
     }
   } else {
-    // If user lands here without data
     document.getElementById('lessonTitle').textContent = "Missing lesson data";
     document.getElementById('lessonTitleOnline').textContent = "Missing lesson data";
     document.getElementById('lessonSummary').textContent = "Go back to Step 1 to start building a lesson.";
@@ -380,7 +383,6 @@ function generateLesson() {
   document.getElementById('lessonMeta').innerHTML = metaHTML;
   document.getElementById('lessonMetaOnline').innerHTML = metaHTML;
 
-  // Reset banner to "verifying"
   setBannerVerifying();
 
   showLoading();
@@ -418,26 +420,18 @@ async function safeJson(res) {
 }
 
 function normalizeLessonFromBackend(payload) {
-  // Backend may return:
-  // 1) { content: [{ text: "JSON..." }] }  (Anthropic-like)
-  // 2) { ...lessonJson }                   (already JSON)
-  // 3) { error: ... }
   if (!payload) return null;
   if (payload.error) throw new Error(payload.error);
 
-  // Anthropic-style
   if (payload.content && Array.isArray(payload.content) && payload.content[0] && typeof payload.content[0].text === "string") {
     const t = payload.content[0].text.trim();
-    // extract JSON object if model added any stray text
     const match = t.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("Could not parse lesson JSON from AI response.");
     return JSON.parse(match[0]);
   }
 
-  // Already a lesson object
   if (payload.summary && payload.objectives && payload.procedures) return payload;
 
-  // Last attempt: raw string containing JSON
   if (payload._raw && typeof payload._raw === "string") {
     const match = payload._raw.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("Could not parse lesson JSON from server response.");
@@ -447,9 +441,58 @@ function normalizeLessonFromBackend(payload) {
   throw new Error("Unexpected response format from backend.");
 }
 
+// ✅ NEW: persist verifiedStandards into localStorage.lessonData
+function persistVerifiedStandards(standardsArr) {
+  try {
+    if (!lessonData || typeof lessonData !== "object") lessonData = {};
+    lessonData.verifiedStandards = Array.isArray(standardsArr) ? standardsArr : [];
+    localStorage.setItem("lessonData", JSON.stringify(lessonData));
+  } catch (e) {
+    console.warn("Could not persist verifiedStandards:", e);
+  }
+}
+
+// ✅ NEW: pick standards from (lesson.verifiedStandards → lesson.standards → verifiedStandards → lessonData.verifiedStandards)
+function getStandardsForDisplay(lesson) {
+  const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : null;
+  const b = Array.isArray(lesson?.standards) ? lesson.standards : null;
+  const c = Array.isArray(verifiedStandards) ? verifiedStandards : null;
+  const d = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
+  return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : (d && d.length ? d : []))));
+}
+
+// ✅ NEW: render standards section HTML (for the lesson document)
+function renderStandardsSection(standardsArr) {
+  if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
+
+  const items = standardsArr.map(std => {
+    const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
+    const text = escapeHtml((std.text || std.description || "").toString());
+    const link = std.sourceURL || std.sourceUrl || "";
+    const linkHtml = link ? ` <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link" style="font-size:12px;">Source</a>` : "";
+
+    // show code on its own line if present, otherwise just show text
+    return `
+      <li style="margin-bottom:10px;">
+        ${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}
+        <span style="color:#4A5568;line-height:1.6;">${text}</span>
+      </li>
+    `;
+  }).join("");
+
+  return `
+    <div class="lesson-section">
+      <h3>California Standards (Verified)</h3>
+      <ul>
+        ${items}
+      </ul>
+    </div>
+  `;
+}
+
 async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
   try {
-    // 1) Verify standards (best-effort; never block lesson generation)
+    // 1) Verify standards (best-effort)
     let standards = [];
     try {
       const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
@@ -461,7 +504,12 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
 
       if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
         standards = verifyData.standards;
+
         verifiedStandards = standards;
+
+        // ✅ NEW: store verified standards in lessonData so step 6 + future screens can read them
+        persistVerifiedStandards(verifiedStandards);
+
         updateVerificationBanner(standards, verifyData.source);
       } else {
         setBannerFallback(verifyData?.message || "Continuing without verified standards.");
@@ -480,8 +528,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       verifiedStandards: standards && standards.length ? standards : []
     };
 
-    // Optional feedback for regeneration
-    if (feedback) lessonPayload.feedback = feedback; // safe to ignore if backend doesn't use it
+    if (feedback) lessonPayload.feedback = feedback;
 
     const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
       method: "POST",
@@ -497,13 +544,13 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     const lesson = normalizeLessonFromBackend(genData);
     lastLessonJSON = lesson;
 
-    hideLoading();
+    // ✅ NEW: Inject verified standards into the lesson object used by the renderer
+    // so BOTH Online/Export document templates can show them.
+    lesson.verifiedStandards = Array.isArray(standards) && standards.length
+      ? standards
+      : (Array.isArray(verifiedStandards) ? verifiedStandards : []);
 
-    // If the lesson includes standards, prefer those as verifiedStandards (but keep banner standards as-is)
-    if (Array.isArray(lesson.standards) && lesson.standards.length) {
-      // Don’t overwrite banner verification standards; keep both if you want.
-      // For saving, we’ll store verifiedStandards separately anyway.
-    }
+    hideLoading();
 
     displayGeneratedLesson(lesson);
     document.getElementById('feedbackBox').style.display = 'block';
@@ -529,7 +576,6 @@ function updateVerificationBanner(standards, source) {
   bannerMeta.textContent = `Verified via California Department of Education on ${today}${source ? ` (${source})` : ""}`;
   viewDetailsBtn.style.display = 'inline-flex';
 
-  // Populate standards cards
   standardsContainer.innerHTML = standards.map(std => {
     const confidenceClass = (std.confidence || 'medium').toLowerCase();
     const confidenceLabels = {
@@ -561,6 +607,10 @@ function displayGeneratedLesson(lesson) {
   // Summary
   document.getElementById('lessonSummary').textContent = lesson.summary || "";
   document.getElementById('lessonSummaryOnline').textContent = lesson.summary || "";
+
+  // ✅ NEW: standards section for document views
+  const standardsForDoc = getStandardsForDisplay(lesson);
+  const standardsHTML = renderStandardsSection(standardsForDoc);
 
   // Assessments HTML
   let assessmentHTML = '';
@@ -608,12 +658,13 @@ function displayGeneratedLesson(lesson) {
     `;
   }
 
-  // Objectives & materials & procedures
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const procedures = Array.isArray(lesson.procedures) ? lesson.procedures : [];
 
   const exportContent = `
+    ${standardsHTML}
+
     <div class="lesson-section">
       <h3>Learning Objectives</h3>
       <ul>
@@ -649,6 +700,8 @@ function displayGeneratedLesson(lesson) {
   `).join('');
 
   const onlineContent = `
+    ${standardsHTML}
+
     <div class="lesson-section">
       <h3>Learning Objectives</h3>
       <ul>
@@ -708,9 +761,8 @@ function saveToLibrary() {
       duration: data.step1?.duration || 45,
       framework: data.step3?.framework || 'madeline-hunter',
       hasCollaborations: data.hasCollaborations || false,
-      verifiedStandards: verifiedStandards,
+      verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
       savedAt: new Date().toISOString(),
-      // store the latest generated lesson JSON so your viewer can show it later
       generatedLesson: lastLessonJSON || null,
       fullLesson: data
     };
@@ -755,7 +807,6 @@ function regenerateLesson() {
     const duration = step1.duration || 45;
     const framework = step3.framework || 'madeline-hunter';
 
-    // keep banner as-is, just regenerate lesson
     generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
   }
 }
@@ -765,8 +816,6 @@ function reportError() {
 }
 
 function reverifyStandards() {
-  // Real reverify = call verify endpoint again and refresh banner.
-  // We'll do it for real:
   const step1 = lessonData.step1 || {};
   const topic = step1.topic || '';
   const grade = step1.grade || '';
@@ -791,8 +840,19 @@ function reverifyStandards() {
 
       if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
         verifiedStandards = verifyData.standards;
+
+        // ✅ NEW: persist again
+        persistVerifiedStandards(verifiedStandards);
+
         updateVerificationBanner(verifiedStandards, verifyData.source);
         hideLoading();
+
+        // ✅ OPTIONAL: If you want the lesson document to update immediately after reverify,
+        // you can re-render using lastLessonJSON:
+        if (lastLessonJSON) {
+          lastLessonJSON.verifiedStandards = verifiedStandards;
+          displayGeneratedLesson(lastLessonJSON);
+        }
       } else {
         hideLoading();
         setBannerFallback(verifyData?.message || "Continuing without verified standards.");
@@ -804,7 +864,6 @@ function reverifyStandards() {
   })();
 }
 
-// Simple HTML escape to prevent weird rendering if text contains "<" etc.
 function escapeHtml(str) {
   return String(str ?? "")
     .replaceAll("&", "&amp;")
