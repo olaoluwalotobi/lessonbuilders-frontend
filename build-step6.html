@@ -284,12 +284,27 @@ function setBannerNoMatch(message){
   document.getElementById("standardsContainer").innerHTML = "";
   document.getElementById("detailsSection").classList.remove("show");
 }
-function updateVerificationBanner(standards, source){
+function updateVerificationBanner(standards, metaOrSource){
   const count = standards.length;
   const today = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+
+  // Backwards compatible: allow string source OR {source, matchType, confidence}
+  const meta = (metaOrSource && typeof metaOrSource === "object") ? metaOrSource : { source: metaOrSource };
+
+  const source = meta?.source ? String(meta.source) : "";
+  const matchType = meta?.matchType ? String(meta.matchType) : "";
+  const confidence = (typeof meta?.confidence === "number") ? meta.confidence : null;
+
   document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""} Verified`;
-  document.getElementById("bannerMeta").textContent = `Verified on ${today}${source ? ` (${source})` : ""}`;
+
+  const parts = [`Verified on ${today}`];
+  if (source) parts.push(`source: ${source}`);
+  if (matchType) parts.push(`match: ${matchType}`);
+  if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
+  document.getElementById("bannerMeta").textContent = parts.join(" • ");
+
   document.getElementById("viewDetailsBtn").style.display = "inline-flex";
+
 
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
@@ -489,7 +504,8 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
         subject: subjectNorm,
         subjectLabel,
         gradeLabel,
-        topic
+        topic,
+        standardFocus: (lessonData?.step1?.standardFocus || "").trim()
       };
 
       const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
@@ -500,13 +516,21 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
 
       const verifyData = await safeJson(verifyRes);
 
-      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)){
-        standards = verifyData.standards;
+      const returnedStandards = Array.isArray(verifyData?.verifiedStandards)
+        ? verifyData.verifiedStandards
+        : (Array.isArray(verifyData?.standards) ? verifyData.standards : []);
+
+      if (verifyRes.ok && verifyData){
+        standards = returnedStandards;
         verifiedStandards = standards;
         persistVerifiedStandards(verifiedStandards);
 
-        if (standards.length) updateVerificationBanner(standards, verifyData.source);
-        else setBannerNoMatch(`No match for grade=${gradeNum}, subject=${subjectNorm}. (This string confirms what Step 6 sent.)`);
+        if (standards.length) updateVerificationBanner(standards, {
+          source: verifyData.source,
+          matchType: verifyData.matchType,
+          confidence: verifyData.confidence
+        });
+        else setBannerNoMatch(verifyData?.message || `No match for grade=${gradeNum}, subject=${subjectNorm}. (This string confirms what Step 6 sent.)`);
       } else {
         setBannerFallback(verifyData?.message || "Continuing without verified standards.");
       }
