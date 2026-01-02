@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Preview & Export - LessonBuilders</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
 :root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+
 .top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
 .nav-left{display:flex;align-items:center;gap:40px;}
 .logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
@@ -33,6 +35,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:18px;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
 
+/* Standards banner */
 .verification-banner{background:rgba(16,185,129,0.05);border:2px solid rgba(16,185,129,0.2);border-radius:12px;padding:14px 18px;margin-bottom:16px;}
 .banner-header{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .banner-left{display:flex;align-items:center;gap:10px;}
@@ -48,31 +51,30 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 .standard-card{background:white;border:2px solid #E2E8F0;border-radius:12px;padding:14px;margin-bottom:10px;}
 .standard-number{font-weight:700;color:var(--orange);font-size:14px;background:rgba(255,140,66,0.1);padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:8px;}
-.standard-text{color:#4A5568;line-height:1.6;font-size:14px;margin-bottom:10px;}
+.standard-text{color:#4A5568;line-height:1.55;font-size:14px;margin-bottom:10px;}
 .standard-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:10px;border-top:1px solid #E2E8F0;}
-.confidence-badge{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;}
-.confidence-badge.high{background:rgba(16,185,129,0.1);color:#059669;}
-.confidence-badge.medium{background:rgba(245,158,11,0.1);color:#D97706;}
-.confidence-badge.low{background:rgba(239,68,68,0.1);color:#DC2626;}
 .source-link{color:var(--blue);text-decoration:none;font-size:13px;font-weight:600;}
 .source-link:hover{color:var(--orange);}
 
-.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:20px;margin-bottom:14px;}
-.lesson-title{font-size:28px;font-weight:700;color:var(--navy);margin-bottom:12px;text-align:center;}
+/* Lesson preview (compact) */
+.lesson-preview{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:18px;margin-bottom:14px;}
+.lesson-title{font-size:28px;font-weight:700;color:var(--navy);margin-bottom:10px;text-align:center;}
 .lesson-meta{text-align:center;color:#4A5568;margin-bottom:10px;padding-bottom:10px;border-top:2px solid #E2E8F0;}
-.lesson-summary{text-align:center;color:#4A5568;font-size:15px;line-height:1.55;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid #E2E8F0;}
+.lesson-summary{text-align:center;color:#4A5568;font-size:15px;line-height:1.5;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid #E2E8F0;}
+
 .lesson-section{margin-bottom:12px;}
-.lesson-section h3{font-size:19px;font-weight:700;color:var(--navy);margin-bottom:6px;}
-.lesson-section p{color:#4A5568;line-height:1.55;margin-bottom:6px;}
-.lesson-section ul{margin-left:18px;color:#4A5568;line-height:1.55;}
-.lesson-section li{margin-bottom:6px;}
+.lesson-section h3{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.lesson-section p{color:#4A5568;line-height:1.5;margin-bottom:6px;}
+.lesson-section ul{margin-left:18px;color:#4A5568;line-height:1.5;}
+.lesson-section li{margin-bottom:5px;}
 
 /* compact procedures */
-.proc-list{margin-left:0;color:#4A5568;line-height:1.55;}
+.proc-list{color:#4A5568;line-height:1.5;}
 .proc-item{margin-bottom:10px;}
 .proc-head{font-weight:700;color:var(--navy);}
 .proc-time-text{font-weight:500;color:#718096;font-size:13px;margin-left:6px;}
 
+/* buttons row */
 .btn{padding:14px 22px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.25s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.30);}
@@ -84,6 +86,14 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .export-group{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
 .export-label{font-size:13px;color:#718096;font-weight:700;letter-spacing:.2px;text-transform:uppercase;margin-right:2px;}
 
+/* feedback box */
+.feedback-box{display:none;background:white;border:2px solid #E2E8F0;border-radius:16px;padding:18px;margin-top:12px;}
+.feedback-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.feedback-subtitle{font-size:14px;color:#718096;margin-bottom:10px;}
+.feedback-textarea{width:100%;padding:14px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:110px;}
+.feedback-textarea:focus{outline:none;border-color:var(--orange);}
+
+/* loading overlay */
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
 .loading-overlay.hidden{display:none;}
 .blocks-loader{position:relative;width:73px;height:66px;margin-bottom:18px;}
@@ -98,14 +108,14 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 @keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
 .loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
 
-/* ✅ Print requirements:
-   - Start at lesson Title
-   - End at Assessment Summary
-   - Hide page chrome + meta/summary
-   - No blank pages
+/* ✅ PRINT:
+   - font size 12
+   - start at lesson title (hide chrome + meta/summary)
+   - end at Assessment Summary naturally
+   - no source links
 */
 @media print{
-  body{background:white;}
+  body{background:white;font-size:12pt;}
   .top-nav,
   .sidebar,
   .verification-banner,
@@ -113,17 +123,18 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   .btn-row,
   .page-title,
   .page-subtitle,
-  .progress-bar { display:none !important; }
+  .progress-bar{display:none !important;}
 
-  .container { display:block !important; }
-  .main-content { padding:0 !important; max-width:none !important; }
-  .lesson-meta, .lesson-summary { display:none !important; }
-  .lesson-preview { border:none !important; padding:0 !important; margin:0 !important; }
-  .source-link { display:none !important; }
-  @page { margin: 0.6in; }
+  .container{display:block !important;}
+  .main-content{padding:0 !important;max-width:none !important;}
+  .lesson-meta,.lesson-summary{display:none !important;}
+  .lesson-preview{border:none !important;padding:0 !important;margin:0 !important;}
+  .source-link{display:none !important;}
+  @page{margin:0.6in;}
 }
 </style>
 </head>
+
 <body>
 <nav class="top-nav">
   <div class="nav-left">
@@ -181,10 +192,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
       <div id="lessonContent"></div>
     </div>
 
-    <div id="feedbackBox" style="display:none;background:white;border:2px solid #E2E8F0;border-radius:16px;padding:18px;margin-top:12px;">
-      <div style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:6px;">Want to make changes?</div>
-      <div style="font-size:14px;color:#718096;margin-bottom:10px;">Example: tighten procedure steps, adjust pacing, add a hands-on demo...</div>
-      <textarea id="feedbackTextarea" placeholder="Describe your changes here..." style="width:100%;padding:14px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:110px;"></textarea>
+    <div class="feedback-box" id="feedbackBox">
+      <div class="feedback-title">Want to make changes?</div>
+      <div class="feedback-subtitle">Example: “Only 5 key vocabulary words.” “Shorten Engage to 5 minutes.”</div>
+      <textarea class="feedback-textarea" id="feedbackTextarea" placeholder="Describe your changes here..."></textarea>
       <button class="btn btn-primary" style="width:100%;margin-top:10px;" onclick="regenerateLesson()">Update Lesson</button>
     </div>
 
@@ -195,9 +206,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
         <button class="btn btn-secondary" onclick="exportDOC()">DOC</button>
         <button class="btn btn-secondary" onclick="window.print()">Print</button>
       </div>
-
       <div class="btn-spacer"></div>
-
       <button class="btn btn-primary" onclick="continueToStep7()">Continue &rarr;</button>
     </div>
   </main>
@@ -205,15 +214,23 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 <div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-live="polite">
   <div class="blocks-loader" aria-hidden="true">
-    <div class="block bl"></div>
-    <div class="block tl"></div>
-    <div class="block br"></div>
-    <div class="block tr"></div>
+    <div class="block bl"></div><div class="block tl"></div><div class="block br"></div><div class="block tr"></div>
   </div>
   <div class="loading-message" id="loadingMessage">Building a great lesson, one block at a time</div>
 </div>
 
 <script>
+/**
+ * Step 6 goals:
+ * - Single view
+ * - Export PDF/DOC + Print
+ * - Continue = Save to library + go to Step 7
+ * - Standards: always send numeric grade to backend so local-ca lookup matches
+ * - Regenerate: robust JSON extraction/repair so feedback doesn't crash rendering
+ *
+ * UbD stage names informed by your provided UbD template. :contentReference[oaicite:0]{index=0}
+ */
+
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
 const messages = [
@@ -238,7 +255,6 @@ function showLoading(){
     msgEl.textContent = messages[msgIndex];
   }, 2200);
 }
-
 function hideLoading(){
   document.getElementById("loadingOverlay").classList.add("hidden");
   clearInterval(msgTimer);
@@ -249,114 +265,127 @@ let verifiedStandards = [];
 let lastLessonJSON = null;
 
 const frameworkNames = {
-  'madeline-hunter': 'Madeline Hunter',
-  '5e-model': '5E Model',
-  'ubd': 'Understanding by Design',
-  'gradual-release': 'Gradual Release'
+  "madeline-hunter": "Madeline Hunter",
+  "5e-model": "5E Model",
+  "ubd": "Understanding by Design",
+  "gradual-release": "Gradual Release"
 };
 
-window.addEventListener('DOMContentLoaded', function() {
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    lessonData = JSON.parse(saved);
-    verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
-    generateLesson();
-  } else {
-    document.getElementById('lessonTitle').textContent = "Missing lesson data";
-    document.getElementById('lessonSummary').textContent = "Go back to Step 1 to start building a lesson.";
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem("lessonData");
+  if (!saved) {
+    document.getElementById("lessonTitle").textContent = "Missing lesson data";
+    document.getElementById("lessonSummary").textContent = "Go back to Step 1 to start building a lesson.";
+    return;
   }
+  lessonData = JSON.parse(saved);
+  verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
+  generateLesson();
 });
 
 function toggleDetails() {
-  const section = document.getElementById('detailsSection');
-  const icon = document.getElementById('detailsIcon');
-  const btn = document.getElementById('viewDetailsBtn');
-  section.classList.toggle('show');
-  icon.classList.toggle('expanded');
-  btn.innerHTML = section.classList.contains('show')
+  const section = document.getElementById("detailsSection");
+  const icon = document.getElementById("detailsIcon");
+  const btn = document.getElementById("viewDetailsBtn");
+  section.classList.toggle("show");
+  icon.classList.toggle("expanded");
+  btn.innerHTML = section.classList.contains("show")
     ? 'Hide Details <span class="details-icon expanded" id="detailsIcon">▼</span>'
     : 'View Details <span class="details-icon" id="detailsIcon">▼</span>';
 }
 
-function setBannerVerifying() {
-  document.getElementById('bannerText').textContent = "Verifying California Standards...";
-  document.getElementById('bannerMeta').textContent = "This will take 5-15 seconds";
-  document.getElementById('viewDetailsBtn').style.display = "none";
-  document.getElementById('standardsContainer').innerHTML = "";
-  document.getElementById('detailsSection').classList.remove('show');
+function setBannerVerifying(){
+  document.getElementById("bannerText").textContent = "Verifying California Standards...";
+  document.getElementById("bannerMeta").textContent = "This will take 5-15 seconds";
+  document.getElementById("viewDetailsBtn").style.display = "none";
+  document.getElementById("standardsContainer").innerHTML = "";
+  document.getElementById("detailsSection").classList.remove("show");
 }
-
-function setBannerFallback(message) {
-  document.getElementById('bannerText').textContent = "Standards verification unavailable";
-  document.getElementById('bannerMeta').textContent = message || "Continuing without verified standards.";
-  document.getElementById('viewDetailsBtn').style.display = "none";
-  document.getElementById('standardsContainer').innerHTML = "";
-  document.getElementById('detailsSection').classList.remove('show');
+function setBannerFallback(message){
+  document.getElementById("bannerText").textContent = "Standards verification unavailable";
+  document.getElementById("bannerMeta").textContent = message || "Continuing without verified standards.";
+  document.getElementById("viewDetailsBtn").style.display = "none";
+  document.getElementById("standardsContainer").innerHTML = "";
+  document.getElementById("detailsSection").classList.remove("show");
 }
-
-function setBannerNoMatch(message) {
-  document.getElementById('bannerText').textContent = "0 California Standards Found";
-  document.getElementById('bannerMeta').textContent = message || "Backend returned 0 matches (still using local CA standards lookup).";
-  document.getElementById('viewDetailsBtn').style.display = "none";
-  document.getElementById('standardsContainer').innerHTML = "";
-  document.getElementById('detailsSection').classList.remove('show');
+function setBannerNoMatch(message){
+  document.getElementById("bannerText").textContent = "0 California Standards Found";
+  document.getElementById("bannerMeta").textContent = message || "Backend returned 0 matches.";
+  document.getElementById("viewDetailsBtn").style.display = "none";
+  document.getElementById("standardsContainer").innerHTML = "";
+  document.getElementById("detailsSection").classList.remove("show");
 }
-
-function updateVerificationBanner(standards, source) {
+function updateVerificationBanner(standards, source){
   const count = standards.length;
-  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const today = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""} Verified`;
+  document.getElementById("bannerMeta").textContent = `Verified on ${today}${source ? ` (${source})` : ""}`;
+  document.getElementById("viewDetailsBtn").style.display = "inline-flex";
 
-  document.getElementById('bannerText').textContent =
-    `${count} California Standard${count !== 1 ? 's' : ''} Verified`;
-  document.getElementById('bannerMeta').textContent =
-    `Verified on ${today}${source ? ` (${source})` : ""}`;
-  document.getElementById('viewDetailsBtn').style.display = 'inline-flex';
-
-  document.getElementById('standardsContainer').innerHTML = standards.map(std => {
-    const confidenceClass = (std.confidence || 'medium').toLowerCase();
+  document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
+    const code = escapeHtml((std.code || std.id || "").toString());
+    const text = escapeHtml((std.text || std.description || "").toString());
     return `
       <div class="standard-card">
-        <div class="standard-number">${escapeHtml((std.code || std.id || "").toString())}</div>
-        <div class="standard-text">${escapeHtml((std.text || std.description || "").toString())}</div>
+        <div class="standard-number">${code}</div>
+        <div class="standard-text">${text}</div>
         <div class="standard-meta">
-          <span class="confidence-badge ${confidenceClass}">
-            ${confidenceClass === "high" ? "High ✓✓" : confidenceClass === "low" ? "Manual ⚠️" : "Medium ✓"}
-          </span>
           <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link">View Source</a>
         </div>
       </div>
     `;
-  }).join('');
+  }).join("");
 }
 
-async function safeJson(res) {
+/* -----------------------------
+   Safe parsing / repair helpers
+------------------------------ */
+
+async function safeJson(res){
   const text = await res.text();
-  try { return JSON.parse(text); } catch { return { _raw: text }; }
+  const cleaned = stripControlChars(text);
+  try { return JSON.parse(cleaned); } catch { return { _raw: cleaned }; }
 }
 
-function persistVerifiedStandards(arr) {
-  try {
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    data.verifiedStandards = Array.isArray(arr) ? arr : [];
-    localStorage.setItem("lessonData", JSON.stringify(data));
-    lessonData = data;
-  } catch (e) {
-    console.warn("persistVerifiedStandards failed:", e);
-  }
+function stripControlChars(s){
+  // removes ASCII control chars that break JSON (except tab/newline/carriage return)
+  return String(s ?? "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "");
 }
 
-function persistGeneratedLessonToLessonData(lessonObj){
-  try{
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    data.generatedLesson = lessonObj || null;
-    localStorage.setItem("lessonData", JSON.stringify(data));
-    lessonData = data;
-  } catch(e){
-    console.warn("persistGeneratedLessonToLessonData failed:", e);
+function extractJsonObject(text){
+  const t = stripControlChars(text);
+  const start = t.indexOf("{");
+  const end = t.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) return null;
+  return t.slice(start, end + 1);
+}
+
+function normalizeLessonFromBackend(payload){
+  if (!payload) throw new Error("Empty server response.");
+
+  // Case 1: server already returns clean lesson JSON
+  if (payload.summary && (payload.objectives || payload.procedures)) return payload;
+
+  // Case 2: server returns { content: [{ text: "..." }] } (Claude-style)
+  const maybeText = payload?.content?.[0]?.text;
+  if (typeof maybeText === "string") {
+    const jsonStr = extractJsonObject(maybeText);
+    if (!jsonStr) throw new Error("Could not parse lesson JSON from AI text.");
+    return JSON.parse(jsonStr);
   }
+
+  // Case 3: we got _raw
+  if (typeof payload._raw === "string") {
+    const jsonStr = extractJsonObject(payload._raw);
+    if (!jsonStr) throw new Error("Could not parse lesson JSON from server response.");
+    return JSON.parse(jsonStr);
+  }
+
+  // Case 4: server returns wrapper object like { lesson: {...} }
+  if (payload.lesson && typeof payload.lesson === "object") return payload.lesson;
+
+  throw new Error("Unexpected response format from backend.");
 }
 
 function escapeHtml(str) {
@@ -368,13 +397,53 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-/* ✅ Framework enforcement: Madeline Hunter 7 steps */
-function applyFrameworkStepNames(frameworkKey, procedures){
-  if (!Array.isArray(procedures)) return [];
-  const out = procedures.map(p => ({...p}));
+function takeFirstSentence(text){
+  const t = String(text || "").trim();
+  if (!t) return "";
+  const m = t.match(/^(.*?[.!?])\s/);
+  return m ? m[1].trim() : t;
+}
 
-  if (frameworkKey === "madeline-hunter") {
-    const names = [
+function persistVerifiedStandards(arr){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    const data = saved ? JSON.parse(saved) : {};
+    data.verifiedStandards = Array.isArray(arr) ? arr : [];
+    localStorage.setItem("lessonData", JSON.stringify(data));
+    lessonData = data;
+  } catch(e){ console.warn("persistVerifiedStandards failed:", e); }
+}
+
+function persistGeneratedLesson(lessonObj){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    const data = saved ? JSON.parse(saved) : {};
+    data.generatedLesson = lessonObj || null;
+    localStorage.setItem("lessonData", JSON.stringify(data));
+    lessonData = data;
+  } catch(e){ console.warn("persistGeneratedLesson failed:", e); }
+}
+
+/* -----------------------------
+   Framework naming (correct)
+------------------------------ */
+
+function applyFrameworkStepNames(frameworkKey, procedures){
+  const steps = Array.isArray(procedures) ? procedures.map(p => ({...p})) : [];
+
+  const setNames = (names) => {
+    for (let i=0;i<Math.min(names.length, steps.length);i++){
+      steps[i].name = `Step ${i+1}: ${names[i]}`;
+    }
+    for (let i=names.length;i<steps.length;i++){
+      if (!String(steps[i].name||"").toLowerCase().startsWith("step ")){
+        steps[i].name = `Step ${i+1}: ${steps[i].name || "Additional Step"}`;
+      }
+    }
+  };
+
+  if (frameworkKey === "madeline-hunter"){
+    setNames([
       "Anticipatory Set (Hook)",
       "Objective & Purpose",
       "Input",
@@ -383,31 +452,38 @@ function applyFrameworkStepNames(frameworkKey, procedures){
       "Guided Practice",
       "Independent Practice",
       "Closure"
-    ];
-    const targetLen = out.length >= 8 ? 8 : 7;
-    for (let i = 0; i < Math.min(targetLen, out.length); i++){
-      out[i].name = `Step ${i+1}: ${names[i] || (out[i].name || `Step ${i+1}`)}`;
-    }
-    for (let i = targetLen; i < out.length; i++){
-      if (!String(out[i].name || "").toLowerCase().startsWith("step ")) {
-        out[i].name = `Step ${i+1}: ${out[i].name || "Additional Step"}`;
-      }
-    }
+    ]);
   }
 
-  return out;
+  if (frameworkKey === "5e-model"){
+    setNames(["Engage","Explore","Explain","Elaborate","Evaluate"]);
+  }
+
+  if (frameworkKey === "gradual-release"){
+    setNames(["I Do","We Do","You Do Together","You Do Alone"]);
+  }
+
+  // UbD is stage-based; we still label procedures if provided
+  if (frameworkKey === "ubd"){
+    setNames(["Stage 1: Desired Results","Stage 2: Assessment Evidence","Stage 3: Learning Plan"]);
+  }
+
+  return steps;
 }
 
-function getStandardsForDisplay(lesson) {
+/* -----------------------------
+   Standards display
+------------------------------ */
+
+function getStandardsForDisplay(lesson){
   const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : null;
   const b = Array.isArray(verifiedStandards) ? verifiedStandards : null;
   const c = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
   return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : [])));
 }
 
-function renderStandardsSection(standardsArr, includeSourceLinks=true) {
+function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
-
   const items = standardsArr.map(std => {
     const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
     const text = escapeHtml((std.text || std.description || "").toString());
@@ -415,15 +491,8 @@ function renderStandardsSection(standardsArr, includeSourceLinks=true) {
     const linkHtml = (includeSourceLinks && link)
       ? ` <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link" style="font-size:12px;">Source</a>`
       : "";
-
-    return `
-      <li>
-        ${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}
-        <span>${text}</span>
-      </li>
-    `;
+    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}${text}</li>`;
   }).join("");
-
   return `
     <div class="lesson-section">
       <h3>California Standards</h3>
@@ -432,25 +501,28 @@ function renderStandardsSection(standardsArr, includeSourceLinks=true) {
   `;
 }
 
-function generateLesson() {
+/* -----------------------------
+   Generation
+------------------------------ */
+
+function generateLesson(){
   const step1 = lessonData.step1 || {};
   const step2 = lessonData.step2 || {};
   const step3 = lessonData.step3 || {};
   const step5 = lessonData.step5 || {};
 
-  const topic = step1.topic || 'Untitled Lesson';
-  const grade = step1.grade || '5th Grade';
-  const subject = step1.subject || 'Science';
+  const topic = step1.topic || "Untitled Lesson";
+  const grade = step1.grade || "5th Grade";
+  const subject = step1.subject || "Science";
   const duration = step1.duration || 45;
-  const framework = step3.framework || 'madeline-hunter';
+  const framework = step3.framework || "madeline-hunter";
 
-  document.getElementById('lessonTitle').textContent = topic;
+  document.getElementById("lessonTitle").textContent = topic;
 
-  const metaHTML = `
+  document.getElementById("lessonMeta").innerHTML = `
     <p><strong>Grade:</strong> ${escapeHtml(grade)} | <strong>Subject:</strong> ${escapeHtml(subject)} | <strong>Duration:</strong> ${escapeHtml(String(duration))} minutes</p>
     <p><strong>Framework:</strong> ${escapeHtml(frameworkNames[framework] || framework)}</p>
   `;
-  document.getElementById('lessonMeta').innerHTML = metaHTML;
 
   setBannerVerifying();
   showLoading();
@@ -458,48 +530,50 @@ function generateLesson() {
   generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback: null });
 }
 
-async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }) {
-  try {
-    // ✅ Standards: send grade as numeric (for local match), but keep gradeLabel too.
+async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }){
+  try{
+    // 1) Verify standards (IMPORTANT: numeric grade + normalized subject for local match)
     let standards = [];
-    try {
+    try{
       const gradeRaw = grade;
       const gradeNum = String(gradeRaw).match(/\b(\d{1,2})\b/)?.[1] || String(gradeRaw).trim();
+      const subjectRaw = subject;
+      const subjectNorm = String(subjectRaw || "").toLowerCase().trim();
 
       const verifyBody = {
-        grade: gradeNum,                 // ✅ IMPORTANT: "5"
-        gradeLabel: gradeRaw,            // keep "5th Grade"
-        subject: subject,                // keep original ("Science")
-        subjectNormalized: String(subject || "").toLowerCase().trim(),
+        grade: gradeNum,             // ✅ "5"
+        gradeLabel: gradeRaw,        // "5th Grade"
+        subject: subjectRaw,         // "Science"
+        subjectNormalized: subjectNorm,
         topic
       };
 
       const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
         body: JSON.stringify(verifyBody)
       });
-
       const verifyData = await safeJson(verifyRes);
 
-      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)) {
+      if (verifyRes.ok && verifyData && Array.isArray(verifyData.standards)){
         standards = verifyData.standards;
         verifiedStandards = standards;
         persistVerifiedStandards(verifiedStandards);
 
         if (standards.length) updateVerificationBanner(standards, verifyData.source);
-        else setBannerNoMatch(verifyData?.message || "Backend returned 0 standards.");
+        else setBannerNoMatch(verifyData?.message || `No matches for grade=${gradeNum}, subject=${subjectNorm}`);
       } else {
         setBannerFallback(verifyData?.message || "Continuing without verified standards.");
       }
-    } catch (e) {
+    } catch(e){
       console.warn("Standards verification failed:", e);
       setBannerFallback("Continuing without verified standards.");
     }
 
+    // 2) Generate lesson
     const payload = {
       step1: { topic, grade, subject, duration },
-      step2: step2 || { handsOn: 0, direct: 0, collaborative: 0, independent: 0, technology: 0 },
+      step2: step2 || {},
       step3: { framework },
       step5: step5 || {},
       verifiedStandards: Array.isArray(standards) ? standards : []
@@ -507,57 +581,103 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     if (feedback) payload.feedback = feedback;
 
     const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
       body: JSON.stringify(payload)
     });
 
     const genData = await safeJson(genRes);
     if (!genRes.ok) throw new Error(genData?.error || genData?.message || "Lesson generation failed.");
 
-    const lesson = genData;
-    lastLessonJSON = lesson;
-    persistGeneratedLessonToLessonData(lastLessonJSON);
+    const lesson = normalizeLessonFromBackend(genData);
 
-    lesson.verifiedStandards = standards && standards.length ? standards : getStandardsForDisplay(lesson);
+    // force-inject verified standards so document always uses the verified list we got
+    lesson.verifiedStandards = (standards && standards.length) ? standards : getStandardsForDisplay(lesson);
+
+    lastLessonJSON = lesson;
+    persistGeneratedLesson(lesson);
 
     hideLoading();
     displayGeneratedLesson(lesson, framework);
-    document.getElementById('feedbackBox').style.display = 'block';
 
-  } catch (err) {
+    document.getElementById("feedbackBox").style.display = "block";
+  } catch(err){
     console.error("generateLessonViaBackend error:", err);
     hideLoading();
-    alert("There was an error generating your lesson.\n\n" + (err.message || ""));
-    document.getElementById('feedbackBox').style.display = 'block';
+    alert("Lesson generation error:\n\n" + (err.message || ""));
+    document.getElementById("feedbackBox").style.display = "block";
   }
 }
 
-function displayGeneratedLesson(lesson, frameworkKey) {
-  document.getElementById('lessonSummary').textContent = lesson.summary || "";
+/* -----------------------------
+   Rendering
+------------------------------ */
+
+function displayGeneratedLesson(lesson, frameworkKey){
+  document.getElementById("lessonSummary").textContent = lesson.summary || "";
 
   const standardsHTML = renderStandardsSection(getStandardsForDisplay(lesson), true);
 
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const keyVocab = Array.isArray(lesson.keyVocabulary) ? lesson.keyVocabulary : [];
+
+  // UDL: one short sentence each
   const udl = lesson.udlConnections || {};
+  const udlEngage = takeFirstSentence(udl.engagement || "");
+  const udlRepresent = takeFirstSentence(udl.representation || "");
+  const udlAction = takeFirstSentence(udl.actionExpression || udl.action_and_expression || "");
+
+  // procedures, corrected step names per framework
   const proceduresRaw = Array.isArray(lesson.procedures) ? lesson.procedures : [];
   const procedures = applyFrameworkStepNames(frameworkKey, proceduresRaw);
+
+  // Key vocab: comma-separated (no bullets)
+  const keyVocabLine = keyVocab.map(v => String(v).trim()).filter(Boolean).join(", ");
 
   const keyVocabHTML = `
     <div class="lesson-section">
       <h3>Key Vocabulary</h3>
-      <ul>${keyVocab.map(w => `<li>${escapeHtml(w)}</li>`).join("")}</ul>
+      <p>${escapeHtml(keyVocabLine)}</p>
     </div>
   `;
 
   const udlHTML = `
     <div class="lesson-section">
       <h3>UDL Connections</h3>
-      <p><strong>Engagement:</strong> ${escapeHtml(udl.engagement || "")}</p>
-      <p><strong>Representation:</strong> ${escapeHtml(udl.representation || "")}</p>
-      <p><strong>Action &amp; Expression:</strong> ${escapeHtml(udl.actionExpression || "")}</p>
+      <p><strong>Engagement:</strong> ${escapeHtml(udlEngage)}</p>
+      <p><strong>Representation:</strong> ${escapeHtml(udlRepresent)}</p>
+      <p><strong>Action &amp; Expression:</strong> ${escapeHtml(udlAction)}</p>
+    </div>
+  `;
+
+  // UbD view: render Stage 1/2/3 explicitly if present, otherwise still show compact procedures
+  const isUbD = frameworkKey === "ubd";
+  const ubd = lesson.ubd || {};
+
+  const ubdStage1 = `
+    <div class="lesson-section">
+      <h3>Stage 1: Desired Results</h3>
+      ${ubd.establishedGoals ? `<p><strong>Established Goals:</strong> ${escapeHtml(ubd.establishedGoals)}</p>` : ""}
+      ${ubd.understandings ? `<p><strong>Understandings:</strong> ${escapeHtml(ubd.understandings)}</p>` : ""}
+      ${ubd.essentialQuestions ? `<p><strong>Essential Questions:</strong> ${escapeHtml(ubd.essentialQuestions)}</p>` : ""}
+      ${ubd.knowledge ? `<p><strong>Students will know:</strong> ${escapeHtml(ubd.knowledge)}</p>` : ""}
+      ${ubd.skills ? `<p><strong>Students will be able to:</strong> ${escapeHtml(ubd.skills)}</p>` : ""}
+    </div>
+  `;
+
+  const ubdStage2 = `
+    <div class="lesson-section">
+      <h3>Stage 2: Assessment Evidence</h3>
+      ${ubd.performanceTasks ? `<p><strong>Performance Task(s):</strong> ${escapeHtml(ubd.performanceTasks)}</p>` : ""}
+      ${ubd.otherEvidence ? `<p><strong>Other Evidence:</strong> ${escapeHtml(ubd.otherEvidence)}</p>` : ""}
+    </div>
+  `;
+
+  const ubdStage3 = `
+    <div class="lesson-section">
+      <h3>Stage 3: Learning Plan</h3>
+      ${ubd.learningActivities ? `<p>${escapeHtml(ubd.learningActivities)}</p>` : ""}
     </div>
   `;
 
@@ -565,11 +685,11 @@ function displayGeneratedLesson(lesson, frameworkKey) {
     <div class="lesson-section">
       <h3>Procedures</h3>
       <div class="proc-list">
-        ${procedures.map((p, i) => `
+        ${procedures.map((p,i)=>`
           <div class="proc-item">
             <div class="proc-head">
               ${escapeHtml(p.name || `Step ${i+1}`)}
-              ${(p.time !== undefined && p.time !== null && String(p.time).trim() !== "") ? `<span class="proc-time-text">(${escapeHtml(String(p.time))} min)</span>` : ""}
+              ${(p.time!==undefined && p.time!==null && String(p.time).trim()!=="") ? `<span class="proc-time-text">(${escapeHtml(String(p.time))} min)</span>` : ""}
             </div>
             <div>${escapeHtml(p.description || "")}</div>
           </div>
@@ -578,10 +698,11 @@ function displayGeneratedLesson(lesson, frameworkKey) {
     </div>
   `;
 
+  const assessmentSummary = lesson.assessmentSummary || (lesson.assessments && lesson.assessments.summary) || "";
   const assessmentsHTML = `
     <div class="lesson-section">
       <h3>Assessment Summary</h3>
-      <p>${escapeHtml(lesson.assessmentSummary || "")}</p>
+      <p>${escapeHtml(assessmentSummary)}</p>
     </div>
   `;
 
@@ -590,28 +711,34 @@ function displayGeneratedLesson(lesson, frameworkKey) {
 
     <div class="lesson-section">
       <h3>Learning Objectives</h3>
-      <ul>${objectives.map(o => `<li>${escapeHtml(o)}</li>`).join("")}</ul>
+      <ul>${objectives.map(o=>`<li>${escapeHtml(o)}</li>`).join("")}</ul>
     </div>
 
     <div class="lesson-section">
       <h3>Materials Needed</h3>
-      <ul>${materials.map(m => `<li>${escapeHtml(m)}</li>`).join("")}</ul>
+      <ul>${materials.map(m=>`<li>${escapeHtml(m)}</li>`).join("")}</ul>
     </div>
 
     ${keyVocabHTML}
     ${udlHTML}
-    ${proceduresHTML}
+
+    ${isUbD ? (ubdStage1 + ubdStage2 + ubdStage3) : proceduresHTML}
+
     ${assessmentsHTML}
   `;
 
-  document.getElementById('lessonContent').innerHTML = content;
+  document.getElementById("lessonContent").innerHTML = content;
 }
 
-function regenerateLesson() {
-  const feedback = document.getElementById('feedbackTextarea').value.trim();
+/* -----------------------------
+   Update Lesson (feedback)
+------------------------------ */
+
+function regenerateLesson(){
+  const feedback = document.getElementById("feedbackTextarea").value.trim();
   if (!feedback) { alert("Please describe what changes you want to make."); return; }
 
-  document.getElementById('feedbackBox').style.display = 'none';
+  document.getElementById("feedbackBox").style.display = "none";
   showLoading();
 
   const step1 = lessonData.step1 || {};
@@ -619,14 +746,18 @@ function regenerateLesson() {
   const step3 = lessonData.step3 || {};
   const step5 = lessonData.step5 || {};
 
-  const topic = step1.topic || 'Untitled Lesson';
-  const grade = step1.grade || '5th Grade';
-  const subject = step1.subject || 'Science';
+  const topic = step1.topic || "Untitled Lesson";
+  const grade = step1.grade || "5th Grade";
+  const subject = step1.subject || "Science";
   const duration = step1.duration || 45;
-  const framework = step3.framework || 'madeline-hunter';
+  const framework = step3.framework || "madeline-hunter";
 
   generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
 }
+
+/* -----------------------------
+   Export + Continue
+------------------------------ */
 
 function exportPDF(){ window.print(); }
 
@@ -635,24 +766,31 @@ function exportDOC(){
 
   const lesson = lastLessonJSON;
   const step1 = lessonData.step1 || {};
-  const title = (step1.topic || "Lesson").replace(/[^\w\-]+/g,'_');
+  const title = (step1.topic || "Lesson").replace(/[^\w\-]+/g,"_");
+  const frameworkKey = (lessonData.step3 || {}).framework || "madeline-hunter";
 
   const standardsHTML = renderStandardsSection(getStandardsForDisplay(lesson), false);
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const keyVocab = Array.isArray(lesson.keyVocabulary) ? lesson.keyVocabulary : [];
+  const keyVocabLine = keyVocab.map(v => String(v).trim()).filter(Boolean).join(", ");
   const udl = lesson.udlConnections || {};
-  const frameworkKey = (lessonData.step3 || {}).framework || "madeline-hunter";
+
+  const udlEngage = takeFirstSentence(udl.engagement || "");
+  const udlRepresent = takeFirstSentence(udl.representation || "");
+  const udlAction = takeFirstSentence(udl.actionExpression || udl.action_and_expression || "");
+
   const procedures = applyFrameworkStepNames(frameworkKey, Array.isArray(lesson.procedures) ? lesson.procedures : []);
+  const assessmentSummary = lesson.assessmentSummary || (lesson.assessments && lesson.assessments.summary) || "";
 
   const docHtml = `
   <html><head><meta charset="utf-8">
   <title>${escapeHtml(step1.topic || "Lesson")}</title>
   <style>
-    body{font-family:Arial, sans-serif; color:#111; line-height:1.35;}
-    h1{font-size:22px; text-align:center; margin:0 0 10px;}
-    h2{font-size:16px; margin:16px 0 6px;}
-    .meta{font-size:12px; color:#333; text-align:center; margin-bottom:10px;}
+    body{font-family:Arial, sans-serif; color:#111; font-size:12pt; line-height:1.35;}
+    h1{font-size:18pt; text-align:center; margin:0 0 10px;}
+    h2{font-size:13pt; margin:14px 0 6px;}
+    .meta{font-size:11pt; color:#333; text-align:center; margin-bottom:10px;}
     ul{margin:0 0 10px 18px;}
     li{margin-bottom:5px;}
     .step{margin-bottom:8px;}
@@ -674,25 +812,34 @@ function exportDOC(){
     <ul>${materials.map(m=>`<li>${escapeHtml(m)}</li>`).join("")}</ul>
 
     <h2>Key Vocabulary</h2>
-    <ul>${keyVocab.map(v=>`<li>${escapeHtml(v)}</li>`).join("")}</ul>
+    <div>${escapeHtml(keyVocabLine)}</div>
 
     <h2>UDL Connections</h2>
-    <div><b>Engagement:</b> ${escapeHtml(udl.engagement || "")}</div>
-    <div><b>Representation:</b> ${escapeHtml(udl.representation || "")}</div>
-    <div><b>Action & Expression:</b> ${escapeHtml(udl.actionExpression || "")}</div>
+    <div><b>Engagement:</b> ${escapeHtml(udlEngage)}</div>
+    <div><b>Representation:</b> ${escapeHtml(udlRepresent)}</div>
+    <div><b>Action & Expression:</b> ${escapeHtml(udlAction)}</div>
 
-    <h2>Procedures</h2>
-    ${procedures.map((p,i)=>`
-      <div class="step">
-        <div class="step-title">${escapeHtml(p.name || `Step ${i+1}`)}${(p.time!==undefined && p.time!==null && String(p.time).trim()!=="")?` (${escapeHtml(String(p.time))} min)`:``}</div>
-        <div>${escapeHtml(p.description || "")}</div>
-      </div>
-    `).join("")}
+    ${frameworkKey === "ubd" ? `
+      <h2>Stage 1: Desired Results</h2>
+      <div>${escapeHtml((lesson.ubd && lesson.ubd.understandings) || "")}</div>
+      <h2>Stage 2: Assessment Evidence</h2>
+      <div>${escapeHtml((lesson.ubd && lesson.ubd.performanceTasks) || "")}</div>
+      <h2>Stage 3: Learning Plan</h2>
+      <div>${escapeHtml((lesson.ubd && lesson.ubd.learningActivities) || "")}</div>
+    ` : `
+      <h2>Procedures</h2>
+      ${procedures.map((p,i)=>`
+        <div class="step">
+          <div class="step-title">${escapeHtml(p.name || `Step ${i+1}`)}${(p.time!==undefined && p.time!==null && String(p.time).trim()!=="")?` (${escapeHtml(String(p.time))} min)`:``}</div>
+          <div>${escapeHtml(p.description || "")}</div>
+        </div>
+      `).join("")}
+    `}
 
-    <h2>Assessment Summary</h2><div>${escapeHtml(lesson.assessmentSummary || "")}</div>
+    <h2>Assessment Summary</h2><div>${escapeHtml(assessmentSummary)}</div>
   </body></html>`;
 
-  const blob = new Blob([docHtml], { type: "application/msword;charset=utf-8" });
+  const blob = new Blob([docHtml], { type:"application/msword;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -703,19 +850,18 @@ function exportDOC(){
   URL.revokeObjectURL(url);
 }
 
-function saveToLibrary() {
-  const saved = localStorage.getItem('lessonData');
+function saveToLibrary(){
+  const saved = localStorage.getItem("lessonData");
   if (!saved) return;
-
   const data = JSON.parse(saved);
 
   const lesson = {
     id: Date.now(),
-    title: data.step1?.topic || 'Untitled Lesson',
-    grade: data.step1?.grade || '5th Grade',
-    subject: data.step1?.subject || 'Science',
+    title: data.step1?.topic || "Untitled Lesson",
+    grade: data.step1?.grade || "5th Grade",
+    subject: data.step1?.subject || "Science",
     duration: data.step1?.duration || 45,
-    framework: data.step3?.framework || 'madeline-hunter',
+    framework: data.step3?.framework || "madeline-hunter",
     verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
     savedAt: new Date().toISOString(),
     generatedLesson: lastLessonJSON || data.generatedLesson || null,
@@ -723,17 +869,16 @@ function saveToLibrary() {
   };
 
   let savedLessons = [];
-  const existing = localStorage.getItem('savedLessons');
+  const existing = localStorage.getItem("savedLessons");
   if (existing) savedLessons = JSON.parse(existing);
-
   savedLessons.push(lesson);
-  localStorage.setItem('savedLessons', JSON.stringify(savedLessons));
+  localStorage.setItem("savedLessons", JSON.stringify(savedLessons));
 }
 
 function continueToStep7(){
   saveToLibrary();
-  if (lastLessonJSON) persistGeneratedLessonToLessonData(lastLessonJSON);
-  window.location.href = 'build-step7.html';
+  if (lastLessonJSON) persistGeneratedLesson(lastLessonJSON);
+  window.location.href = "build-step7.html";
 }
 </script>
 </body>
