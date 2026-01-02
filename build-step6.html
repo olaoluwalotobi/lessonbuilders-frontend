@@ -143,8 +143,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   </aside>
 
   <main class="main-content">
-    <h1 class="page-title">Your lesson is ready</h1>
-    <p class="page-subtitle">Review, export, then continue to collaborations</p>
+    <h1 class="page-title">Lesson Review</h1>
+    <p class="page-subtitle">Confirm/edit, then continue to collaborations</p>
     <div class="progress-bar"><div class="progress-fill" style="width:86%;"></div></div>
 
     <div class="verification-banner" id="verificationBanner">
@@ -153,7 +153,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
           <div class="banner-icon">✓</div>
           <div>
             <div class="banner-text" id="bannerText">Verifying California Standards...</div>
-            <div class="banner-meta" id="bannerMeta">This will take 5-15 seconds</div>
+            <div class="banner-meta" id="bannerMeta">This will take a moment</div>
           </div>
         </div>
         <button class="view-details-btn" id="viewDetailsBtn" onclick="toggleDetails()" style="display:none;">
@@ -203,11 +203,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
 const messages = [
-  "Building a great lesson, one block at a time",
-  "Verifying California standards…",
-  "Aligning to learning standards…",
-  "Designing engaging activities…",
-  "Finalizing your lesson plan…"
+  "Building lesson, one block at a time"
 ];
 let msgIndex = 0;
 let msgTimer;
@@ -264,15 +260,15 @@ function toggleDetails() {
 }
 
 function setBannerVerifying(){
-  document.getElementById("bannerText").textContent = "Verifying California Standards...";
-  document.getElementById("bannerMeta").textContent = "This will take 5-15 seconds";
+  document.getElementById("bannerText").textContent = "Locating California Standards...";
+  document.getElementById("bannerMeta").textContent = "This will take a moment";
   document.getElementById("viewDetailsBtn").style.display = "none";
   document.getElementById("standardsContainer").innerHTML = "";
   document.getElementById("detailsSection").classList.remove("show");
 }
 function setBannerFallback(message){
-  document.getElementById("bannerText").textContent = "Standards verification unavailable";
-  document.getElementById("bannerMeta").textContent = message || "Continuing without verified standards.";
+  document.getElementById("bannerText").textContent = "Standards location unavailable";
+  document.getElementById("bannerMeta").textContent = message || "Continuing without locating standards.";
   document.getElementById("viewDetailsBtn").style.display = "none";
   document.getElementById("standardsContainer").innerHTML = "";
   document.getElementById("detailsSection").classList.remove("show");
@@ -295,9 +291,9 @@ function updateVerificationBanner(standards, metaOrSource){
   const matchType = meta?.matchType ? String(meta.matchType) : "";
   const confidence = (typeof meta?.confidence === "number") ? meta.confidence : null;
 
-  document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""} Verified`;
+  document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""}`;
 
-  const parts = [`Verified on ${today}`];
+  const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
   if (matchType) parts.push(`match: ${matchType}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
