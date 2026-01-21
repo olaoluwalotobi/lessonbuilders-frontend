@@ -295,7 +295,6 @@ function updateVerificationBanner(standards, metaOrSource){
 
   const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
-  if (matchType) parts.push(`match: ${matchType}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
   document.getElementById("bannerMeta").textContent = parts.join(" • ");
 
