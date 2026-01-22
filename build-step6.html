@@ -184,7 +184,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
         <span class="export-label">Export</span>
         <button class="btn btn-secondary" onclick="exportPDF()">PDF</button>
         <button class="btn btn-secondary" onclick="exportDOC()">DOC</button>
-        <button class="btn btn-secondary" onclick="window.print()">Print</button>
+        <button class="btn btn-secondary" onclick="window.print();">Print</button>
       </div>
       <div class="btn-spacer"></div>
       <button class="btn btn-primary" onclick="continueToStep7()">Continue &rarr;</button>
@@ -284,7 +284,6 @@ function updateVerificationBanner(standards, metaOrSource){
   const count = standards.length;
   const today = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
 
-  // Backwards compatible: allow string source OR {source, matchType, confidence}
   const meta = (metaOrSource && typeof metaOrSource === "object") ? metaOrSource : { source: metaOrSource };
 
   const source = meta?.source ? String(meta.source) : "";
@@ -292,7 +291,7 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""}`;
 
-  // NOTE: matchType is intentionally not shown in UI (hides "sonnet" etc.)
+  // hide matchType ("sonnet") from user-facing UI
   const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
@@ -300,7 +299,7 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("viewDetailsBtn").style.display = "inline-flex";
 
-  // show ONLY standard code + source link (no standard wording)
+  // show ONLY the standard code + source link (no standard wording)
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
     const code = escapeHtml((std.code || std.id || "").toString());
@@ -387,64 +386,71 @@ function persistGeneratedLesson(lessonObj){
   } catch(e){ console.warn("persistGeneratedLesson failed:", e); }
 }
 
-/* ✅ Inspiration (from Step 1) — lightweight metadata only */
+/* -----------------------------
+   Inspiration helpers + directive
+------------------------------ */
 function getInspirationFromStep1(){
   const insp = lessonData?.step1?.inspiration || {};
-  const notes = String(insp.notes || "").trim();
   const files = Array.isArray(insp.files) ? insp.files : [];
   const fileMeta = files.map(f => ({
     name: String(f?.name || ""),
     type: String(f?.type || ""),
     size: Number(f?.size || 0)
   })).filter(f => f.name);
-  return { notes, files: fileMeta };
+
+  return {
+    observations: String(insp.observations || "").trim(),
+    keyTakeaways: String(insp.keyTakeaways || "").trim(),
+    notes: String(insp.notes || "").trim(),
+    files: fileMeta
+  };
 }
 
-/* ✅ Clear uploads + focus text after export/save to honor your storage rule */
-function clearInspirationFiles(){
+function buildInspirationDirective(insp){
+  const obs = String(insp?.observations || "").trim();
+  const take = String(insp?.keyTakeaways || "").trim();
+  const notes = String(insp?.notes || "").trim();
+  const names = Array.isArray(insp?.files) ? insp.files.map(f => f.name).filter(Boolean) : [];
+
+  const hasAnything = obs || take || notes || names.length;
+  if (!hasAnything) return "";
+
+  return `
+IMPORTANT: The teacher provided inspiration materials. The lesson MUST be built around them.
+RULES:
+1) Use the inspiration explicitly in: Hook/Engage, Modeling/Guided Practice, AND Assessment.
+2) Make at least 6 explicit references to the inspiration details (not generic “use the image”).
+3) If inspiration details are limited, include 3 “Teacher prompts” questions inside the lesson to gather missing info — but still draft the lesson using what is provided.
+4) Prefer specific nouns from the observations (people/objects/symbols/text in the doc/image) and build activities around interpreting them.
+
+FILES (names only):
+${names.length ? names.slice(0,12).map(n=>`- ${n}`).join("\n") : "(none)"}
+
+INSPIRATION OBSERVATIONS:
+${obs || "(none provided)"}
+
+TEACHER INTENT / TAKEAWAYS:
+${take || "(none provided)"}
+
+EXTRA NOTES:
+${notes || "(none provided)"}
+`.trim();
+}
+
+/* Clear inspiration after save/export: files + text fields (fixes your reset issue) */
+function clearInspirationAfterSaveExport(){
   try{
     const saved = localStorage.getItem("lessonData");
-    if (!saved) return;
-    const data = JSON.parse(saved);
+    const data = saved ? JSON.parse(saved) : {};
     if (data?.step1?.inspiration) {
       data.step1.inspiration.files = [];
+      data.step1.inspiration.observations = "";
+      data.step1.inspiration.keyTakeaways = "";
+      data.step1.inspiration.notes = "";
     }
     localStorage.setItem("lessonData", JSON.stringify(data));
     lessonData = data;
-  } catch(e){ console.warn("clearInspirationFiles failed:", e); }
-}
-function clearStep1FocusText(){
-  try{
-    const saved = localStorage.getItem("lessonData");
-    if (!saved) return;
-    const data = JSON.parse(saved);
-    if (data?.step1) {
-      data.step1.standardFocus = ""; // "what do you want to focus on?"
-      if (data.step1.inspiration) {
-        data.step1.inspiration.notes = ""; // optional: clear notes too
-      }
-    }
-    localStorage.setItem("lessonData", JSON.stringify(data));
-    lessonData = data;
-  } catch(e){ console.warn("clearStep1FocusText failed:", e); }
-}
-
-/* ✅ Make sure Step 5 doesn't sneak in default items (like exit ticket) */
-function sanitizeStep5(step5){
-  const s5 = step5 && typeof step5 === "object" ? JSON.parse(JSON.stringify(step5)) : {};
-  // Common patterns: step5.assessments (array of objects) OR step5.selectedAssessments (array) OR flags
-  if (Array.isArray(s5.assessments)) {
-    // keep only explicitly selected items when that flag exists
-    const hasSelectedFlag = s5.assessments.some(a => a && typeof a === "object" && ("selected" in a));
-    if (hasSelectedFlag) {
-      s5.assessments = s5.assessments.filter(a => a && a.selected === true);
-    }
-  }
-  if (Array.isArray(s5.selectedAssessments)) {
-    // keep as-is; but remove falsy
-    s5.selectedAssessments = s5.selectedAssessments.filter(Boolean);
-  }
-  return s5;
+  } catch(e){ console.warn("clearInspirationAfterSaveExport failed:", e); }
 }
 
 /* framework names (correct) */
@@ -483,7 +489,6 @@ function applyFrameworkStepNames(frameworkKey, procedures){
     setNames(["I Do","We Do","You Do Together","You Do Alone"]);
   }
 
-  // UbD Hybrid: stage labels
   if (frameworkKey === "ubd"){
     setNames(["Stage 1: Desired Results","Stage 2: Assessment Evidence","Stage 3: Learning Plan"]);
   }
@@ -498,8 +503,6 @@ function getStandardsForDisplay(lesson){
   const c = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
   return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : [])));
 }
-
-/* show only standard codes + (optional) source links (no standard wording) */
 function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
   const items = standardsArr.map(std => {
@@ -580,7 +583,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
 
         if (standards.length) updateVerificationBanner(standards, {
           source: verifyData.source,
-          matchType: verifyData.matchType, // kept internally; not shown
+          matchType: verifyData.matchType,
           confidence: verifyData.confidence
         });
         else setBannerNoMatch(verifyData?.message || `No match for grade=${gradeNum}, subject=${subjectNorm}.`);
@@ -592,17 +595,21 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       setBannerFallback("Continuing without verified standards.");
     }
 
-    const sanitizedStep5 = sanitizeStep5(step5 || {});
+    // Inspiration: include it in payload AND force directive on first generation (feedback=null)
     const inspiration = getInspirationFromStep1();
+    const inspirationDirective = buildInspirationDirective(inspiration);
 
     const payload = {
-      step1: { topic, grade, subject, duration, inspiration },   // ✅ include inspiration
+      step1: { topic, grade, subject, duration, inspiration },
       step2: step2 || {},
       step3: { framework },
-      step5: sanitizedStep5,                                     // ✅ prevent default assessments sneaking in
+      step5: step5 || {},
       verifiedStandards: Array.isArray(standards) ? standards : []
     };
+
+    // If user typed feedback, use it. Otherwise inject directive if present.
     if (feedback) payload.feedback = feedback;
+    if (!feedback && inspirationDirective) payload.feedback = inspirationDirective;
 
     const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
       method:"POST",
@@ -734,9 +741,8 @@ function regenerateLesson(){
 
 /* export/continue */
 function exportPDF(){
-  // delete uploads + focus text after export
-  clearInspirationFiles();
-  clearStep1FocusText();
+  // delete uploads + focus text after export (your storage rule + reset fix)
+  clearInspirationAfterSaveExport();
   window.print();
 }
 
@@ -810,9 +816,8 @@ function exportDOC(){
   a.remove();
   URL.revokeObjectURL(url);
 
-  // delete uploads + focus text after export
-  clearInspirationFiles();
-  clearStep1FocusText();
+  // delete uploads + focus text after export (your storage rule + reset fix)
+  clearInspirationAfterSaveExport();
 }
 
 function saveToLibrary(){
@@ -844,9 +849,8 @@ function continueToStep7(){
   saveToLibrary();
   if (lastLessonJSON) persistGeneratedLesson(lastLessonJSON);
 
-  // delete uploads + focus text after lesson save
-  clearInspirationFiles();
-  clearStep1FocusText();
+  // delete uploads + focus text after save (your storage rule + reset fix)
+  clearInspirationAfterSaveExport();
 
   window.location.href = "build-step7.html";
 }
