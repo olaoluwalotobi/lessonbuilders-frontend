@@ -49,148 +49,429 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .optional-icon.expanded{transform:rotate(180deg);}
 .optional-content{max-height:0;overflow:hidden;transition:max-height 0.3s;}
 .optional-content.show{max-height:1000px;margin-top:24px;}
+
+/* =========================
+   Inspiration Uploads (Sidebar)
+   ========================= */
+.sidebar-panel{margin-bottom:18px;padding:14px;border:2px solid #E2E8F0;border-radius:14px;background:linear-gradient(135deg,#FFFFFF 0%,#F7FAFC 100%);}
+.sidebar-panel-title{font-weight:800;color:var(--navy);font-size:13px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;}
+.dropzone{border:2px dashed rgba(13,40,71,0.25);border-radius:12px;padding:12px;text-align:center;color:#4A5568;background:white;transition:all .2s;}
+.dropzone strong{color:var(--navy);}
+.dropzone.small{font-size:13px;line-height:1.35;}
+.dropzone.dragover{border-color:var(--orange);background:rgba(255,140,66,0.06);}
+.sidebar-actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.sidebar-actions .mini-btn{flex:1;min-width:110px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+.mini-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.mini-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.file-list{margin-top:10px;max-height:170px;overflow:auto;border-top:1px solid #E2E8F0;padding-top:10px;}
+.file-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #E2E8F0;}
+.file-left{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.file-name{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.file-meta{font-size:12px;color:#718096;}
+.remove-btn{background:white;border:2px solid #E2E8F0;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800;cursor:pointer;color:#4A5568;}
+.remove-btn:hover{border-color:var(--orange);color:var(--navy);}
+.sidebar-note{margin-top:10px;}
+.sidebar-note textarea{width:100%;padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:90px;}
+.sidebar-note textarea:focus{outline:none;border-color:var(--orange);}
+.sidebar-hint{font-size:12px;color:#718096;margin-top:8px;line-height:1.35;}
+.badge{display:inline-block;background:rgba(255,140,66,0.12);color:var(--navy);font-weight:800;font-size:12px;padding:4px 8px;border-radius:999px;margin-left:6px;}
 </style>
 </head>
 <body>
 <nav class="top-nav">
-<div class="nav-left">
-<a href="index.html" class="logo-text">LessonBuilders</a>
-<div class="nav-menu">
-<a href="library.html" class="nav-link">My Lessons</a>
-<a href="discover.html" class="nav-link">Discover</a>
-<a href="about.html" class="nav-link">Help</a>
-</div>
-</div>
-<div class="nav-right">
-<div class="user-profile">JD</div>
-</div>
+  <div class="nav-left">
+    <a href="index.html" class="logo-text">LessonBuilders</a>
+    <div class="nav-menu">
+      <a href="library.html" class="nav-link">My Lessons</a>
+      <a href="discover.html" class="nav-link">Discover</a>
+      <a href="about.html" class="nav-link">Help</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="user-profile">JD</div>
+  </div>
 </nav>
+
 <div class="container">
-<aside class="sidebar">
-<div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
-<a href="build-step1.html" class="nav-step active"><div class="step-number">1</div><div>Basic Information</div></a>
-<a href="build-step2.html" class="nav-step"><div class="step-number">2</div><div>Teaching Style</div></a>
-<a href="build-step3.html" class="nav-step"><div class="step-number">3</div><div>Choose Template</div></a>
-<a href="build-step4.html" class="nav-step"><div class="step-number">4</div><div>Build Method</div></a>
-<a href="build-step5.html" class="nav-step"><div class="step-number">5</div><div>Assessments</div></a>
-<a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
-<a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
-</aside>
-<main class="main-content">
-<h1 class="page-title">Tell us what you need</h1>
-<p class="page-subtitle">We&apos;ll align it to California standards</p>
-<div class="progress-bar"><div class="progress-fill" style="width:12%;"></div></div>
+  <aside class="sidebar">
 
-<div class="form-group">
-<label class="form-label">Grade Level</label>
-<select class="form-select" id="gradeSelect">
-<option>Kindergarten</option>
-<option>1st Grade</option>
-<option>2nd Grade</option>
-<option>3rd Grade</option>
-<option>4th Grade</option>
-<option selected>5th Grade</option>
-<option>6th Grade</option>
-<option>7th Grade</option>
-<option>8th Grade</option>
-<option>9th Grade</option>
-<option>10th Grade</option>
-<option>11th Grade</option>
-<option>12th Grade</option>
-</select>
-</div>
+    <!-- ✅ NEW: Inspiration Uploads -->
+    <div class="sidebar-panel" id="inspirationPanel">
+      <div class="sidebar-panel-title">Inspiration Uploads <span class="badge" id="inspCountBadge">0</span></div>
 
-<div class="form-group">
-<label class="form-label">Subject</label>
-<select class="form-select" id="subjectSelect">
-<option selected>Mathematics</option>
-<option>English Language Arts (ELA)</option>
-<option>Science</option>
-<option>Social Studies / History</option>
-<option>Physical Education</option>
-<option>Arts</option>
-<option>Other</option>
-</select>
-</div>
+      <div class="dropzone small" id="dropzone" tabindex="0" role="button" aria-label="Upload inspiration">
+        <strong>Drag & drop</strong> a PDF, DOC/DOCX, or image here<br>
+        or click “Browse Files”
+      </div>
 
-<div class="form-group">
-<label class="form-label">Lesson Topic</label>
-<input type="text" class="form-input" id="topicInput" placeholder="Example: Introduction to fractions">
-</div>
+      <input id="filePicker" type="file" multiple
+        accept="image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        style="display:none;">
 
-<div class="form-group">
-<label class="form-label">State</label>
-<select class="form-select" id="stateSelect">
-<option selected>California</option>
-</select>
-</div>
+      <div class="sidebar-actions">
+        <button class="mini-btn mini-primary" type="button" onclick="openFilePicker()">Browse Files</button>
+        <button class="mini-btn mini-secondary" type="button" onclick="clearAllInspiration()">Clear</button>
+      </div>
 
-<div class="form-group">
-<label class="form-label">Lesson Duration</label>
-<input type="range" min="15" max="120" value="45" class="slider" id="durationSlider">
-<div class="slider-value" id="durationValue">45 minutes</div>
-</div>
+      <div class="file-list" id="fileList" aria-live="polite"></div>
 
-<div class="optional-section" id="optionalSection">
-<div class="optional-header" id="optionalHeader">
-<div class="optional-title">+ Additional Details (Optional)</div>
-<div class="optional-icon" id="optionalIcon">&#9660;</div>
-</div>
-<div class="optional-content" id="optionalContent">
-<div class="form-group">
-<label class="form-label">Class Size</label>
-<select class="form-select" id="classSizeSelect">
-<option>Small (1-15 students)</option>
-<option selected>Medium (16-25 students)</option>
-<option>Large (26-35 students)</option>
-<option>Very large (36+ students)</option>
-</select>
-</div>
+      <div class="sidebar-note">
+        <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What should we notice?</label>
+        <textarea id="inspirationNotes" placeholder="Example: This is last year’s lesson. Keep the same hook, but simplify the assessment."></textarea>
+      </div>
 
-<div class="form-group">
-<label class="form-label">My students include (select all that apply)</label>
-<div style="display:grid;gap:8px;">
-<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb1"> English Language Learners</label>
-<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb2"> Students with IEPs</label>
-<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb3"> Students with 504 plans</label>
-<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb4"> Gifted/advanced learners</label>
-<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb5"> Below grade level</label>
-<label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb6"> Mixed ability classroom</label>
-</div>
-</div>
+      <div class="sidebar-hint">
+        Stored locally for this lesson build and can be deleted after generation/export to save storage.
+      </div>
+    </div>
 
-<div class="form-group">
-<label class="form-label">Focus on specific standard (optional)</label>
-<input type="text" class="form-input" id="standardInput" placeholder="e.g., 5.NF.A.1">
-<div style="font-size:13px;color:#718096;margin-top:4px;">Leave blank to auto-select best standards</div>
-</div>
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+    <a href="build-step1.html" class="nav-step active"><div class="step-number">1</div><div>Basic Information</div></a>
+    <a href="build-step2.html" class="nav-step"><div class="step-number">2</div><div>Teaching Style</div></a>
+    <a href="build-step3.html" class="nav-step"><div class="step-number">3</div><div>Choose Template</div></a>
+    <a href="build-step4.html" class="nav-step"><div class="step-number">4</div><div>Build Method</div></a>
+    <a href="build-step5.html" class="nav-step"><div class="step-number">5</div><div>Assessments</div></a>
+    <a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
+    <a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
+  </aside>
 
-<div class="form-group">
-<label class="form-label">Prior knowledge</label>
-<select class="form-select" id="priorKnowledgeSelect">
-<option>First time seeing this concept</option>
-<option selected>Have some background</option>
-<option>Review/reinforcement</option>
-<option>Advanced/extension</option>
-</select>
-</div>
+  <main class="main-content">
+    <h1 class="page-title">Tell us what you need</h1>
+    <p class="page-subtitle">We&apos;ll align it to California standards</p>
+    <div class="progress-bar"><div class="progress-fill" style="width:12%;"></div></div>
 
-<div class="form-group">
-<label class="form-label">Additional context</label>
-<textarea class="form-input" id="contextTextarea" rows="4" style="resize:vertical;" placeholder="Special needs, timing, classroom setup, etc."></textarea>
-</div>
-</div>
-</div>
+    <div class="form-group">
+      <label class="form-label">Grade Level</label>
+      <select class="form-select" id="gradeSelect">
+        <option>Kindergarten</option>
+        <option>1st Grade</option>
+        <option>2nd Grade</option>
+        <option>3rd Grade</option>
+        <option>4th Grade</option>
+        <option selected>5th Grade</option>
+        <option>6th Grade</option>
+        <option>7th Grade</option>
+        <option>8th Grade</option>
+        <option>9th Grade</option>
+        <option>10th Grade</option>
+        <option>11th Grade</option>
+        <option>12th Grade</option>
+      </select>
+    </div>
 
-<div class="btn-group">
-<a href="index.html" class="btn btn-secondary">&larr; Back to Home</a>
-<button class="btn btn-primary" onclick="saveAndContinue()">Next: Teaching Style &rarr;</button>
-</div>
-</main>
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <select class="form-select" id="subjectSelect">
+        <option selected>Mathematics</option>
+        <option>English Language Arts (ELA)</option>
+        <option>Science</option>
+        <option>Social Studies / History</option>
+        <option>Physical Education</option>
+        <option>Arts</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Lesson Topic</label>
+      <input type="text" class="form-input" id="topicInput" placeholder="Example: Introduction to fractions">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">State</label>
+      <select class="form-select" id="stateSelect">
+        <option selected>California</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Lesson Duration</label>
+      <input type="range" min="15" max="120" value="45" class="slider" id="durationSlider">
+      <div class="slider-value" id="durationValue">45 minutes</div>
+    </div>
+
+    <div class="optional-section" id="optionalSection">
+      <div class="optional-header" id="optionalHeader">
+        <div class="optional-title">+ Additional Details (Optional)</div>
+        <div class="optional-icon" id="optionalIcon">&#9660;</div>
+      </div>
+      <div class="optional-content" id="optionalContent">
+        <div class="form-group">
+          <label class="form-label">Class Size</label>
+          <select class="form-select" id="classSizeSelect">
+            <option>Small (1-15 students)</option>
+            <option selected>Medium (16-25 students)</option>
+            <option>Large (26-35 students)</option>
+            <option>Very large (36+ students)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">My students include (select all that apply)</label>
+          <div style="display:grid;gap:8px;">
+            <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb1"> English Language Learners</label>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb2"> Students with IEPs</label>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb3"> Students with 504 plans</label>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb4"> Gifted/advanced learners</label>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb5"> Below grade level</label>
+            <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="cb6"> Mixed ability classroom</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Focus on specific standard (optional)</label>
+          <input type="text" class="form-input" id="standardInput" placeholder="e.g., 5.NF.A.1">
+          <div style="font-size:13px;color:#718096;margin-top:4px;">Leave blank to auto-select best standards</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Prior knowledge</label>
+          <select class="form-select" id="priorKnowledgeSelect">
+            <option>First time seeing this concept</option>
+            <option selected>Have some background</option>
+            <option>Review/reinforcement</option>
+            <option>Advanced/extension</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Additional context</label>
+          <textarea class="form-input" id="contextTextarea" rows="4" style="resize:vertical;" placeholder="Special needs, timing, classroom setup, etc."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <a href="index.html" class="btn btn-secondary">&larr; Back to Home</a>
+      <button class="btn btn-primary" onclick="saveAndContinue()">Next: Teaching Style &rarr;</button>
+    </div>
+  </main>
 </div>
 
 <script>
-window.addEventListener('DOMContentLoaded', function() {
+/* =========================
+   Inspiration Uploads (IndexedDB)
+   ========================= */
+const INSP_DB_NAME = "lessonbuilders_inspiration";
+const INSP_STORE = "files";
+
+function openFilePicker(){
+  document.getElementById("filePicker").click();
+}
+
+function bytesToNice(n){
+  const x = Number(n || 0);
+  if (!x) return "0 B";
+  const units = ["B","KB","MB","GB"];
+  let i = 0, v = x;
+  while (v >= 1024 && i < units.length-1){ v/=1024; i++; }
+  return `${v.toFixed(v>=10||i===0?0:1)} ${units[i]}`;
+}
+
+function fileTypeLabel(file){
+  const name = (file?.name || "").toLowerCase();
+  if (file?.type?.startsWith("image/")) return "Image";
+  if (file?.type === "application/pdf" || name.endsWith(".pdf")) return "PDF";
+  if (name.endsWith(".docx")) return "DOCX";
+  if (name.endsWith(".doc")) return "DOC";
+  return (file?.type || "File");
+}
+
+function isAllowedFile(file){
+  const name = (file?.name || "").toLowerCase();
+  if (file?.type?.startsWith("image/")) return true;
+  if (file?.type === "application/pdf" || name.endsWith(".pdf")) return true;
+  if (name.endsWith(".doc") || name.endsWith(".docx")) return true;
+  return false;
+}
+
+function openInspDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(INSP_DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(INSP_STORE)){
+        db.createObjectStore(INSP_STORE, { keyPath: "id" });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function putInspRecord(record){
+  const db = await openInspDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(INSP_STORE, "readwrite");
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+    tx.objectStore(INSP_STORE).put(record);
+  });
+}
+
+async function getAllInspRecords(){
+  const db = await openInspDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(INSP_STORE, "readonly");
+    const req = tx.objectStore(INSP_STORE).getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function deleteInspRecord(id){
+  const db = await openInspDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(INSP_STORE, "readwrite");
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+    tx.objectStore(INSP_STORE).delete(id);
+  });
+}
+
+async function clearInspStore(){
+  const db = await openInspDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(INSP_STORE, "readwrite");
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+    tx.objectStore(INSP_STORE).clear();
+  });
+}
+
+function newId(){
+  return "insp_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+}
+
+async function addFiles(files){
+  const list = Array.from(files || []).filter(isAllowedFile);
+  if (!list.length){
+    alert("Please upload an image, PDF, DOC, or DOCX.");
+    return;
+  }
+
+  // store each file as Blob in IndexedDB (local only)
+  for (const f of list){
+    const id = newId();
+    await putInspRecord({
+      id,
+      name: f.name,
+      type: f.type || "",
+      size: f.size || 0,
+      lastModified: f.lastModified || Date.now(),
+      blob: f
+    });
+  }
+
+  await refreshInspirationUI();
+}
+
+async function refreshInspirationUI(){
+  const records = await getAllInspRecords();
+  const listEl = document.getElementById("fileList");
+  const badge = document.getElementById("inspCountBadge");
+
+  badge.textContent = String(records.length);
+
+  if (!records.length){
+    listEl.innerHTML = `<div style="font-size:13px;color:#718096;">No files uploaded yet.</div>`;
+    persistInspirationMeta([]); // keep step1 in sync
+    return;
+  }
+
+  listEl.innerHTML = records.map(r => `
+    <div class="file-item">
+      <div class="file-left">
+        <div class="file-name" title="${escapeHtml(r.name || "")}">${escapeHtml(r.name || "")}</div>
+        <div class="file-meta">${escapeHtml(fileTypeLabel(r))} • ${escapeHtml(bytesToNice(r.size))}</div>
+      </div>
+      <button class="remove-btn" type="button" onclick="removeInspirationFile('${r.id}')">Remove</button>
+    </div>
+  `).join("");
+
+  // Save a lightweight list in lessonData.step1.inspiration (not the blob)
+  persistInspirationMeta(records.map(r => ({
+    id: r.id,
+    name: r.name,
+    type: r.type,
+    size: r.size,
+    lastModified: r.lastModified
+  })));
+}
+
+async function removeInspirationFile(id){
+  await deleteInspRecord(id);
+  await refreshInspirationUI();
+}
+
+async function clearAllInspiration(){
+  if (!confirm("Remove all uploaded inspiration files for this lesson?")) return;
+  await clearInspStore();
+  document.getElementById("inspirationNotes").value = "";
+  await refreshInspirationUI();
+  persistInspirationNotes("");
+}
+
+function persistInspirationMeta(filesMeta){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    const data = saved ? JSON.parse(saved) : {};
+    data.step1 = data.step1 || {};
+    data.step1.inspiration = data.step1.inspiration || {};
+    data.step1.inspiration.files = Array.isArray(filesMeta) ? filesMeta : [];
+    localStorage.setItem("lessonData", JSON.stringify(data));
+  }catch(e){ console.warn("persistInspirationMeta failed:", e); }
+}
+
+function persistInspirationNotes(notes){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    const data = saved ? JSON.parse(saved) : {};
+    data.step1 = data.step1 || {};
+    data.step1.inspiration = data.step1.inspiration || {};
+    data.step1.inspiration.notes = String(notes || "");
+    localStorage.setItem("lessonData", JSON.stringify(data));
+  }catch(e){ console.warn("persistInspirationNotes failed:", e); }
+}
+
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+/* Dropzone wiring */
+const dz = document.getElementById("dropzone");
+const fp = document.getElementById("filePicker");
+
+dz.addEventListener("click", () => openFilePicker());
+dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+dz.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  dz.classList.remove("dragover");
+  if (e.dataTransfer?.files?.length) await addFiles(e.dataTransfer.files);
+});
+fp.addEventListener("change", async (e) => {
+  const files = e.target.files;
+  if (files && files.length) await addFiles(files);
+  fp.value = ""; // reset
+});
+
+document.getElementById("inspirationNotes").addEventListener("input", (e) => {
+  persistInspirationNotes(e.target.value);
+});
+
+/* =========================
+   Your existing Step 1 restore/save logic
+   ========================= */
+window.addEventListener('DOMContentLoaded', async function() {
+  // load files + badge + list
+  await refreshInspirationUI();
+
   const savedData = localStorage.getItem('lessonData');
   if (savedData) {
     const data = JSON.parse(savedData);
@@ -201,7 +482,7 @@ window.addEventListener('DOMContentLoaded', function() {
       document.getElementById('stateSelect').value = data.step1.state || 'California';
       document.getElementById('durationSlider').value = data.step1.duration || 45;
       document.getElementById('durationValue').textContent = (data.step1.duration || 45) + ' minutes';
-      
+
       if (data.step1.classSize) {
         document.getElementById('classSizeSelect').value = data.step1.classSize;
       }
@@ -222,6 +503,11 @@ window.addEventListener('DOMContentLoaded', function() {
           }
         }
       }
+
+      // restore inspiration notes
+      if (data.step1.inspiration && typeof data.step1.inspiration.notes === "string"){
+        document.getElementById("inspirationNotes").value = data.step1.inspiration.notes;
+      }
     }
   }
 });
@@ -232,29 +518,32 @@ function saveAndContinue() {
   const topic = document.getElementById('topicInput').value;
   const state = document.getElementById('stateSelect').value;
   const duration = document.getElementById('durationSlider').value;
-  
+
   const classSize = document.getElementById('classSizeSelect').value;
   const standardFocus = document.getElementById('standardInput').value;
   const priorKnowledge = document.getElementById('priorKnowledgeSelect').value;
   const additionalContext = document.getElementById('contextTextarea').value;
-  
+
   const studentNeeds = [];
   for (let i = 1; i <= 6; i++) {
     const cb = document.getElementById('cb' + i);
     studentNeeds.push(cb ? cb.checked : false);
   }
-  
+
   if (!topic.trim()) {
     alert('Please enter a lesson topic');
     return;
   }
-  
+
   let lessonData = {};
   const saved = localStorage.getItem('lessonData');
   if (saved) {
     lessonData = JSON.parse(saved);
   }
-  
+
+  // Keep whatever inspiration object already exists (meta is maintained by refreshInspirationUI/persist)
+  const existingInsp = (lessonData.step1 && lessonData.step1.inspiration) ? lessonData.step1.inspiration : {};
+
   lessonData.step1 = {
     grade,
     subject,
@@ -265,9 +554,10 @@ function saveAndContinue() {
     standardFocus,
     priorKnowledge,
     additionalContext,
-    studentNeeds
+    studentNeeds,
+    inspiration: existingInsp
   };
-  
+
   localStorage.setItem('lessonData', JSON.stringify(lessonData));
   window.location.href = 'build-step2.html';
 }
@@ -289,7 +579,6 @@ header.addEventListener('click', function(e){
 content.addEventListener('click', function(e){
   e.stopPropagation();
 });
-
 </script>
 
 </body>
