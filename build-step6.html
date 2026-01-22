@@ -292,7 +292,7 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""}`;
 
-  // ✅ hide matchType ("sonnet") from user-facing UI
+  // NOTE: matchType is intentionally not shown in UI (hides "sonnet" etc.)
   const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
@@ -300,7 +300,7 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("viewDetailsBtn").style.display = "inline-flex";
 
-  // ✅ Per your request: show ONLY the standard code + source link (no standard wording)
+  // show ONLY standard code + source link (no standard wording)
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
     const code = escapeHtml((std.code || std.id || "").toString());
@@ -387,30 +387,64 @@ function persistGeneratedLesson(lessonObj){
   } catch(e){ console.warn("persistGeneratedLesson failed:", e); }
 }
 
-/* ✅ inspiration helpers (Step 1 uploads) */
+/* ✅ Inspiration (from Step 1) — lightweight metadata only */
 function getInspirationFromStep1(){
   const insp = lessonData?.step1?.inspiration || {};
   const notes = String(insp.notes || "").trim();
   const files = Array.isArray(insp.files) ? insp.files : [];
-  // keep it lightweight: only metadata (no base64)
   const fileMeta = files.map(f => ({
     name: String(f?.name || ""),
     type: String(f?.type || ""),
     size: Number(f?.size || 0)
   })).filter(f => f.name);
-
   return { notes, files: fileMeta };
 }
+
+/* ✅ Clear uploads + focus text after export/save to honor your storage rule */
 function clearInspirationFiles(){
   try{
     const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
+    if (!saved) return;
+    const data = JSON.parse(saved);
     if (data?.step1?.inspiration) {
-      data.step1.inspiration.files = []; // delete file blobs/meta after save/export
+      data.step1.inspiration.files = [];
     }
     localStorage.setItem("lessonData", JSON.stringify(data));
     lessonData = data;
   } catch(e){ console.warn("clearInspirationFiles failed:", e); }
+}
+function clearStep1FocusText(){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    if (data?.step1) {
+      data.step1.standardFocus = ""; // "what do you want to focus on?"
+      if (data.step1.inspiration) {
+        data.step1.inspiration.notes = ""; // optional: clear notes too
+      }
+    }
+    localStorage.setItem("lessonData", JSON.stringify(data));
+    lessonData = data;
+  } catch(e){ console.warn("clearStep1FocusText failed:", e); }
+}
+
+/* ✅ Make sure Step 5 doesn't sneak in default items (like exit ticket) */
+function sanitizeStep5(step5){
+  const s5 = step5 && typeof step5 === "object" ? JSON.parse(JSON.stringify(step5)) : {};
+  // Common patterns: step5.assessments (array of objects) OR step5.selectedAssessments (array) OR flags
+  if (Array.isArray(s5.assessments)) {
+    // keep only explicitly selected items when that flag exists
+    const hasSelectedFlag = s5.assessments.some(a => a && typeof a === "object" && ("selected" in a));
+    if (hasSelectedFlag) {
+      s5.assessments = s5.assessments.filter(a => a && a.selected === true);
+    }
+  }
+  if (Array.isArray(s5.selectedAssessments)) {
+    // keep as-is; but remove falsy
+    s5.selectedAssessments = s5.selectedAssessments.filter(Boolean);
+  }
+  return s5;
 }
 
 /* framework names (correct) */
@@ -465,7 +499,7 @@ function getStandardsForDisplay(lesson){
   return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : [])));
 }
 
-/* ✅ per your request: NO standard wording in lesson content; keep codes + source only */
+/* show only standard codes + (optional) source links (no standard wording) */
 function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
   const items = standardsArr.map(std => {
@@ -546,7 +580,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
 
         if (standards.length) updateVerificationBanner(standards, {
           source: verifyData.source,
-          matchType: verifyData.matchType, // we keep it internally; UI hides it
+          matchType: verifyData.matchType, // kept internally; not shown
           confidence: verifyData.confidence
         });
         else setBannerNoMatch(verifyData?.message || `No match for grade=${gradeNum}, subject=${subjectNorm}.`);
@@ -558,14 +592,14 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       setBannerFallback("Continuing without verified standards.");
     }
 
-    // ✅ bring inspiration notes/meta into the generation payload (lightweight)
+    const sanitizedStep5 = sanitizeStep5(step5 || {});
     const inspiration = getInspirationFromStep1();
 
     const payload = {
-      step1: { topic, grade, subject, duration, inspiration }, // ✅ added inspiration
+      step1: { topic, grade, subject, duration, inspiration },   // ✅ include inspiration
       step2: step2 || {},
       step3: { framework },
-      step5: step5 || {},
+      step5: sanitizedStep5,                                     // ✅ prevent default assessments sneaking in
       verifiedStandards: Array.isArray(standards) ? standards : []
     };
     if (feedback) payload.feedback = feedback;
@@ -700,8 +734,9 @@ function regenerateLesson(){
 
 /* export/continue */
 function exportPDF(){
-  // optional: clear files after export to save storage
+  // delete uploads + focus text after export
   clearInspirationFiles();
+  clearStep1FocusText();
   window.print();
 }
 
@@ -775,8 +810,9 @@ function exportDOC(){
   a.remove();
   URL.revokeObjectURL(url);
 
-  // optional: clear files after export to save storage
+  // delete uploads + focus text after export
   clearInspirationFiles();
+  clearStep1FocusText();
 }
 
 function saveToLibrary(){
@@ -808,8 +844,9 @@ function continueToStep7(){
   saveToLibrary();
   if (lastLessonJSON) persistGeneratedLesson(lastLessonJSON);
 
-  // ✅ delete uploads after lesson save/export (your storage rule)
+  // delete uploads + focus text after lesson save
   clearInspirationFiles();
+  clearStep1FocusText();
 
   window.location.href = "build-step7.html";
 }
