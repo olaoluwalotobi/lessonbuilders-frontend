@@ -288,11 +288,11 @@ function updateVerificationBanner(standards, metaOrSource){
   const meta = (metaOrSource && typeof metaOrSource === "object") ? metaOrSource : { source: metaOrSource };
 
   const source = meta?.source ? String(meta.source) : "";
-  const matchType = meta?.matchType ? String(meta.matchType) : "";
   const confidence = (typeof meta?.confidence === "number") ? meta.confidence : null;
 
   document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""}`;
 
+  // ✅ hide matchType ("sonnet") from user-facing UI
   const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
@@ -300,11 +300,10 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("viewDetailsBtn").style.display = "inline-flex";
 
-
+  // ✅ Per your request: show ONLY the standard code + source link (no standard wording)
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
     const code = escapeHtml((std.code || std.id || "").toString());
-    const text = escapeHtml((std.text || std.description || "").toString());
     return `
       <div class="standard-card">
         <div class="standard-number">${code}</div>
@@ -388,6 +387,32 @@ function persistGeneratedLesson(lessonObj){
   } catch(e){ console.warn("persistGeneratedLesson failed:", e); }
 }
 
+/* ✅ inspiration helpers (Step 1 uploads) */
+function getInspirationFromStep1(){
+  const insp = lessonData?.step1?.inspiration || {};
+  const notes = String(insp.notes || "").trim();
+  const files = Array.isArray(insp.files) ? insp.files : [];
+  // keep it lightweight: only metadata (no base64)
+  const fileMeta = files.map(f => ({
+    name: String(f?.name || ""),
+    type: String(f?.type || ""),
+    size: Number(f?.size || 0)
+  })).filter(f => f.name);
+
+  return { notes, files: fileMeta };
+}
+function clearInspirationFiles(){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    const data = saved ? JSON.parse(saved) : {};
+    if (data?.step1?.inspiration) {
+      data.step1.inspiration.files = []; // delete file blobs/meta after save/export
+    }
+    localStorage.setItem("lessonData", JSON.stringify(data));
+    lessonData = data;
+  } catch(e){ console.warn("clearInspirationFiles failed:", e); }
+}
+
 /* framework names (correct) */
 function applyFrameworkStepNames(frameworkKey, procedures){
   const steps = Array.isArray(procedures) ? procedures.map(p => ({...p})) : [];
@@ -439,16 +464,17 @@ function getStandardsForDisplay(lesson){
   const c = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
   return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : [])));
 }
+
+/* ✅ per your request: NO standard wording in lesson content; keep codes + source only */
 function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
   const items = standardsArr.map(std => {
     const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
-    const text = escapeHtml((std.text || std.description || "").toString());
     const link = std.sourceURL || std.sourceUrl || "";
     const linkHtml = (includeSourceLinks && link)
       ? ` <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link" style="font-size:12px;">Source</a>`
       : "";
-    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}${text}</li>`;
+    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}` : ""}</li>`;
   }).join("");
   return `
     <div class="lesson-section">
@@ -492,7 +518,6 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       const subjectLabel = String(subject || "");
       const subjectNorm = subjectLabel.toLowerCase().trim();
 
-      // ✅ IMPORTANT: put normalized subject in "subject" (most likely what backend uses)
       const verifyBody = {
         grade: gradeNum,
         subject: subjectNorm,
@@ -521,10 +546,10 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
 
         if (standards.length) updateVerificationBanner(standards, {
           source: verifyData.source,
-          matchType: verifyData.matchType,
+          matchType: verifyData.matchType, // we keep it internally; UI hides it
           confidence: verifyData.confidence
         });
-        else setBannerNoMatch(verifyData?.message || `No match for grade=${gradeNum}, subject=${subjectNorm}. (This string confirms what Step 6 sent.)`);
+        else setBannerNoMatch(verifyData?.message || `No match for grade=${gradeNum}, subject=${subjectNorm}.`);
       } else {
         setBannerFallback(verifyData?.message || "Continuing without verified standards.");
       }
@@ -533,8 +558,11 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       setBannerFallback("Continuing without verified standards.");
     }
 
+    // ✅ bring inspiration notes/meta into the generation payload (lightweight)
+    const inspiration = getInspirationFromStep1();
+
     const payload = {
-      step1: { topic, grade, subject, duration },
+      step1: { topic, grade, subject, duration, inspiration }, // ✅ added inspiration
       step2: step2 || {},
       step3: { framework },
       step5: step5 || {},
@@ -603,7 +631,6 @@ function displayGeneratedLesson(lesson, frameworkKey){
     </div>
   `;
 
-  // ✅ UbD Hybrid = just 3 stages with content coming from procedures (NOT lesson.ubd)
   const proceduresHTML = `
     <div class="lesson-section">
       <h3>${frameworkKey === "ubd" ? "Understanding by Design (Hybrid)" : "Procedures"}</h3>
@@ -672,7 +699,11 @@ function regenerateLesson(){
 }
 
 /* export/continue */
-function exportPDF(){ window.print(); }
+function exportPDF(){
+  // optional: clear files after export to save storage
+  clearInspirationFiles();
+  window.print();
+}
 
 function exportDOC(){
   if (!lastLessonJSON) { alert("Lesson not ready yet."); return; }
@@ -743,6 +774,9 @@ function exportDOC(){
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+
+  // optional: clear files after export to save storage
+  clearInspirationFiles();
 }
 
 function saveToLibrary(){
@@ -773,6 +807,10 @@ function saveToLibrary(){
 function continueToStep7(){
   saveToLibrary();
   if (lastLessonJSON) persistGeneratedLesson(lastLessonJSON);
+
+  // ✅ delete uploads after lesson save/export (your storage rule)
+  clearInspirationFiles();
+
   window.location.href = "build-step7.html";
 }
 </script>
