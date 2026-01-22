@@ -50,34 +50,83 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .optional-content{max-height:0;overflow:hidden;transition:max-height 0.3s;}
 .optional-content.show{max-height:1000px;margin-top:24px;}
 
-/* =========================
-   Inspiration Uploads (Sidebar)
-   ========================= */
-.sidebar-panel{margin-bottom:18px;padding:14px;border:2px solid #E2E8F0;border-radius:14px;background:linear-gradient(135deg,#FFFFFF 0%,#F7FAFC 100%);}
-.sidebar-panel-title{font-weight:800;color:var(--navy);font-size:13px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;}
-.dropzone{border:2px dashed rgba(13,40,71,0.25);border-radius:12px;padding:12px;text-align:center;color:#4A5568;background:white;transition:all .2s;}
-.dropzone strong{color:var(--navy);}
-.dropzone.small{font-size:13px;line-height:1.35;}
-.dropzone.dragover{border-color:var(--orange);background:rgba(255,140,66,0.06);}
-.sidebar-actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
-.sidebar-actions .mini-btn{flex:1;min-width:110px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+/* -----------------------------
+   Inspiration Uploads (Dropdown)
+------------------------------ */
+.inspiration-wrap{margin-bottom:18px;}
+.insp-header{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px;border:2px solid #E2E8F0;border-radius:12px;background:white;
+  cursor:pointer;user-select:none;transition:all .2s;
+}
+.insp-header:hover{border-color:rgba(255,140,66,0.55);}
+.insp-title{
+  font-weight:800;color:var(--navy);font-size:13px;
+  text-transform:uppercase;letter-spacing:.6px;
+  display:flex;align-items:center;gap:10px;
+}
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:22px;height:22px;padding:0 8px;border-radius:999px;
+  background:rgba(255,140,66,0.12);color:var(--navy);font-weight:800;font-size:12px;
+  border:1px solid rgba(255,140,66,0.25);
+}
+.insp-caret{font-size:12px;color:#718096;transition:transform .25s;}
+.insp-caret.expanded{transform:rotate(180deg);}
+
+.insp-body{margin-top:10px;max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.insp-body.show{max-height:1200px;}
+
+.dropzone{
+  border:2px dashed rgba(13,40,71,0.25);
+  border-radius:12px;
+  padding:14px;
+  background:rgba(247,250,252,0.6);
+  color:#4A5568;
+  font-size:13px;
+  line-height:1.35;
+  text-align:center;
+  cursor:pointer;
+  transition:all .2s;
+}
+.dropzone:hover{border-color:rgba(255,140,66,0.55);background:rgba(255,140,66,0.06);}
+.dropzone.dragover{border-color:var(--orange);background:rgba(255,140,66,0.10);}
+
+.sidebar-actions{display:flex;gap:10px;margin-top:10px;}
+.mini-btn{
+  width:100%;
+  padding:10px 12px;border-radius:10px;
+  font-size:13px;font-weight:700;cursor:pointer;border:none;
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
 .mini-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.mini-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,140,66,0.25);}
 .mini-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
-.file-list{margin-top:10px;max-height:170px;overflow:auto;border-top:1px solid #E2E8F0;padding-top:10px;}
-.file-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #E2E8F0;}
-.file-left{display:flex;flex-direction:column;gap:2px;min-width:0;}
-.file-name{font-size:13px;font-weight:700;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.mini-secondary:hover{border-color:var(--orange);}
+
+.file-list{margin-top:10px;display:grid;gap:8px;}
+.file-item{
+  background:white;border:2px solid #E2E8F0;border-radius:12px;
+  padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;
+}
+.file-name{font-size:13px;color:var(--navy);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px;}
 .file-meta{font-size:12px;color:#718096;}
-.remove-btn{background:white;border:2px solid #E2E8F0;border-radius:10px;padding:6px 10px;font-size:12px;font-weight:800;cursor:pointer;color:#4A5568;}
-.remove-btn:hover{border-color:var(--orange);color:var(--navy);}
-.sidebar-note{margin-top:10px;}
-.sidebar-note textarea{width:100%;padding:10px 12px;border:2px solid #E2E8F0;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:90px;}
+
+.sidebar-note{margin-top:12px;}
+.sidebar-note textarea{
+  width:100%;
+  padding:12px 12px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:13px;font-family:'DM Sans',sans-serif;
+  resize:vertical;min-height:88px;
+}
 .sidebar-note textarea:focus{outline:none;border-color:var(--orange);}
-.sidebar-hint{font-size:12px;color:#718096;margin-top:8px;line-height:1.35;}
-.badge{display:inline-block;background:rgba(255,140,66,0.12);color:var(--navy);font-weight:800;font-size:12px;padding:4px 8px;border-radius:999px;margin-left:6px;}
+
+.sidebar-hint{margin-top:10px;font-size:12px;color:#718096;line-height:1.35;}
 </style>
 </head>
 <body>
+
 <nav class="top-nav">
   <div class="nav-left">
     <a href="index.html" class="logo-text">LessonBuilders</a>
@@ -95,33 +144,40 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 <div class="container">
   <aside class="sidebar">
 
-    <!-- ✅ NEW: Inspiration Uploads -->
-    <div class="sidebar-panel" id="inspirationPanel">
-      <div class="sidebar-panel-title">Inspiration Uploads <span class="badge" id="inspCountBadge">0</span></div>
-
-      <div class="dropzone small" id="dropzone" tabindex="0" role="button" aria-label="Upload inspiration">
-        <strong>Drag & drop</strong> a PDF, DOC/DOCX, or image here<br>
-        or click “Browse Files”
+    <!-- Inspiration Uploads dropdown -->
+    <div class="inspiration-wrap" id="inspirationPanel">
+      <div class="insp-header" id="inspHeader" role="button" tabindex="0" aria-expanded="false">
+        <div class="insp-title">
+          INSPIRATION UPLOADS <span class="badge" id="inspCountBadge">0</span>
+        </div>
+        <div class="insp-caret" id="inspCaret">▼</div>
       </div>
 
-      <input id="filePicker" type="file" multiple
-        accept="image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        style="display:none;">
+      <div class="insp-body" id="inspBody">
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload inspiration">
+          <strong>Drag &amp; drop</strong> a PDF, DOC, or image here<br>
+          or click “Browse Files”
+        </div>
 
-      <div class="sidebar-actions">
-        <button class="mini-btn mini-primary" type="button" onclick="openFilePicker()">Browse Files</button>
-        <button class="mini-btn mini-secondary" type="button" onclick="clearAllInspiration()">Clear</button>
-      </div>
+        <input id="filePicker" type="file" multiple
+          accept="image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          style="display:none;">
 
-      <div class="file-list" id="fileList" aria-live="polite"></div>
+        <div class="sidebar-actions">
+          <button class="mini-btn mini-primary" type="button" onclick="openFilePicker()">Browse Files</button>
+          <button class="mini-btn mini-secondary" type="button" onclick="clearAllInspiration()">Clear</button>
+        </div>
 
-      <div class="sidebar-note">
-        <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What should we notice?</label>
-        <textarea id="inspirationNotes" placeholder="Example: This is last year’s lesson. Keep the same hook, but simplify the assessment."></textarea>
-      </div>
+        <div class="file-list" id="fileList" aria-live="polite"></div>
 
-      <div class="sidebar-hint">
-        Stored locally for this lesson build and can be deleted after generation/export to save storage.
+        <div class="sidebar-note">
+          <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What should we notice?</label>
+          <textarea id="inspirationNotes" placeholder="Example: This is last year’s lesson. Keep the same hook, but simplify the assessment."></textarea>
+        </div>
+
+        <div class="sidebar-hint">
+          Stored locally for this lesson build, deleted after lesson save/export.
+        </div>
       </div>
     </div>
 
@@ -249,232 +305,261 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
-/* =========================
-   Inspiration Uploads (IndexedDB)
-   ========================= */
-const INSP_DB_NAME = "lessonbuilders_inspiration";
-const INSP_STORE = "files";
+/* -----------------------------
+   Inspiration Uploads (Local-only)
+   - Stores file metadata + base64 in localStorage for this build
+   - You can later delete after save/export by clearing lessonData.step1.inspiration
+------------------------------ */
+const MAX_FILES = 5;
+const MAX_TOTAL_BYTES = 8 * 1024 * 1024; // ~8MB total (localStorage safety)
+const dropzone = document.getElementById("dropzone");
+const filePicker = document.getElementById("filePicker");
+const fileList = document.getElementById("fileList");
+const inspCountBadge = document.getElementById("inspCountBadge");
+const inspirationNotesEl = document.getElementById("inspirationNotes");
+
+function bytesToLabel(bytes){
+  const b = Number(bytes)||0;
+  if (b < 1024) return `${b} B`;
+  const kb = b/1024;
+  if (kb < 1024) return `${kb.toFixed(1)} KB`;
+  const mb = kb/1024;
+  return `${mb.toFixed(1)} MB`;
+}
+
+function safeName(name){
+  return String(name||"").replace(/[<>]/g,"");
+}
 
 function openFilePicker(){
-  document.getElementById("filePicker").click();
+  filePicker.click();
 }
 
-function bytesToNice(n){
-  const x = Number(n || 0);
-  if (!x) return "0 B";
-  const units = ["B","KB","MB","GB"];
-  let i = 0, v = x;
-  while (v >= 1024 && i < units.length-1){ v/=1024; i++; }
-  return `${v.toFixed(v>=10||i===0?0:1)} ${units[i]}`;
+function getLessonData(){
+  try{
+    const saved = localStorage.getItem("lessonData");
+    return saved ? JSON.parse(saved) : {};
+  }catch(e){
+    return {};
+  }
 }
 
-function fileTypeLabel(file){
-  const name = (file?.name || "").toLowerCase();
-  if (file?.type?.startsWith("image/")) return "Image";
-  if (file?.type === "application/pdf" || name.endsWith(".pdf")) return "PDF";
-  if (name.endsWith(".docx")) return "DOCX";
-  if (name.endsWith(".doc")) return "DOC";
-  return (file?.type || "File");
+function setLessonData(data){
+  localStorage.setItem("lessonData", JSON.stringify(data));
+}
+
+function getInspiration(){
+  const data = getLessonData();
+  const step1 = data.step1 || {};
+  const insp = step1.inspiration || { files: [], notes: "" };
+  if (!Array.isArray(insp.files)) insp.files = [];
+  if (typeof insp.notes !== "string") insp.notes = "";
+  return insp;
+}
+
+function setInspiration(insp){
+  const data = getLessonData();
+  data.step1 = data.step1 || {};
+  data.step1.inspiration = insp;
+  setLessonData(data);
+}
+
+function updateInspBadge(){
+  const insp = getInspiration();
+  inspCountBadge.textContent = String(insp.files.length || 0);
+}
+
+function renderFileList(){
+  const insp = getInspiration();
+  updateInspBadge();
+  const files = insp.files || [];
+  if (!files.length){
+    fileList.innerHTML = `<div style="font-size:13px;color:#718096;margin-top:8px;">No files uploaded yet.</div>`;
+    return;
+  }
+  fileList.innerHTML = files.map((f, idx) => `
+    <div class="file-item">
+      <div style="min-width:0;">
+        <div class="file-name" title="${safeName(f.name)}">${safeName(f.name)}</div>
+        <div class="file-meta">${safeName(f.type || "file")} • ${bytesToLabel(f.size || 0)}</div>
+      </div>
+      <button type="button" class="mini-btn mini-secondary" style="width:auto;padding:8px 10px;" onclick="removeInspirationFile(${idx})">Remove</button>
+    </div>
+  `).join("");
+}
+
+function removeInspirationFile(index){
+  const insp = getInspiration();
+  insp.files.splice(index, 1);
+  setInspiration(insp);
+  renderFileList();
+}
+
+function clearAllInspiration(){
+  setInspiration({ files: [], notes: "" });
+  inspirationNotesEl.value = "";
+  renderFileList();
 }
 
 function isAllowedFile(file){
   const name = (file?.name || "").toLowerCase();
-  if (file?.type?.startsWith("image/")) return true;
-  if (file?.type === "application/pdf" || name.endsWith(".pdf")) return true;
+  const type = (file?.type || "").toLowerCase();
+
+  if (type.startsWith("image/")) return true;
+  if (type === "application/pdf") return true;
+
+  // DOC/DOCX often come with these types (or blank), so also allow by extension.
   if (name.endsWith(".doc") || name.endsWith(".docx")) return true;
   return false;
 }
 
-function openInspDB(){
+function fileToBase64(file){
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(INSP_DB_NAME, 1);
-    req.onupgradeneeded = () => {
-      const db = req.result;
-      if (!db.objectStoreNames.contains(INSP_STORE)){
-        db.createObjectStore(INSP_STORE, { keyPath: "id" });
-      }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.readAsDataURL(file);
   });
 }
 
-async function putInspRecord(record){
-  const db = await openInspDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(INSP_STORE, "readwrite");
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-    tx.objectStore(INSP_STORE).put(record);
-  });
-}
+async function addFiles(fileListObj){
+  const incoming = Array.from(fileListObj || []);
+  if (!incoming.length) return;
 
-async function getAllInspRecords(){
-  const db = await openInspDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(INSP_STORE, "readonly");
-    const req = tx.objectStore(INSP_STORE).getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = () => reject(req.error);
-  });
-}
+  const insp = getInspiration();
+  const existing = insp.files || [];
 
-async function deleteInspRecord(id){
-  const db = await openInspDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(INSP_STORE, "readwrite");
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-    tx.objectStore(INSP_STORE).delete(id);
-  });
-}
-
-async function clearInspStore(){
-  const db = await openInspDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(INSP_STORE, "readwrite");
-    tx.oncomplete = () => resolve(true);
-    tx.onerror = () => reject(tx.error);
-    tx.objectStore(INSP_STORE).clear();
-  });
-}
-
-function newId(){
-  return "insp_" + Date.now() + "_" + Math.random().toString(16).slice(2);
-}
-
-async function addFiles(files){
-  const list = Array.from(files || []).filter(isAllowedFile);
-  if (!list.length){
-    alert("Please upload an image, PDF, DOC, or DOCX.");
+  // Filter allowed
+  const allowed = incoming.filter(isAllowedFile);
+  if (!allowed.length){
+    alert("That file type isn’t supported yet. Please upload a PDF, DOC/DOCX, or an image.");
     return;
   }
 
-  // store each file as Blob in IndexedDB (local only)
-  for (const f of list){
-    const id = newId();
-    await putInspRecord({
-      id,
+  // Enforce max files
+  const room = Math.max(0, MAX_FILES - existing.length);
+  const toAdd = allowed.slice(0, room);
+  if (toAdd.length < allowed.length){
+    alert(`Only ${MAX_FILES} files max. Extra files were skipped.`);
+  }
+  if (!toAdd.length){
+    alert(`You already have ${MAX_FILES} files uploaded.`);
+    return;
+  }
+
+  // Enforce total size cap
+  const existingBytes = existing.reduce((sum, f) => sum + (Number(f.size)||0), 0);
+  const incomingBytes = toAdd.reduce((sum, f) => sum + (Number(f.size)||0), 0);
+  if (existingBytes + incomingBytes > MAX_TOTAL_BYTES){
+    alert("Those files are too large to store locally for this build. Please upload fewer/smaller files.");
+    return;
+  }
+
+  // Read as base64 data URLs (local-only)
+  const packed = [];
+  for (const f of toAdd){
+    const dataUrl = await fileToBase64(f);
+    packed.push({
       name: f.name,
       type: f.type || "",
       size: f.size || 0,
-      lastModified: f.lastModified || Date.now(),
-      blob: f
+      dataUrl
     });
   }
 
-  await refreshInspirationUI();
+  insp.files = existing.concat(packed);
+  setInspiration(insp);
+  renderFileList();
 }
 
-async function refreshInspirationUI(){
-  const records = await getAllInspRecords();
-  const listEl = document.getElementById("fileList");
-  const badge = document.getElementById("inspCountBadge");
+dropzone.addEventListener("click", openFilePicker);
+dropzone.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openFilePicker(); }
+});
 
-  badge.textContent = String(records.length);
-
-  if (!records.length){
-    listEl.innerHTML = `<div style="font-size:13px;color:#718096;">No files uploaded yet.</div>`;
-    persistInspirationMeta([]); // keep step1 in sync
-    return;
+filePicker.addEventListener("change", async (e) => {
+  try{
+    await addFiles(e.target.files);
+  }catch(err){
+    console.warn(err);
+    alert("Could not add that file. Try again.");
+  }finally{
+    filePicker.value = "";
   }
+});
 
-  listEl.innerHTML = records.map(r => `
-    <div class="file-item">
-      <div class="file-left">
-        <div class="file-name" title="${escapeHtml(r.name || "")}">${escapeHtml(r.name || "")}</div>
-        <div class="file-meta">${escapeHtml(fileTypeLabel(r))} • ${escapeHtml(bytesToNice(r.size))}</div>
-      </div>
-      <button class="remove-btn" type="button" onclick="removeInspirationFile('${r.id}')">Remove</button>
-    </div>
-  `).join("");
-
-  // Save a lightweight list in lessonData.step1.inspiration (not the blob)
-  persistInspirationMeta(records.map(r => ({
-    id: r.id,
-    name: r.name,
-    type: r.type,
-    size: r.size,
-    lastModified: r.lastModified
-  })));
-}
-
-async function removeInspirationFile(id){
-  await deleteInspRecord(id);
-  await refreshInspirationUI();
-}
-
-async function clearAllInspiration(){
-  if (!confirm("Remove all uploaded inspiration files for this lesson?")) return;
-  await clearInspStore();
-  document.getElementById("inspirationNotes").value = "";
-  await refreshInspirationUI();
-  persistInspirationNotes("");
-}
-
-function persistInspirationMeta(filesMeta){
-  try{
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    data.step1 = data.step1 || {};
-    data.step1.inspiration = data.step1.inspiration || {};
-    data.step1.inspiration.files = Array.isArray(filesMeta) ? filesMeta : [];
-    localStorage.setItem("lessonData", JSON.stringify(data));
-  }catch(e){ console.warn("persistInspirationMeta failed:", e); }
-}
-
-function persistInspirationNotes(notes){
-  try{
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    data.step1 = data.step1 || {};
-    data.step1.inspiration = data.step1.inspiration || {};
-    data.step1.inspiration.notes = String(notes || "");
-    localStorage.setItem("lessonData", JSON.stringify(data));
-  }catch(e){ console.warn("persistInspirationNotes failed:", e); }
-}
-
-function escapeHtml(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-/* Dropzone wiring */
-const dz = document.getElementById("dropzone");
-const fp = document.getElementById("filePicker");
-
-dz.addEventListener("click", () => openFilePicker());
-dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
-dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
-dz.addEventListener("drop", async (e) => {
+dropzone.addEventListener("dragover", (e) => {
   e.preventDefault();
-  dz.classList.remove("dragover");
-  if (e.dataTransfer?.files?.length) await addFiles(e.dataTransfer.files);
+  dropzone.classList.add("dragover");
 });
-fp.addEventListener("change", async (e) => {
-  const files = e.target.files;
-  if (files && files.length) await addFiles(files);
-  fp.value = ""; // reset
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+  try{
+    await addFiles(e.dataTransfer.files);
+  }catch(err){
+    console.warn(err);
+    alert("Could not add that file. Try again.");
+  }
 });
 
-document.getElementById("inspirationNotes").addEventListener("input", (e) => {
-  persistInspirationNotes(e.target.value);
+// Inspiration dropdown toggle + persistence
+const inspHeader = document.getElementById("inspHeader");
+const inspBody = document.getElementById("inspBody");
+const inspCaret = document.getElementById("inspCaret");
+
+function setInspExpanded(isOpen){
+  inspBody.classList.toggle("show", isOpen);
+  inspCaret.classList.toggle("expanded", isOpen);
+  inspHeader.setAttribute("aria-expanded", String(isOpen));
+  try{
+    const data = getLessonData();
+    data.ui = data.ui || {};
+    data.ui.inspirationOpen = isOpen;
+    setLessonData(data);
+  }catch(e){}
+}
+
+inspHeader.addEventListener("click", () => {
+  const open = !inspBody.classList.contains("show");
+  setInspExpanded(open);
+});
+inspHeader.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    const open = !inspBody.classList.contains("show");
+    setInspExpanded(open);
+  }
 });
 
-/* =========================
-   Your existing Step 1 restore/save logic
-   ========================= */
-window.addEventListener('DOMContentLoaded', async function() {
-  // load files + badge + list
-  await refreshInspirationUI();
+// Save notes live
+inspirationNotesEl.addEventListener("input", () => {
+  const insp = getInspiration();
+  insp.notes = inspirationNotesEl.value || "";
+  setInspiration(insp);
+});
 
+/* -----------------------------
+   Existing Step 1 behavior
+------------------------------ */
+window.addEventListener('DOMContentLoaded', function() {
   const savedData = localStorage.getItem('lessonData');
   if (savedData) {
     const data = JSON.parse(savedData);
+
+    // restore inspiration (files + notes + open state)
+    try{
+      const open = !!data?.ui?.inspirationOpen;
+      setInspExpanded(open);
+      const insp = (data.step1 && data.step1.inspiration) ? data.step1.inspiration : {files:[],notes:""};
+      inspirationNotesEl.value = insp?.notes || "";
+      renderFileList();
+    }catch(e){
+      setInspExpanded(false);
+      renderFileList();
+    }
+
     if (data.step1) {
       document.getElementById('gradeSelect').value = data.step1.grade || '5th Grade';
       document.getElementById('subjectSelect').value = data.step1.subject || 'Mathematics';
@@ -503,12 +588,11 @@ window.addEventListener('DOMContentLoaded', async function() {
           }
         }
       }
-
-      // restore inspiration notes
-      if (data.step1.inspiration && typeof data.step1.inspiration.notes === "string"){
-        document.getElementById("inspirationNotes").value = data.step1.inspiration.notes;
-      }
     }
+  } else {
+    // no savedData: init inspiration UI
+    setInspExpanded(false);
+    renderFileList();
   }
 });
 
@@ -541,8 +625,10 @@ function saveAndContinue() {
     lessonData = JSON.parse(saved);
   }
 
-  // Keep whatever inspiration object already exists (meta is maintained by refreshInspirationUI/persist)
-  const existingInsp = (lessonData.step1 && lessonData.step1.inspiration) ? lessonData.step1.inspiration : {};
+  // keep any existing inspiration data, but ensure notes are current
+  const insp = getInspiration();
+  insp.notes = inspirationNotesEl.value || "";
+  // (files already stored)
 
   lessonData.step1 = {
     grade,
@@ -555,7 +641,7 @@ function saveAndContinue() {
     priorKnowledge,
     additionalContext,
     studentNeeds,
-    inspiration: existingInsp
+    inspiration: insp
   };
 
   localStorage.setItem('lessonData', JSON.stringify(lessonData));
