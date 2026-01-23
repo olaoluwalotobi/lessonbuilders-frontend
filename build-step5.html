@@ -145,6 +145,7 @@ function lockSidebarProgressNav(){
 
   
 window.addEventListener('DOMContentLoaded', function() {
+  lockSidebarProgressNav(); // 
   const saved = localStorage.getItem('lessonData');
   if (saved) {
     const data = JSON.parse(saved);
