@@ -285,13 +285,11 @@ function updateVerificationBanner(standards, metaOrSource){
   const today = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
 
   const meta = (metaOrSource && typeof metaOrSource === "object") ? metaOrSource : { source: metaOrSource };
-
   const source = meta?.source ? String(meta.source) : "";
   const confidence = (typeof meta?.confidence === "number") ? meta.confidence : null;
 
   document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""}`;
 
-  // hide matchType ("sonnet") from user-facing UI
   const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
@@ -299,13 +297,14 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("viewDetailsBtn").style.display = "inline-flex";
 
-  // show ONLY the standard code + source link (no standard wording)
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
     const code = escapeHtml((std.code || std.id || "").toString());
+    const text = escapeHtml((std.text || std.description || "").toString());
     return `
       <div class="standard-card">
         <div class="standard-number">${code}</div>
+        ${text ? `<div class="standard-text">${text}</div>` : ``}
         <div class="standard-meta">
           <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link">View Source</a>
         </div>
@@ -387,81 +386,56 @@ function persistGeneratedLesson(lessonObj){
 }
 
 /* -----------------------------
-   Inspiration helpers + directive
+   Inspiration (Step 1) -> text directive
+   We DO NOT change your backend schema.
+   We inject inspiration as text into:
+     - step1.additionalContext
+     - (first run only) payload.feedback
 ------------------------------ */
 function getInspirationFromStep1(){
   const insp = lessonData?.step1?.inspiration || {};
+  const notes = String(insp.notes || "").trim();
   const files = Array.isArray(insp.files) ? insp.files : [];
-  const fileMeta = files.map(f => ({
-    name: String(f?.name || ""),
-    type: String(f?.type || ""),
-    size: Number(f?.size || 0)
-  })).filter(f => f.name);
-
-  return {
-    observations: String(insp.observations || "").trim(),
-    keyTakeaways: String(insp.keyTakeaways || "").trim(),
-    notes: String(insp.notes || "").trim(),
-    files: fileMeta
-  };
+  const fileNames = files.map(f => String(f?.name || "")).filter(Boolean);
+  return { notes, fileNames };
 }
 
 function buildInspirationDirective(insp){
-  const obs = String(insp?.observations || "").trim();
-  const take = String(insp?.keyTakeaways || "").trim();
   const notes = String(insp?.notes || "").trim();
-  const names = Array.isArray(insp?.files) ? insp.files.map(f => f.name).filter(Boolean) : [];
+  const names = Array.isArray(insp?.fileNames) ? insp.fileNames : [];
 
-  const hasAnything = obs || take || notes || names.length;
+  const hasAnything = notes || names.length;
   if (!hasAnything) return "";
 
   return `
 IMPORTANT: The teacher provided inspiration materials. The lesson MUST be built around them.
-RULES:
-1) Use the inspiration explicitly in: Hook/Engage, Modeling/Guided Practice, AND Assessment.
-2) Make at least 6 explicit references to the inspiration details (not generic “use the image”).
-3) If inspiration details are limited, include 3 “Teacher prompts” questions inside the lesson to gather missing info — but still draft the lesson using what is provided.
-4) Prefer specific nouns from the observations (people/objects/symbols/text in the doc/image) and build activities around interpreting them.
 
-FILES (names only):
+REQUIREMENTS:
+- Use the inspiration explicitly in: Hook/Engage, Modeling/Guided Practice, AND Assessment.
+- Make at least 6 explicit references to the inspiration (specific details/teacher focus), not generic statements.
+- If inspiration details are limited, add 3 “Teacher prompts” questions inside the lesson to gather missing info, but still draft the lesson now.
+
+FILES (names):
 ${names.length ? names.slice(0,12).map(n=>`- ${n}`).join("\n") : "(none)"}
 
-INSPIRATION OBSERVATIONS:
-${obs || "(none provided)"}
-
-TEACHER INTENT / TAKEAWAYS:
-${take || "(none provided)"}
-
-EXTRA NOTES:
-${notes || "(none provided)"}
+TEACHER FOCUS NOTES:
+${notes || "(none)"}
 `.trim();
 }
 
-/* Clear inspiration after save/export: files + text fields (fixes your reset issue) */
+/* Clear inspiration after save/export (fixes Step 1 focus box not resetting) */
 function clearInspirationAfterSaveExport(){
   try{
     const saved = localStorage.getItem("lessonData");
     const data = saved ? JSON.parse(saved) : {};
-
-    // clear your step1 inspiration UI fields (if your Step 1 created them)
     if (data?.step1?.inspiration) {
       data.step1.inspiration.files = [];
-      data.step1.inspiration.observations = "";
-      data.step1.inspiration.keyTakeaways = "";
       data.step1.inspiration.notes = "";
     }
-
-    // OPTIONAL: if you want to clear the "what do you want to focus on?" text too:
-    // comment this out if you want to preserve additionalContext
-    if (data?.step1) {
-      data.step1.additionalContext = "";
-    }
-
     localStorage.setItem("lessonData", JSON.stringify(data));
     lessonData = data;
   } catch(e){ console.warn("clearInspirationAfterSaveExport failed:", e); }
 }
-
 
 /* framework names (correct) */
 function applyFrameworkStepNames(frameworkKey, procedures){
@@ -517,11 +491,12 @@ function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
   const items = standardsArr.map(std => {
     const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
+    const text = escapeHtml((std.text || std.description || "").toString());
     const link = std.sourceURL || std.sourceUrl || "";
     const linkHtml = (includeSourceLinks && link)
       ? ` <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link" style="font-size:12px;">Source</a>`
       : "";
-    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}` : ""}</li>`;
+    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}${text}</li>`;
   }).join("");
   return `
     <div class="lesson-section">
@@ -605,39 +580,26 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
       setBannerFallback("Continuing without verified standards.");
     }
 
-    // Inspiration: include it in payload AND force directive on first generation (feedback=null)
+    // ✅ Inspiration injected schema-safely as TEXT
     const inspiration = getInspirationFromStep1();
     const inspirationDirective = buildInspirationDirective(inspiration);
 
-    // ✅ inspiration: keep schema-safe by converting to TEXT and appending to additionalContext
-const inspiration = getInspirationFromStep1();
-const inspirationDirective = buildInspirationDirective(inspiration);
+    const existingContext = String(lessonData?.step1?.additionalContext || "").trim();
+    const combinedAdditionalContext = inspirationDirective
+      ? (existingContext ? `${existingContext}\n\n${inspirationDirective}` : inspirationDirective)
+      : existingContext;
 
-// pull any existing additional context from Step 1
-const existingContext = String(lessonData?.step1?.additionalContext || "").trim();
+    const payload = {
+      step1: { topic, grade, subject, duration, additionalContext: combinedAdditionalContext },
+      step2: step2 || {},
+      step3: { framework },
+      step5: step5 || {},
+      verifiedStandards: Array.isArray(standards) ? standards : []
+    };
 
-// append inspiration as text (only if present)
-const combinedAdditionalContext = inspirationDirective
-  ? (existingContext ? `${existingContext}\n\n${inspirationDirective}` : inspirationDirective)
-  : existingContext;
-
-const payload = {
-  // ✅ keep step1 schema simple (no nested objects)
-  step1: { topic, grade, subject, duration, additionalContext: combinedAdditionalContext },
-
-  step2: step2 || {},
-  step3: { framework },
-  step5: step5 || {},
-  verifiedStandards: Array.isArray(standards) ? standards : []
-};
-
-// ✅ Only include payload.feedback if user typed feedback (avoid unexpected schema issues)
-if (feedback) payload.feedback = feedback;
-
-
-    // If user typed feedback, use it. Otherwise inject directive if present.
+    // ✅ Only include feedback when present; on FIRST run also inject inspiration as feedback
     if (feedback) payload.feedback = feedback;
-    if (!feedback && inspirationDirective) payload.feedback = inspirationDirective;
+    else if (inspirationDirective) payload.feedback = inspirationDirective;
 
     const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
       method:"POST",
@@ -769,7 +731,6 @@ function regenerateLesson(){
 
 /* export/continue */
 function exportPDF(){
-  // delete uploads + focus text after export (your storage rule + reset fix)
   clearInspirationAfterSaveExport();
   window.print();
 }
@@ -844,7 +805,6 @@ function exportDOC(){
   a.remove();
   URL.revokeObjectURL(url);
 
-  // delete uploads + focus text after export (your storage rule + reset fix)
   clearInspirationAfterSaveExport();
 }
 
@@ -876,10 +836,7 @@ function saveToLibrary(){
 function continueToStep7(){
   saveToLibrary();
   if (lastLessonJSON) persistGeneratedLesson(lastLessonJSON);
-
-  // delete uploads + focus text after save (your storage rule + reset fix)
   clearInspirationAfterSaveExport();
-
   window.location.href = "build-step7.html";
 }
 </script>
