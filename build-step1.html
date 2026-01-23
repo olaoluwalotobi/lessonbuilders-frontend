@@ -20,6 +20,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .container{display:flex;max-width:1400px;margin:0 auto;}
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
 .nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.locked{cursor:default;pointer-events:none;opacity:.95;}
+.nav-step.locked:hover{background:none;}
 .nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
 /* lock left-step navigation (visual only) */
 .sidebar .nav-step{pointer-events:none;cursor:default;}
@@ -171,6 +173,15 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
         <div class="file-list" id="fileList" aria-live="polite"></div>
 
+        <div class="sidebar-note" id="inspDetailsBlock" style="display:none;">
+          <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What do you see in the file?</label>
+          <textarea id="inspirationObserved" class="insp-textarea" placeholder="Example: Students in groups measuring objects; chart paper with fractions; a photo of a protest march..."></textarea>
+          <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin:12px 0 6px;">What should students learn from it?</label>
+          <textarea id="inspirationGoal" class="insp-textarea" placeholder="Example: Compare primary vs secondary sources; connect the image to cause/effect; identify numerator/denominator..."></textarea>
+          <div style="font-size:12px;color:#718096;margin-top:8px;">Required when you upload a file so the lesson can be built around it.</div>
+        </div>
+
+
         <div class="sidebar-note">
           <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What do you want to focus on?</label>
           <textarea id="inspirationNotes" placeholder="Example: Build the lesson around the image. Use it in the hook, modeling, guided practice, and the assessment."></textarea>
@@ -183,13 +194,13 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     </div>
 
     <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
-    <a href="build-step1.html" class="nav-step active"><div class="step-number">1</div><div>Basic Information</div></a>
-    <a href="build-step2.html" class="nav-step"><div class="step-number">2</div><div>Teaching Style</div></a>
-    <a href="build-step3.html" class="nav-step"><div class="step-number">3</div><div>Choose Template</div></a>
-    <a href="build-step4.html" class="nav-step"><div class="step-number">4</div><div>Build Method</div></a>
-    <a href="build-step5.html" class="nav-step"><div class="step-number">5</div><div>Assessments</div></a>
-    <a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
-    <a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
+    <a href="#" class="nav-step active locked" data-step="1"><div class="step-number">1</div><div>Basic Information</div></a>
+    <a href="#" class="nav-step locked" data-step="2"><div class="step-number">2</div><div>Teaching Style</div></a>
+    <a href="#" class="nav-step locked" data-step="3"><div class="step-number">3</div><div>Choose Template</div></a>
+    <a href="#" class="nav-step locked" data-step="4"><div class="step-number">4</div><div>Build Method</div></a>
+    <a href="#" class="nav-step locked" data-step="5"><div class="step-number">5</div><div>Assessments</div></a>
+    <a href="#" class="nav-step locked" data-step="6"><div class="step-number">6</div><div>Preview & Export</div></a>
+    <a href="#" class="nav-step locked" data-step="7"><div class="step-number">7</div><div>Collaborate</div></a>
   </aside>
 
   <main class="main-content">
@@ -381,6 +392,9 @@ function renderFileList(){
   const insp = getInspiration();
   updateInspBadge();
   const files = insp.files || [];
+  if (inspDetailsBlock) {
+    inspDetailsBlock.style.display = files.length ? "block" : "none";
+  }
   if (!files.length){
     fileList.innerHTML = `<div style="font-size:13px;color:#718096;margin-top:8px;">No files uploaded yet.</div>`;
     return;
@@ -404,8 +418,10 @@ function removeInspirationFile(index){
 }
 
 function clearAllInspiration(){
-  setInspiration({ files: [], notes: "" });
+  setInspiration({ files: [], notes: "", observedDetails: "", learningGoal: "" });
   inspirationNotesEl.value = "";
+  if (inspirationObservedEl) inspirationObservedEl.value = "";
+  if (inspirationGoalEl) inspirationGoalEl.value = "";
   renderFileList();
 }
 
@@ -460,12 +476,13 @@ async function addFiles(fileListObj){
 
   const packed = [];
   for (const f of toAdd){
-    const dataUrl = await fileToBase64(f);
+    // Store ONLY lightweight metadata in localStorage to avoid quota errors.
+    // (No base64/file bytes.)
     packed.push({
       name: f.name,
       type: f.type || "",
       size: f.size || 0,
-      dataUrl
+      lastModified: f.lastModified || 0
     });
   }
 
@@ -541,6 +558,19 @@ inspirationNotesEl.addEventListener("input", () => {
   setInspiration(insp);
 });
 
+inspirationObservedEl?.addEventListener("input", () => {
+  const insp = getInspiration();
+  insp.observedDetails = inspirationObservedEl.value;
+  setInspiration(insp);
+});
+
+inspirationGoalEl?.addEventListener("input", () => {
+  const insp = getInspiration();
+  insp.learningGoal = inspirationGoalEl.value;
+  setInspiration(insp);
+});
+
+
 /* Existing Step 1 behavior */
 window.addEventListener('DOMContentLoaded', function() {
   const savedData = localStorage.getItem('lessonData');
@@ -606,6 +636,22 @@ function saveAndContinue() {
     alert('Please enter a lesson topic');
     return;
   }
+
+  // If inspiration files were uploaded, require a description + learning goal (Option B)
+  const insp = getInspiration();
+  if (Array.isArray(insp.files) && insp.files.length){
+    const obs = String(insp.observedDetails || "").trim();
+    const goal = String(insp.learningGoal || "").trim();
+    if (!obs){
+      alert("Please describe what you see in the uploaded file (Inspiration Uploads). This helps us build the lesson around it.");
+      return;
+    }
+    if (!goal){
+      alert("Please describe what you want students to learn from the uploaded file (Inspiration Uploads).");
+      return;
+    }
+  }
+
 
   let lessonData = {};
   const saved = localStorage.getItem('lessonData');
