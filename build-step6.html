@@ -28,11 +28,11 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
 .nav-link:hover{color:var(--navy);}
 .nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:default;}
 
 .container{display:flex;max-width:1400px;margin:0 auto;}
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
-.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:default;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
 .nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
 .nav-step.completed{color:#10B981;}
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
@@ -51,7 +51,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .banner-icon{font-size:20px;color:var(--green);display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(16,185,129,0.1);}
 .banner-text{font-weight:600;color:var(--navy);font-size:15px;}
 .banner-meta{font-size:13px;color:#718096;margin-left:42px;margin-top:2px;}
-.view-details-btn{background:white;border:2px solid rgba(16,185,129,0.3);color:var(--green);padding:8px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.view-details-btn{background:white;border:2px solid rgba(16,185,129,0.3);color:var(--green);padding:8px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:default;transition:all 0.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
 .view-details-btn:hover{background:rgba(16,185,129,0.05);border-color:var(--green);}
 .details-icon{font-size:12px;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);}
 .details-icon.expanded{transform:rotate(180deg);}
@@ -81,7 +81,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .proc-head{font-weight:700;color:var(--navy);}
 .proc-time-text{font-weight:500;color:#718096;font-size:13px;margin-left:6px;}
 
-.btn{padding:14px 22px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.25s;text-decoration:none;display:inline-block;border:none;}
+.btn{padding:14px 22px;border-radius:10px;font-size:15px;font-weight:600;cursor:default;transition:all 0.25s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.30);}
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
@@ -212,17 +212,23 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 <script>
 
 function lockSidebarProgressNav(){
-  document.querySelectorAll(".sidebar .nav-step").forEach(el => {
-    el.classList.add("is-static");
-    el.setAttribute("aria-disabled","true");
-    // If it's an <a>, keep it from behaving like a link
-    if (el.tagName.toLowerCase() === "a") {
-      el.addEventListener("click", (e) => e.preventDefault());
-      el.addEventListener("keydown", (e) => {
-        // prevent Enter/Space activation
-        if (e.key === "Enter" || e.key === " ") e.preventDefault();
-      });
-    }
+  // Sidebar steps are a progress indicator only (no navigation).
+  document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
+    a.classList.add("is-static");
+    a.setAttribute("aria-disabled","true");
+    a.setAttribute("tabindex","-1");
+
+    // Make navigation impossible even if CSS is overridden.
+    try {
+      const href = a.getAttribute("href");
+      if (href && href !== "#" && href !== "javascript:void(0)") a.setAttribute("data-href", href);
+    } catch(_) {}
+    a.setAttribute("href", "javascript:void(0)");
+
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive:false });
   });
 }
 
