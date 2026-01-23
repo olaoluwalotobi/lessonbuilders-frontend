@@ -50,9 +50,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .optional-content{max-height:0;overflow:hidden;transition:max-height 0.3s;}
 .optional-content.show{max-height:1000px;margin-top:24px;}
 
-/* -----------------------------
-   Inspiration Uploads (Dropdown)
------------------------------- */
+/* Inspiration Uploads (Dropdown) */
 .inspiration-wrap{margin-bottom:18px;}
 .insp-header{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -172,11 +170,11 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
         <div class="sidebar-note">
           <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What do you want to focus on?</label>
-          <textarea id="inspirationNotes" placeholder="Example: This is last year’s lesson. Keep the same hook, but simplify the assessment."></textarea>
+          <textarea id="inspirationNotes" placeholder="Example: Build the lesson around the image. Use it in the hook, modeling, guided practice, and the assessment."></textarea>
         </div>
 
         <div class="sidebar-hint">
-          Uploaded files deleted after lesson build
+          Stored locally for this lesson build, deleted after lesson save/export
         </div>
       </div>
     </div>
@@ -305,13 +303,12 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
-/* -----------------------------
-   Inspiration Uploads (Local-only)
-   - Stores file metadata + base64 in localStorage for this build
-   - You can later delete after save/export by clearing lessonData.step1.inspiration
------------------------------- */
+/* Inspiration Uploads (Local-only) */
 const MAX_FILES = 5;
-const MAX_TOTAL_BYTES = 8 * 1024 * 1024; // ~8MB total (localStorage safety)
+// NOTE: localStorage is small (~5MB total). base64 expands size.
+// Keep this conservative so the UI doesn’t “get stuck”.
+const MAX_TOTAL_BYTES = 2.5 * 1024 * 1024; // ~2.5MB total
+
 const dropzone = document.getElementById("dropzone");
 const filePicker = document.getElementById("filePicker");
 const fileList = document.getElementById("fileList");
@@ -344,8 +341,16 @@ function getLessonData(){
   }
 }
 
-function setLessonData(data){
-  localStorage.setItem("lessonData", JSON.stringify(data));
+function trySetLessonData(data){
+  try{
+    localStorage.setItem("lessonData", JSON.stringify(data));
+    return true;
+  }catch(e){
+    // QuotaExceededError is common here
+    console.warn("localStorage write failed:", e);
+    alert("Inspiration files are too large to store locally in your browser. Please upload fewer/smaller files (or 1 image).");
+    return false;
+  }
 }
 
 function getInspiration(){
@@ -361,7 +366,7 @@ function setInspiration(insp){
   const data = getLessonData();
   data.step1 = data.step1 || {};
   data.step1.inspiration = insp;
-  setLessonData(data);
+  trySetLessonData(data);
 }
 
 function updateInspBadge(){
@@ -407,8 +412,6 @@ function isAllowedFile(file){
 
   if (type.startsWith("image/")) return true;
   if (type === "application/pdf") return true;
-
-  // DOC/DOCX often come with these types (or blank), so also allow by extension.
   if (name.endsWith(".doc") || name.endsWith(".docx")) return true;
   return false;
 }
@@ -429,14 +432,12 @@ async function addFiles(fileListObj){
   const insp = getInspiration();
   const existing = insp.files || [];
 
-  // Filter allowed
   const allowed = incoming.filter(isAllowedFile);
   if (!allowed.length){
     alert("That file type isn’t supported yet. Please upload a PDF, DOC/DOCX, or an image.");
     return;
   }
 
-  // Enforce max files
   const room = Math.max(0, MAX_FILES - existing.length);
   const toAdd = allowed.slice(0, room);
   if (toAdd.length < allowed.length){
@@ -447,7 +448,6 @@ async function addFiles(fileListObj){
     return;
   }
 
-  // Enforce total size cap
   const existingBytes = existing.reduce((sum, f) => sum + (Number(f.size)||0), 0);
   const incomingBytes = toAdd.reduce((sum, f) => sum + (Number(f.size)||0), 0);
   if (existingBytes + incomingBytes > MAX_TOTAL_BYTES){
@@ -455,7 +455,6 @@ async function addFiles(fileListObj){
     return;
   }
 
-  // Read as base64 data URLs (local-only)
   const packed = [];
   for (const f of toAdd){
     const dataUrl = await fileToBase64(f);
@@ -467,8 +466,13 @@ async function addFiles(fileListObj){
     });
   }
 
-  insp.files = existing.concat(packed);
-  setInspiration(insp);
+  // try write; if it fails, don’t mutate stored state
+  const next = { files: existing.concat(packed), notes: String(insp.notes || "") };
+  const data = getLessonData();
+  data.step1 = data.step1 || {};
+  data.step1.inspiration = next;
+  if (!trySetLessonData(data)) return;
+
   renderFileList();
 }
 
@@ -517,7 +521,7 @@ function setInspExpanded(isOpen){
     const data = getLessonData();
     data.ui = data.ui || {};
     data.ui.inspirationOpen = isOpen;
-    setLessonData(data);
+    trySetLessonData(data);
   }catch(e){}
 }
 
@@ -540,15 +544,12 @@ inspirationNotesEl.addEventListener("input", () => {
   setInspiration(insp);
 });
 
-/* -----------------------------
-   Existing Step 1 behavior
------------------------------- */
+/* Existing Step 1 behavior */
 window.addEventListener('DOMContentLoaded', function() {
   const savedData = localStorage.getItem('lessonData');
   if (savedData) {
     const data = JSON.parse(savedData);
 
-    // restore inspiration (files + notes + open state)
     try{
       const open = !!data?.ui?.inspirationOpen;
       setInspExpanded(open);
@@ -568,29 +569,19 @@ window.addEventListener('DOMContentLoaded', function() {
       document.getElementById('durationSlider').value = data.step1.duration || 45;
       document.getElementById('durationValue').textContent = (data.step1.duration || 45) + ' minutes';
 
-      if (data.step1.classSize) {
-        document.getElementById('classSizeSelect').value = data.step1.classSize;
-      }
-      if (data.step1.standardFocus) {
-        document.getElementById('standardInput').value = data.step1.standardFocus;
-      }
-      if (data.step1.priorKnowledge) {
-        document.getElementById('priorKnowledgeSelect').value = data.step1.priorKnowledge;
-      }
-      if (data.step1.additionalContext) {
-        document.getElementById('contextTextarea').value = data.step1.additionalContext;
-      }
+      if (data.step1.classSize) document.getElementById('classSizeSelect').value = data.step1.classSize;
+      if (data.step1.standardFocus) document.getElementById('standardInput').value = data.step1.standardFocus;
+      if (data.step1.priorKnowledge) document.getElementById('priorKnowledgeSelect').value = data.step1.priorKnowledge;
+      if (data.step1.additionalContext) document.getElementById('contextTextarea').value = data.step1.additionalContext;
+
       if (data.step1.studentNeeds) {
         for (let i = 0; i < 6; i++) {
           const cb = document.getElementById('cb' + (i+1));
-          if (cb && data.step1.studentNeeds[i]) {
-            cb.checked = true;
-          }
+          if (cb && data.step1.studentNeeds[i]) cb.checked = true;
         }
       }
     }
   } else {
-    // no savedData: init inspiration UI
     setInspExpanded(false);
     renderFileList();
   }
@@ -621,14 +612,10 @@ function saveAndContinue() {
 
   let lessonData = {};
   const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    lessonData = JSON.parse(saved);
-  }
+  if (saved) lessonData = JSON.parse(saved);
 
-  // keep any existing inspiration data, but ensure notes are current
   const insp = getInspiration();
   insp.notes = inspirationNotesEl.value || "";
-  // (files already stored)
 
   lessonData.step1 = {
     grade,
@@ -644,7 +631,7 @@ function saveAndContinue() {
     inspiration: insp
   };
 
-  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+  if (!trySetLessonData(lessonData)) return;
   window.location.href = 'build-step2.html';
 }
 
