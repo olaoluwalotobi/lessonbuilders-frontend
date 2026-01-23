@@ -26,10 +26,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
 .nav-link:hover{color:var(--navy);}
 .nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:default;}
 .container{display:flex;max-width:1400px;margin:0 auto;}
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
-.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:default;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
 .nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
 .nav-step.completed{color:#10B981;}
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
@@ -51,7 +51,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .suggestion-badge{background:rgba(255,140,66,0.1);color:var(--orange);padding:4px 12px;border-radius:6px;font-size:13px;font-weight:600;}
 .suggestion-description{color:#4A5568;line-height:1.6;margin-bottom:12px;}
 .suggestion-contact{display:flex;align-items:center;margin-top:16px;}
-.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:default;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
 .btn-email{background:var(--orange);color:white;padding:10px 20px;font-size:14px;border-radius:8px;border:none;display:inline-flex;align-items:center;gap:8px;}
@@ -163,17 +163,23 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 <script>
 
 function lockSidebarProgressNav(){
-  document.querySelectorAll(".sidebar .nav-step").forEach(el => {
-    el.classList.add("is-static");
-    el.setAttribute("aria-disabled","true");
-    // If it's an <a>, keep it from behaving like a link
-    if (el.tagName.toLowerCase() === "a") {
-      el.addEventListener("click", (e) => e.preventDefault());
-      el.addEventListener("keydown", (e) => {
-        // prevent Enter/Space activation
-        if (e.key === "Enter" || e.key === " ") e.preventDefault();
-      });
-    }
+  // Sidebar steps are a progress indicator only (no navigation).
+  document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
+    a.classList.add("is-static");
+    a.setAttribute("aria-disabled","true");
+    a.setAttribute("tabindex","-1");
+
+    // Make navigation impossible even if CSS is overridden.
+    try {
+      const href = a.getAttribute("href");
+      if (href && href !== "#" && href !== "javascript:void(0)") a.setAttribute("data-href", href);
+    } catch(_) {}
+    a.setAttribute("href", "javascript:void(0)");
+
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive:false });
   });
 }
 
