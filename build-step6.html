@@ -334,11 +334,9 @@ function updateVerificationBanner(standards, metaOrSource){
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
     const code = escapeHtml((std.code || std.id || "").toString());
-    const text = escapeHtml((std.text || std.description || "").toString());
     return `
       <div class="standard-card">
         <div class="standard-number">${code}</div>
-        ${text ? `<div class="standard-text">${text}</div>` : ``}
         <div class="standard-meta">
           <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link">View Source</a>
         </div>
@@ -400,7 +398,16 @@ function takeFirstSentence(text){
   return m ? m[1].trim() : t;
 }
 
+function slimStandards(arr){
+  const a = Array.isArray(arr) ? arr : [];
+  return a.map(s => ({
+    code: (s.code || s.id || s.standardCode || "").toString(),
+    sourceURL: s.sourceURL || s.sourceUrl || "https://www.cde.ca.gov/"
+  })).filter(s => s.code);
+}
+
 function persistVerifiedStandards(arr){
+
   try{
     const saved = localStorage.getItem("lessonData");
     const data = saved ? JSON.parse(saved) : {};
@@ -525,12 +532,11 @@ function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
   const items = standardsArr.map(std => {
     const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
-    const text = escapeHtml((std.text || std.description || "").toString());
     const link = std.sourceURL || std.sourceUrl || "";
     const linkHtml = (includeSourceLinks && link)
       ? ` <a href="${link}" target="_blank" rel="noopener noreferrer" class="source-link" style="font-size:12px;">Source</a>`
       : "";
-    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}<br>` : ""}${text}</li>`;
+    return `<li>${code ? `<strong style="color:var(--navy);">${code}</strong>${linkHtml}` : ""}</li>`;
   }).join("");
   return `
     <div class="lesson-section">
@@ -596,7 +602,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
         : (Array.isArray(verifyData?.standards) ? verifyData.standards : []);
 
       if (verifyRes.ok && verifyData){
-        standards = returnedStandards;
+        standards = slimStandards(returnedStandards);
         verifiedStandards = standards;
         persistVerifiedStandards(verifiedStandards);
 
