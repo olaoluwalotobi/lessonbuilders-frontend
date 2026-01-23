@@ -442,16 +442,26 @@ function clearInspirationAfterSaveExport(){
   try{
     const saved = localStorage.getItem("lessonData");
     const data = saved ? JSON.parse(saved) : {};
+
+    // clear your step1 inspiration UI fields (if your Step 1 created them)
     if (data?.step1?.inspiration) {
       data.step1.inspiration.files = [];
       data.step1.inspiration.observations = "";
       data.step1.inspiration.keyTakeaways = "";
       data.step1.inspiration.notes = "";
     }
+
+    // OPTIONAL: if you want to clear the "what do you want to focus on?" text too:
+    // comment this out if you want to preserve additionalContext
+    if (data?.step1) {
+      data.step1.additionalContext = "";
+    }
+
     localStorage.setItem("lessonData", JSON.stringify(data));
     lessonData = data;
   } catch(e){ console.warn("clearInspirationAfterSaveExport failed:", e); }
 }
+
 
 /* framework names (correct) */
 function applyFrameworkStepNames(frameworkKey, procedures){
@@ -599,13 +609,31 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     const inspiration = getInspirationFromStep1();
     const inspirationDirective = buildInspirationDirective(inspiration);
 
-    const payload = {
-      step1: { topic, grade, subject, duration, inspiration },
-      step2: step2 || {},
-      step3: { framework },
-      step5: step5 || {},
-      verifiedStandards: Array.isArray(standards) ? standards : []
-    };
+    // ✅ inspiration: keep schema-safe by converting to TEXT and appending to additionalContext
+const inspiration = getInspirationFromStep1();
+const inspirationDirective = buildInspirationDirective(inspiration);
+
+// pull any existing additional context from Step 1
+const existingContext = String(lessonData?.step1?.additionalContext || "").trim();
+
+// append inspiration as text (only if present)
+const combinedAdditionalContext = inspirationDirective
+  ? (existingContext ? `${existingContext}\n\n${inspirationDirective}` : inspirationDirective)
+  : existingContext;
+
+const payload = {
+  // ✅ keep step1 schema simple (no nested objects)
+  step1: { topic, grade, subject, duration, additionalContext: combinedAdditionalContext },
+
+  step2: step2 || {},
+  step3: { framework },
+  step5: step5 || {},
+  verifiedStandards: Array.isArray(standards) ? standards : []
+};
+
+// ✅ Only include payload.feedback if user typed feedback (avoid unexpected schema issues)
+if (feedback) payload.feedback = feedback;
+
 
     // If user typed feedback, use it. Otherwise inject directive if present.
     if (feedback) payload.feedback = feedback;
