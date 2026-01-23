@@ -316,7 +316,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   </main>
 </div>
 
-<script> 
+<script>
+ 
 /* Inspiration Uploads (Local-only) */
 const MAX_FILES = 5;
 // NOTE: localStorage is small (~5MB total). base64 expands size.
@@ -657,7 +658,7 @@ function saveAndContinue() {
   const saved = localStorage.getItem('lessonData');
   if (saved) lessonData = JSON.parse(saved);
 
-  const insp = getInspiration();
+  const inspSave = getInspiration();
   insp.notes = inspirationNotesEl.value || "";
 
   lessonData.step1 = {
@@ -695,6 +696,7 @@ header.addEventListener('click', function(e){
 content.addEventListener('click', function(e){
   e.stopPropagation();
 });
+
 </script>
 
 </body>
