@@ -312,6 +312,23 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
+
+  function lockSidebarProgressNav(){
+  document.querySelectorAll(".sidebar .nav-step").forEach(el => {
+    el.classList.add("is-static");
+    el.setAttribute("aria-disabled","true");
+    // If it's an <a>, keep it from behaving like a link
+    if (el.tagName.toLowerCase() === "a") {
+      el.addEventListener("click", (e) => e.preventDefault());
+      el.addEventListener("keydown", (e) => {
+        // prevent Enter/Space activation
+        if (e.key === "Enter" || e.key === " ") e.preventDefault();
+      });
+    }
+  });
+}
+
+  
 /* Inspiration Uploads (Local-only) */
 const MAX_FILES = 5;
 // NOTE: localStorage is small (~5MB total). base64 expands size.
