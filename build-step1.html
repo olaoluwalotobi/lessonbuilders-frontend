@@ -5,16 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Basic Information - LessonBuilders</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-/* Sidebar is a progress indicator only */
-.sidebar .nav-step{
-  cursor: default;
-}
-.sidebar .nav-step.is-static{
-  pointer-events: none;     /* disables clicking */
-}
-
-  
+<style>  
 :root{--navy:#0D2847;--orange:#FF8C42;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
@@ -311,24 +302,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   </main>
 </div>
 
-<script>
-
-  function lockSidebarProgressNav(){
-  document.querySelectorAll(".sidebar .nav-step").forEach(el => {
-    el.classList.add("is-static");
-    el.setAttribute("aria-disabled","true");
-    // If it's an <a>, keep it from behaving like a link
-    if (el.tagName.toLowerCase() === "a") {
-      el.addEventListener("click", (e) => e.preventDefault());
-      el.addEventListener("keydown", (e) => {
-        // prevent Enter/Space activation
-        if (e.key === "Enter" || e.key === " ") e.preventDefault();
-      });
-    }
-  });
-}
-
-  
+<script> 
 /* Inspiration Uploads (Local-only) */
 const MAX_FILES = 5;
 // NOTE: localStorage is small (~5MB total). base64 expands size.
