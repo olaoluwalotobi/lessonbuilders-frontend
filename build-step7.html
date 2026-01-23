@@ -210,6 +210,7 @@ let currentLessonData = {};
 let currentCollabPartner = null; // Store collaboration partner info for pending status
 
 window.addEventListener('DOMContentLoaded', function() {
+  lockSidebarProgressNav(); // 
   const saved = localStorage.getItem('lessonData');
   if (saved) {
     currentLessonData = JSON.parse(saved);
