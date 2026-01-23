@@ -264,6 +264,7 @@ const frameworkNames = {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
+  lockSidebarProgressNav(); // 
   const saved = localStorage.getItem("lessonData");
   if (!saved) {
     document.getElementById("lessonTitle").textContent = "Missing lesson data";
