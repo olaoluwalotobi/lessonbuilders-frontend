@@ -209,6 +209,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 <script>
 
+
 function lockSidebarProgressNav(){
   // Sidebar steps are a progress indicator only (no navigation).
   document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
@@ -566,9 +567,7 @@ function generateLesson(){
   // Guard: backend requires basic fields
   if (!String(topic).trim() || !String(grade).trim() || !String(subject).trim()) {
     hideLoading();
-    alert("Missing required fields (topic/grade/subject).
-
-Please go back to Step 1 and complete Basic Information.");
+    alert("Missing required fields (topic/grade/subject).\n\nPlease go back to Step 1 and complete Basic Information.");
     return;
   }
 
@@ -651,9 +650,7 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     };
 
     // ✅ Only include feedback when present; on FIRST run also inject inspiration as feedback
-    if (feedback && inspirationDirective) payload.feedback = feedback + "
-
-" + inspirationDirective;
+    if (feedback && inspirationDirective) payload.feedback = feedback + "\n\n" + inspirationDirective;
     else if (feedback) payload.feedback = feedback;
     else if (inspirationDirective) payload.feedback = inspirationDirective;
 
@@ -895,6 +892,7 @@ function continueToStep7(){
   clearInspirationAfterSaveExport();
   window.location.href = "build-step7.html";
 }
+
 </script>
 </body>
 </html>
