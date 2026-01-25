@@ -34,7 +34,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
 .nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:default;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
 .nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
-.nav-step.locked{pointer-events:none;}
 .nav-step.completed{color:#10B981;}
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
@@ -146,26 +145,21 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 <div class="container">
   <aside class="sidebar">
     <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
-
-    <!-- Locked navigation: visual cue only -->
-    <a href="#" class="nav-step completed locked" aria-disabled="true" tabindex="-1" data-step="1"><div class="step-number">✓</div><div>Basic Information</div></a>
-    <a href="#" class="nav-step completed locked" aria-disabled="true" tabindex="-1" data-step="2"><div class="step-number">✓</div><div>Teaching Style</div></a>
-    <a href="#" class="nav-step completed locked" aria-disabled="true" tabindex="-1" data-step="3"><div class="step-number">✓</div><div>Choose Template</div></a>
-    <a href="#" class="nav-step completed locked" aria-disabled="true" tabindex="-1" data-step="4"><div class="step-number">✓</div><div>Build Method</div></a>
-    <a href="#" class="nav-step completed locked" aria-disabled="true" tabindex="-1" data-step="5"><div class="step-number">✓</div><div>Assessments</div></a>
-    <a href="#" class="nav-step active locked" aria-disabled="true" tabindex="-1" data-step="6"><div class="step-number">6</div><div>Preview & Export</div></a>
-    <a href="#" class="nav-step locked" aria-disabled="true" tabindex="-1" data-step="7"><div class="step-number">7</div><div>Collaborate</div></a>
+    <!-- Locked (visual only) for MVP -->
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Teaching Style</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Choose Template</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Build Method</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Assessments</div></div>
+    <div class="nav-step active"><div class="step-number">6</div><div>Preview &amp; Export</div></div>
+    <div class="nav-step"><div class="step-number">7</div><div>Collaborate</div></div>
   </aside>
 
   <main class="main-content">
+
     <h1 class="page-title">Lesson Review</h1>
     <p class="page-subtitle">Confirm/edit, then continue to collaborations</p>
     <div class="progress-bar"><div class="progress-fill" style="width:86%;"></div></div>
-
-    <div id="inlineError" style="display:none; margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; border: 2px solid rgba(239,68,68,0.25); background: rgba(239,68,68,0.06); color: #7a1f1f;">
-      <div style="font-weight:700; margin-bottom:4px;">We hit a snag</div>
-      <div id="inlineErrorMsg" style="font-size:14px; color:#7a1f1f;"></div>
-    </div>
 
     <div class="verification-banner" id="verificationBanner">
       <div class="banner-header">
@@ -253,22 +247,6 @@ function hideLoading(){
   document.getElementById("loadingOverlay").classList.add("hidden");
   clearInterval(msgTimer);
 }
-
-function showInlineError(message){
-  const box = document.getElementById("inlineError");
-  const msg = document.getElementById("inlineErrorMsg");
-  if (!box || !msg) return;
-  msg.textContent = String(message || "").trim() || "Something went wrong. Please try again.";
-  box.style.display = "block";
-}
-function clearInlineError(){
-  const box = document.getElementById("inlineError");
-  const msg = document.getElementById("inlineErrorMsg");
-  if (!box || !msg) return;
-  box.style.display = "none";
-  msg.textContent = "";
-}
-
 
 function safeParse(jsonStr){ try { return JSON.parse(jsonStr); } catch { return null; } }
 function getLessonData(){
@@ -658,7 +636,6 @@ async function ensureLessonReady(){
 
   // Otherwise: do parallel verify + generate
   setBannerVerifying();
-  clearInlineError();
   showLoading();
 
   const verifyP = verifyStandards({ topic, grade, subject });
@@ -704,7 +681,6 @@ async function regenerateLesson(){
   const feedback = document.getElementById("feedbackTextarea").value.trim();
   if (!feedback) { alert("Please describe what changes you want to make."); return; }
   document.getElementById("feedbackBox").style.display = "none";
-  clearInlineError();
   showLoading();
 
   try{
