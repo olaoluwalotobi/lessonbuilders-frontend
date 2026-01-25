@@ -438,35 +438,66 @@ function persistGeneratedLesson(lessonObj){
      - (first run only) payload.feedback
 ------------------------------ */
 function getInspirationFromStep1(){
-  const insp = lessonData?.step1?.inspiration || {};
-  const notes = String(insp.notes || "").trim();
+  // Step 1 stores inspiration under step1.inspiration:
+  // { files:[{name,type,size,...}], observeText, learnText, focusText }
+  const insp = (lessonData && lessonData.step1 && lessonData.step1.inspiration) ? lessonData.step1.inspiration : {};
   const files = Array.isArray(insp.files) ? insp.files : [];
-  const fileNames = files.map(f => String(f?.name || "")).filter(Boolean);
-  return { notes, fileNames };
+
+  // Lightweight metadata only (no base64)
+  const fileMeta = files.map(f => ({
+    name: String(f && f.name ? f.name : ""),
+    type: String(f && f.type ? f.type : ""),
+    size: Number(f && f.size ? f.size : 0)
+  })).filter(f => f.name);
+
+  const observeText = String(insp.observeText || "").trim();   // "What do you see in the file?"
+  const learnText   = String(insp.learnText || "").trim();     // "What should students learn from it?"
+  const focusText   = String(insp.focusText || "").trim();     // "What do you want to focus on?"
+
+  const hasFiles = fileMeta.length > 0;
+  return {
+    hasFiles,
+    files: fileMeta,
+    observeText,
+    learnText,
+    focusText
+  };
 }
 
-function buildInspirationDirective(insp){
-  const notes = String(insp?.notes || "").trim();
-  const names = Array.isArray(insp?.fileNames) ? insp.fileNames : [];
 
-  const hasAnything = notes || names.length;
+function buildInspirationDirective(insp){
+  if (!insp) return "";
+  const observeText = String(insp.observeText || "").trim();
+  const learnText = String(insp.learnText || "").trim();
+  const focusText = String(insp.focusText || "").trim();
+  const names = Array.isArray(insp.files) ? insp.files.map(f=>f.name).filter(Boolean) : [];
+
+  const hasAnything = observeText || learnText || focusText || names.length;
   if (!hasAnything) return "";
 
   return `
-IMPORTANT: The teacher provided inspiration materials. The lesson MUST be built around them.
+IMPORTANT: The teacher uploaded inspiration materials. The lesson MUST be built around them.
 
 REQUIREMENTS:
-- Use the inspiration explicitly in: Hook/Engage, Modeling/Guided Practice, AND Assessment.
-- Make at least 6 explicit references to the inspiration (specific details/teacher focus), not generic statements.
-- If inspiration details are limited, add 3 “Teacher prompts” questions inside the lesson to gather missing info, but still draft the lesson now.
+- Use the inspiration explicitly in: Hook/Engage, Guided Practice, AND Assessment.
+- Make at least 6 explicit references to the inspiration (observed details / teacher focus), not generic statements.
+- If the inspiration details are limited, include 3 short “Teacher prompts” questions inside the lesson to gather missing info, but still draft the lesson now.
 
-FILES (names):
-${names.length ? names.slice(0,12).map(n=>`- ${n}`).join("\n") : "(none)"}
+UPLOADED FILES (names):
+${names.length ? names.slice(0,12).map(n=>`- ${n}`).join("
+") : "(none)"}
 
-TEACHER FOCUS NOTES:
-${notes || "(none)"}
+WHAT THE TEACHER SEES IN THE FILE:
+${observeText || "(not provided)"}
+
+WHAT STUDENTS SHOULD LEARN FROM IT:
+${learnText || "(not provided)"}
+
+TEACHER FOCUS:
+${focusText || "(not provided)"}
 `.trim();
 }
+
 
 /* Clear inspiration after save/export (fixes Step 1 focus box not resetting) */
 function clearInspirationAfterSaveExport(){
@@ -475,12 +506,15 @@ function clearInspirationAfterSaveExport(){
     const data = saved ? JSON.parse(saved) : {};
     if (data?.step1?.inspiration) {
       data.step1.inspiration.files = [];
-      data.step1.inspiration.notes = "";
+      data.step1.inspiration.observeText = "";
+      data.step1.inspiration.learnText = "";
+      data.step1.inspiration.focusText = "";
     }
     localStorage.setItem("lessonData", JSON.stringify(data));
     lessonData = data;
   } catch(e){ console.warn("clearInspirationAfterSaveExport failed:", e); }
 }
+
 
 /* framework names (correct) */
 function applyFrameworkStepNames(frameworkKey, procedures){
@@ -559,6 +593,18 @@ function generateLesson(){
   const step5 = lessonData.step5 || {};
 
   const topic = step1.topic || "Untitled Lesson";
+  const topicClean = String(topic || "").trim();
+  const gradeClean = String(grade || "").trim();
+  const subjectClean = String(subject || "").trim();
+  const durationNum = Number(duration || 0);
+
+  // Guard: backend requires these (prevents 500 "missing required fields")
+  if (!topicClean || !gradeClean || !subjectClean || !durationNum) {
+    alert("Missing required lesson fields (topic/grade/subject/duration). Please return to Step 1 and try again.");
+    window.location.href = "build-step1.html";
+    return;
+  }
+
   const grade = step1.grade || "5th Grade";
   const subject = step1.subject || "Science";
   const duration = step1.duration || 45;
@@ -637,12 +683,20 @@ async function generateLessonViaBackend({ topic, grade, subject, duration, frame
     const inspirationDirective = buildInspirationDirective(inspiration);
 
     const existingContext = String(lessonData?.step1?.additionalContext || "").trim();
-    const combinedAdditionalContext = inspirationDirective
-      ? (existingContext ? `${existingContext}\n\n${inspirationDirective}` : inspirationDirective)
-      : existingContext;
+    const combinedAdditionalContext = [existingContext, inspirationDirective].filter(Boolean).join("\n\n");
 
-    const payload = {
-      step1: { topic, grade, subject, duration, additionalContext: combinedAdditionalContext },
+
+// Keep backend schema compatible by sending the full Step 1 object,
+// then overriding the canonical fields we know the backend expects.
+const step1Full = Object.assign({}, (lessonData.step1 || {}), {
+  topic, grade, subject, duration,
+  state: (lessonData.step1 && lessonData.step1.state) ? lessonData.step1.state : "California",
+  additionalContext: combinedAdditionalContext,
+  inspiration
+});
+
+const payload = {
+      step1: step1Full,
       step2: step2 || {},
       step3: { framework },
       step5: step5 || {},
