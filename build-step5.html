@@ -338,17 +338,35 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("quiz").checked = !!s.quiz;
 });
 
-function saveAndContinue(){
-  const savedData = localStorage.getItem('lessonData');
-  const data = savedData ? safeParse(savedData) : {};
-  data.step5 = {
-    assessmentTypes: getAssessmentTypes(),
-    includeRubric: document.getElementById('rubricCheck').checked
-  };
-  localStorage.setItem('lessonData', JSON.stringify(data));
+function getAssessmentTypes(){
+  const types = [];
+  if (document.getElementById("exitTicket")?.checked) types.push("Exit Ticket");
+  if (document.getElementById("formativeChecks")?.checked) types.push("Formative Checks");
+  if (document.getElementById("homework")?.checked) types.push("Homework Assignment");
+  if (document.getElementById("quiz")?.checked) types.push("Quiz");
+  return types;
+}
 
-  // MVP: do NOT pre-build here. Step 6 will generate the lesson.
-  window.location.href = 'build-step6.html';
+function saveAndContinue(){
+  // Persist Step 5 selections in a way that matches how this page re-hydrates on load
+  const data = getLessonData();
+  data.step5 = {
+    // Keep booleans for re-checking on reload
+    exitTicket: !!document.getElementById("exitTicket")?.checked,
+    formativeChecks: !!document.getElementById("formativeChecks")?.checked,
+    homework: !!document.getElementById("homework")?.checked,
+    quiz: !!document.getElementById("quiz")?.checked,
+
+    // Also keep the friendly array Step 6 can use if it expects a list
+    assessmentTypes: getAssessmentTypes(),
+
+    // Guard: this checkbox is not present in MVP, so default false
+    includeRubric: !!document.getElementById("rubricCheck")?.checked
+  };
+  setLessonData(data);
+
+  // IMPORTANT: never block navigation if something above changes later
+  window.location.href = "build-step6.html";
 }
 
 /* Keep your sidebar lock (progress indicator only) */
