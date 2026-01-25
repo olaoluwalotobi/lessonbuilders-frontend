@@ -53,6 +53,22 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
 .btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+
+/* Loading overlay (Step 5 -> Step 6 prebuild) */
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
+.loading-overlay.hidden{display:none;}
+.blocks-loader{position:relative;width:73px;height:66px;margin-bottom:18px;}
+.block{position:absolute;border-radius:6px;opacity:0;animation-duration:2.6s;animation-timing-function:cubic-bezier(.2,.9,.2,1);animation-iteration-count:infinite;will-change:transform, opacity;}
+.bl{width:48px;height:20px;left:0;bottom:0;background:var(--navy);animation-name:bl-in;}
+.tl{width:22px;height:20px;left:26px;bottom:24px;background:var(--navy);animation-name:tl-in;}
+.br{width:22px;height:44px;left:51px;bottom:0;background:var(--navy);animation-name:br-in;}
+.tr{width:22px;height:20px;left:51px;top:0;background:var(--orange);animation-name:tr-in;}
+@keyframes bl-in{0%{opacity:0;transform:translateX(16px);}12%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
+@keyframes br-in{0%,14%{opacity:0;transform:translateY(16px);}26%{opacity:1;transform:translateY(0);}80%{opacity:1;}100%{opacity:0;}}
+@keyframes tl-in{0%,28%{opacity:0;transform:translateX(-16px);}40%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
+@keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
+.loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
+
 </style>
 </head>
 <body>
@@ -87,7 +103,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 <div class="assessment-options">
 <label class="assessment-option">
-<input type="checkbox" id="exitTicket" checked>
+<input type="checkbox" id="exitTicket">
 <div class="assessment-info">
 <div class="assessment-title">Exit Ticket (3-5 min)</div>
 <div class="assessment-description">Quick check at end of lesson to see what students learned</div>
@@ -95,7 +111,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </label>
 
 <label class="assessment-option">
-<input type="checkbox" id="formativeChecks" checked>
+<input type="checkbox" id="formativeChecks">
 <div class="assessment-info">
 <div class="assessment-title">Formative Checks</div>
 <div class="assessment-description">Questions to ask during the lesson to check understanding</div>
@@ -127,79 +143,243 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
+/* ===== LessonBuilders Step 5 (MVP) =====
+   Fixes:
+   - Do NOT default-check assessments unless user chose them (prevents "Exit Ticket" surprise)
+   - Prefetch standards + lesson generation in parallel on Next, so Step 6 loads instantly
+*/
+const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
+function safeParse(jsonStr){ try { return JSON.parse(jsonStr); } catch { return null; } }
+function getLessonData(){
+  const saved = localStorage.getItem("lessonData");
+  return saved ? (safeParse(saved) || {}) : {};
+}
+function setLessonData(data){ localStorage.setItem("lessonData", JSON.stringify(data)); }
+
+function stripControlChars(s){
+  return String(s ?? "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "");
+}
+async function safeJson(res){
+  const text = await res.text();
+  const cleaned = stripControlChars(text);
+  try { return JSON.parse(cleaned); } catch { return { _raw: cleaned }; }
+}
+function extractJsonObject(text){
+  const t = stripControlChars(text);
+  const start = t.indexOf("{");
+  const end = t.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) return null;
+  return t.slice(start, end + 1);
+}
+function normalizeLessonFromBackend(payload){
+  if (!payload) throw new Error("Empty server response.");
+  if (payload.summary && (payload.objectives || payload.procedures)) return payload;
+
+  const maybeText = payload?.content?.[0]?.text;
+  if (typeof maybeText === "string") {
+    const jsonStr = extractJsonObject(maybeText);
+    if (!jsonStr) throw new Error("Could not parse lesson JSON from AI text.");
+    return JSON.parse(jsonStr);
+  }
+
+  if (typeof payload._raw === "string") {
+    const jsonStr = extractJsonObject(payload._raw);
+    if (!jsonStr) throw new Error("Could not parse lesson JSON from server response.");
+    return JSON.parse(jsonStr);
+  }
+
+  if (payload.lesson && typeof payload.lesson === "object") return payload.lesson;
+
+  throw new Error("Unexpected response format from backend.");
+}
+
+/* Loading overlay (added below in HTML) */
+function showLoading(msg){
+  const overlay = document.getElementById("loadingOverlay");
+  const msgEl = document.getElementById("loadingMessage");
+  if (msgEl) msgEl.textContent = msg || "Preparing your lesson preview...";
+  if (overlay) overlay.classList.remove("hidden");
+}
+function hideLoading(){
+  const overlay = document.getElementById("loadingOverlay");
+  if (overlay) overlay.classList.add("hidden");
+}
+
+/* Inspiration directive (teacher-provided only; no AI vision) */
+function buildInspirationDirective(data){
+  const insp = data?.step1?.inspiration || {};
+  const notes = String(insp.notes || "").trim();
+  const files = Array.isArray(insp.files) ? insp.files : [];
+  const fileList = files.map(f => f?.name).filter(Boolean).join(", ");
+  if (!notes && !fileList) return "";
+
+  return [
+    "INSPIRATION (teacher-provided):",
+    fileList ? `Files uploaded: ${fileList}. (System does NOT read file contents; use teacher notes below.)` : "",
+    notes ? `Teacher notes/description: ${notes}` : "",
+    "",
+    "REQUIREMENTS:",
+    "Build the lesson around the inspiration notes. Use it in Hook/Engage, Guided Practice, and Assessment.",
+    "Include at least 6 explicit references to the teacher-provided description (quote short phrases).",
+    "If details are missing, include 2–4 clarifying 'Teacher Prompts' inside the lesson."
+  ].filter(Boolean).join("\n");
+}
+
+async function verifyStandards(data){
+  try{
+    const step1 = data.step1 || {};
+    const topic = step1.topic || "";
+    const grade = step1.grade || "";
+    const subject = step1.subject || "";
+
+    const gradeLabel = String(grade || "");
+    const gradeNum = gradeLabel.match(/\b(\d{1,2})\b/)?.[1] || gradeLabel.trim();
+    const subjectLabel = String(subject || "");
+    const subjectNorm = subjectLabel.toLowerCase().trim();
+
+    const verifyBody = {
+      grade: gradeNum,
+      subject: subjectNorm,
+      subjectLabel,
+      gradeLabel,
+      topic,
+      standardFocus: (step1.standardFocus || "").trim()
+    };
+
+    const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(verifyBody)
+    });
+    const verifyData = await safeJson(verifyRes);
+
+    const returnedStandards = Array.isArray(verifyData?.verifiedStandards)
+      ? verifyData.verifiedStandards
+      : (Array.isArray(verifyData?.standards) ? verifyData.standards : []);
+
+    return {
+      ok: verifyRes.ok,
+      standards: returnedStandards || [],
+      meta: { source: verifyData?.source, matchType: verifyData?.matchType, confidence: verifyData?.confidence, message: verifyData?.message }
+    };
+  } catch(e){
+    return { ok:false, standards:[], meta:{ message:"Continuing without verified standards." } };
+  }
+}
+
+async function generateLesson(data){
+  const step1 = data.step1 || {};
+  const step2 = data.step2 || {};
+  const step3 = data.step3 || {};
+  const step5 = data.step5 || {};
+
+  const payload = {
+    step1: {
+      topic: step1.topic || "Untitled Lesson",
+      grade: step1.grade || "5th Grade",
+      subject: step1.subject || "Science",
+      duration: step1.duration || 45,
+      inspirationDirective: buildInspirationDirective(data)
+    },
+    step2,
+    step3: { framework: step3.framework || "madeline-hunter" },
+    step5,
+    verifiedStandards: [] // empty; standards verified separately for display
+  };
+
+  const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  });
+  const genData = await safeJson(genRes);
+  if (!genRes.ok) throw new Error(genData?.error || genData?.message || "Lesson generation failed.");
+  return normalizeLessonFromBackend(genData);
+}
+
+async function prefetch(data){
+  // parallel: verify + generate
+  const verifyP = verifyStandards(data);
+  const generateP = generateLesson(data);
+
+  const [verifyR, lessonR] = await Promise.allSettled([verifyP, generateP]);
+
+  if (lessonR.status !== "fulfilled") throw (lessonR.reason || new Error("Lesson generation failed."));
+  const lesson = lessonR.value;
+
+  let standards = [];
+  let standardsMeta = {};
+  if (verifyR.status === "fulfilled") {
+    standards = Array.isArray(verifyR.value?.standards) ? verifyR.value.standards : [];
+    standardsMeta = verifyR.value?.meta || {};
+  }
+
+  const updated = getLessonData();
+  updated.generatedLesson = lesson;
+  updated.verifiedStandards = standards;
+  updated.standardsMeta = standardsMeta;
+  updated.generatedAt = new Date().toISOString();
+  setLessonData(updated);
+}
+
+/* ---------- Existing page functions ---------- */
+function goBack(){ window.location.href = "build-step4.html"; }
+
+window.addEventListener("DOMContentLoaded", () => {
+  // Load prior selections (do not default-check)
+  const data = getLessonData();
+  const s = data.step5 || {};
+
+  // Ensure no accidental default-checks
+  document.getElementById("exitTicket").checked = !!s.exitTicket;
+  document.getElementById("formativeChecks").checked = !!s.formativeChecks;
+  document.getElementById("homework").checked = !!s.homework;
+  document.getElementById("quiz").checked = !!s.quiz;
+});
+
+function saveAndContinue(){
+  const data = getLessonData();
+  data.step5 = {
+    exitTicket: !!document.getElementById("exitTicket").checked,
+    formativeChecks: !!document.getElementById("formativeChecks").checked,
+    homework: !!document.getElementById("homework").checked,
+    quiz: !!document.getElementById("quiz").checked
+  };
+  setLessonData(data);
+
+  showLoading("Preparing your Lesson Review...");
+  prefetch(data)
+    .then(() => {
+      hideLoading();
+      window.location.href = "build-step6.html";
+    })
+    .catch((err) => {
+      console.error(err);
+      hideLoading();
+      alert("We couldn't pre-build the lesson yet. Step 6 will try again.\n\n" + (err?.message || err));
+      window.location.href = "build-step6.html";
+    });
+}
+
+/* Keep your sidebar lock (progress indicator only) */
 function lockSidebarProgressNav(){
-  // Sidebar steps are a progress indicator only (no navigation).
   document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
     a.classList.add("is-static");
     a.setAttribute("aria-disabled","true");
     a.setAttribute("tabindex","-1");
-
-    // Make navigation impossible even if CSS is overridden.
-    try {
-      const href = a.getAttribute("href");
-      if (href && href !== "#" && href !== "javascript:void(0)") a.setAttribute("data-href", href);
-    } catch(_) {}
-    a.setAttribute("href", "javascript:void(0)");
-
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    }, { passive:false });
+    a.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); });
   });
 }
-
-  
-window.addEventListener('DOMContentLoaded', function() {
-  lockSidebarProgressNav(); // 
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    const data = JSON.parse(saved);
-    if (data.step5) {
-      document.getElementById('exitTicket').checked = data.step5.exitTicket !== false;
-      document.getElementById('formativeChecks').checked = data.step5.formativeChecks !== false;
-      document.getElementById('homework').checked = data.step5.homework === true;
-      document.getElementById('quiz').checked = data.step5.quiz === true;
-    }
-  }
-});
-
-function goBack() {
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    const data = JSON.parse(saved);
-    if (data.step4 && data.step4.buildMethod === 'section') {
-      window.location.href = 'build-section-by-section.html';
-    } else {
-      window.location.href = 'build-step4.html';
-    }
-  } else {
-    window.location.href = 'build-step4.html';
-  }
-}
-
-function saveAndContinue() {
-  const exitTicket = document.getElementById('exitTicket').checked;
-  const formativeChecks = document.getElementById('formativeChecks').checked;
-  const homework = document.getElementById('homework').checked;
-  const quiz = document.getElementById('quiz').checked;
-  
-  let lessonData = {};
-  const saved = localStorage.getItem('lessonData');
-  if (saved) {
-    lessonData = JSON.parse(saved);
-  }
-  
-  lessonData.step5 = {
-    exitTicket,
-    formativeChecks,
-    homework,
-    quiz
-  };
-  
-  localStorage.setItem('lessonData', JSON.stringify(lessonData));
-  window.location.href = 'build-step6.html';
-}
+lockSidebarProgressNav();
 </script>
+
+<div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-live="polite">
+  <div class="blocks-loader" aria-hidden="true">
+    <div class="block bl"></div><div class="block tl"></div><div class="block br"></div><div class="block tr"></div>
+  </div>
+  <div class="loading-message" id="loadingMessage">Preparing your lesson preview...</div>
+</div>
+
 </body>
 </html>
