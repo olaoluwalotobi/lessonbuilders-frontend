@@ -339,27 +339,16 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function saveAndContinue(){
-  const data = getLessonData();
+  const savedData = localStorage.getItem('lessonData');
+  const data = savedData ? safeParse(savedData) : {};
   data.step5 = {
-    exitTicket: !!document.getElementById("exitTicket").checked,
-    formativeChecks: !!document.getElementById("formativeChecks").checked,
-    homework: !!document.getElementById("homework").checked,
-    quiz: !!document.getElementById("quiz").checked
+    assessmentTypes: getAssessmentTypes(),
+    includeRubric: document.getElementById('rubricCheck').checked
   };
-  setLessonData(data);
+  localStorage.setItem('lessonData', JSON.stringify(data));
 
-  showLoading("Preparing your Lesson Review...");
-  prefetch(data)
-    .then(() => {
-      hideLoading();
-      window.location.href = "build-step6.html";
-    })
-    .catch((err) => {
-      console.error(err);
-      hideLoading();
-      alert("We couldn't pre-build the lesson yet. Step 6 will try again.\n\n" + (err?.message || err));
-      window.location.href = "build-step6.html";
-    });
+  // MVP: do NOT pre-build here. Step 6 will generate the lesson.
+  window.location.href = 'build-step6.html';
 }
 
 /* Keep your sidebar lock (progress indicator only) */
