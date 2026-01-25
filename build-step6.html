@@ -208,34 +208,19 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
-
-
-function lockSidebarProgressNav(){
-  // Sidebar steps are a progress indicator only (no navigation).
-  document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
-    a.classList.add("is-static");
-    a.setAttribute("aria-disabled","true");
-    a.setAttribute("tabindex","-1");
-
-    // Make navigation impossible even if CSS is overridden.
-    try {
-      const href = a.getAttribute("href");
-      if (href && href !== "#" && href !== "javascript:void(0)") a.setAttribute("data-href", href);
-    } catch(_) {}
-    a.setAttribute("href", "javascript:void(0)");
-
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    }, { passive:false });
-  });
-}
-
-  
+/* ===== LessonBuilders Step 6 (MVP) =====
+   Fixes:
+   - If Step 5 already generated the lesson, Step 6 renders instantly (no re-fetch)
+   - If not, Step 6 generates the lesson; standards verification + generation run in parallel
+   - Inspiration files are metadata only; directive forces the model to use teacher notes
+   - Standards shown ONLY as codes + Source links (no standard wording / no matchType)
+*/
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
 const messages = [
-  "Building lesson, one block at a time"
+  "Building lesson, one block at a time",
+  "Aligning to standards...",
+  "Finalizing your lesson preview..."
 ];
 let msgIndex = 0;
 let msgTimer;
@@ -257,8 +242,16 @@ function hideLoading(){
   clearInterval(msgTimer);
 }
 
+function safeParse(jsonStr){ try { return JSON.parse(jsonStr); } catch { return null; } }
+function getLessonData(){
+  const saved = localStorage.getItem("lessonData");
+  return saved ? (safeParse(saved) || {}) : {};
+}
+function setLessonData(data){ localStorage.setItem("lessonData", JSON.stringify(data)); }
+
 let lessonData = {};
 let verifiedStandards = [];
+let standardsMeta = {};
 let lastLessonJSON = null;
 
 const frameworkNames = {
@@ -268,30 +261,7 @@ const frameworkNames = {
   "gradual-release": "Gradual Release"
 };
 
-window.addEventListener("DOMContentLoaded", () => {
-  lockSidebarProgressNav(); // 
-  const saved = localStorage.getItem("lessonData");
-  if (!saved) {
-    document.getElementById("lessonTitle").textContent = "Missing lesson data";
-    document.getElementById("lessonSummary").textContent = "Go back to Step 1 to start building a lesson.";
-    return;
-  }
-  lessonData = JSON.parse(saved);
-  verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
-  generateLesson();
-});
-
-function toggleDetails() {
-  const section = document.getElementById("detailsSection");
-  const icon = document.getElementById("detailsIcon");
-  const btn = document.getElementById("viewDetailsBtn");
-  section.classList.toggle("show");
-  icon.classList.toggle("expanded");
-  btn.innerHTML = section.classList.contains("show")
-    ? 'Hide Details <span class="details-icon expanded" id="detailsIcon">▼</span>'
-    : 'View Details <span class="details-icon" id="detailsIcon">▼</span>';
-}
-
+/* ---------- UI helpers ---------- */
 function setBannerVerifying(){
   document.getElementById("bannerText").textContent = "Locating California Standards...";
   document.getElementById("bannerMeta").textContent = "This will take a moment";
@@ -313,19 +283,27 @@ function setBannerNoMatch(message){
   document.getElementById("standardsContainer").innerHTML = "";
   document.getElementById("detailsSection").classList.remove("show");
 }
-function updateVerificationBanner(standards, metaOrSource){
+function toggleDetails() {
+  const section = document.getElementById("detailsSection");
+  const icon = document.getElementById("detailsIcon");
+  const btn = document.getElementById("viewDetailsBtn");
+  section.classList.toggle("show");
+  icon.classList.toggle("expanded");
+  btn.innerHTML = section.classList.contains("show")
+    ? 'Hide Details <span class="details-icon expanded" id="detailsIcon">▼</span>'
+    : 'View Details <span class="details-icon" id="detailsIcon">▼</span>';
+}
+
+/* Standards banner: show ONLY codes + source links; hide matchType/sonnet */
+function updateVerificationBanner(standards, meta){
   const count = standards.length;
   const today = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
-
-  // Backwards compatible: allow string source OR {source, matchType, confidence}
-  const meta = (metaOrSource && typeof metaOrSource === "object") ? metaOrSource : { source: metaOrSource };
 
   const source = meta?.source ? String(meta.source) : "";
   const confidence = (typeof meta?.confidence === "number") ? meta.confidence : null;
 
   document.getElementById("bannerText").textContent = `${count} California Standard${count!==1?"s":""}`;
 
-  // Hide matchType from users (e.g., "sonnet"); show only located date, source, confidence
   const parts = [`Located on ${today}`];
   if (source) parts.push(`source: ${source}`);
   if (confidence !== null) parts.push(`confidence: ${confidence.toFixed(2)}`);
@@ -333,10 +311,9 @@ function updateVerificationBanner(standards, metaOrSource){
 
   document.getElementById("viewDetailsBtn").style.display = "inline-flex";
 
-  // Show ONLY the standard code + source link (no standard wording)
   document.getElementById("standardsContainer").innerHTML = standards.map(std => {
     const link = std.sourceURL || std.sourceUrl || "https://www.cde.ca.gov/";
-    const code = escapeHtml((std.code || std.id || "").toString());
+    const code = escapeHtml((std.code || std.standardCode || std.id || "").toString());
     return `
       <div class="standard-card">
         <div class="standard-number">${code}</div>
@@ -348,8 +325,7 @@ function updateVerificationBanner(standards, metaOrSource){
   }).join("");
 }
 
-/* parsing helpers */
-
+/* ---------- parsing helpers ---------- */
 function stripControlChars(s){
   return String(s ?? "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "");
 }
@@ -402,121 +378,28 @@ function takeFirstSentence(text){
   return m ? m[1].trim() : t;
 }
 
-function slimStandards(arr){
-  const a = Array.isArray(arr) ? arr : [];
-  return a.map(s => ({
-    code: (s.code || s.id || s.standardCode || "").toString(),
-    sourceURL: s.sourceURL || s.sourceUrl || "https://www.cde.ca.gov/"
-  })).filter(s => s.code);
-}
-
-function persistVerifiedStandards(arr){
-
-  try{
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    data.verifiedStandards = Array.isArray(arr) ? arr : [];
-    localStorage.setItem("lessonData", JSON.stringify(data));
-    lessonData = data;
-  } catch(e){ console.warn("persistVerifiedStandards failed:", e); }
-}
-function persistGeneratedLesson(lessonObj){
-  try{
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    data.generatedLesson = lessonObj || null;
-    localStorage.setItem("lessonData", JSON.stringify(data));
-    lessonData = data;
-  } catch(e){ console.warn("persistGeneratedLesson failed:", e); }
-}
-
-/* -----------------------------
-   Inspiration (Step 1) -> text directive
-   We DO NOT change your backend schema.
-   We inject inspiration as text into:
-     - step1.additionalContext
-     - (first run only) payload.feedback
------------------------------- */
-function getInspirationFromStep1(){
-  // Step 1 stores inspiration under step1.inspiration:
-  // { files:[{name,type,size,...}], observeText, learnText, focusText }
-  const insp = (lessonData && lessonData.step1 && lessonData.step1.inspiration) ? lessonData.step1.inspiration : {};
+/* ---------- Inspiration directive ---------- */
+function buildInspirationDirective(){
+  const insp = lessonData?.step1?.inspiration || {};
+  const notes = String(insp.notes || "").trim();
   const files = Array.isArray(insp.files) ? insp.files : [];
+  const fileList = files.map(f => f?.name).filter(Boolean).join(", ");
 
-  // Lightweight metadata only (no base64)
-  const fileMeta = files.map(f => ({
-    name: String(f && f.name ? f.name : ""),
-    type: String(f && f.type ? f.type : ""),
-    size: Number(f && f.size ? f.size : 0)
-  })).filter(f => f.name);
+  if (!notes && !fileList) return "";
 
-  const observeText = String(insp.observeText || "").trim();   // "What do you see in the file?"
-  const learnText   = String(insp.learnText || "").trim();     // "What should students learn from it?"
-  const focusText   = String(insp.focusText || "").trim();     // "What do you want to focus on?"
-
-  const hasFiles = fileMeta.length > 0;
-  return {
-    hasFiles,
-    files: fileMeta,
-    observeText,
-    learnText,
-    focusText
-  };
+  return [
+    "INSPIRATION (teacher-provided):",
+    fileList ? `Files uploaded: ${fileList}. (System does NOT read file contents; use teacher notes below.)` : "",
+    notes ? `Teacher notes/description: ${notes}` : "",
+    "",
+    "REQUIREMENTS:",
+    "Build the lesson around the inspiration notes. Use it in Hook/Engage, Guided Practice, and Assessment.",
+    "Include at least 6 explicit references to the teacher-provided description (quote short phrases).",
+    "If details are missing, include 2–4 clarifying 'Teacher Prompts' inside the lesson."
+  ].filter(Boolean).join("\n");
 }
 
-
-function buildInspirationDirective(insp){
-  if (!insp) return "";
-  const observeText = String(insp.observeText || "").trim();
-  const learnText = String(insp.learnText || "").trim();
-  const focusText = String(insp.focusText || "").trim();
-  const names = Array.isArray(insp.files) ? insp.files.map(f=>f.name).filter(Boolean) : [];
-
-  const hasAnything = observeText || learnText || focusText || names.length;
-  if (!hasAnything) return "";
-
-  return `
-IMPORTANT: The teacher uploaded inspiration materials. The lesson MUST be built around them.
-
-REQUIREMENTS:
-- Use the inspiration explicitly in: Hook/Engage, Guided Practice, AND Assessment.
-- Make at least 6 explicit references to the inspiration (observed details / teacher focus), not generic statements.
-- If the inspiration details are limited, include 3 short “Teacher prompts” questions inside the lesson to gather missing info, but still draft the lesson now.
-
-UPLOADED FILES (names):
-${names.length ? names.slice(0,12).map(n=>`- ${n}`).join("
-") : "(none)"}
-
-WHAT THE TEACHER SEES IN THE FILE:
-${observeText || "(not provided)"}
-
-WHAT STUDENTS SHOULD LEARN FROM IT:
-${learnText || "(not provided)"}
-
-TEACHER FOCUS:
-${focusText || "(not provided)"}
-`.trim();
-}
-
-
-/* Clear inspiration after save/export (fixes Step 1 focus box not resetting) */
-function clearInspirationAfterSaveExport(){
-  try{
-    const saved = localStorage.getItem("lessonData");
-    const data = saved ? JSON.parse(saved) : {};
-    if (data?.step1?.inspiration) {
-      data.step1.inspiration.files = [];
-      data.step1.inspiration.observeText = "";
-      data.step1.inspiration.learnText = "";
-      data.step1.inspiration.focusText = "";
-    }
-    localStorage.setItem("lessonData", JSON.stringify(data));
-    lessonData = data;
-  } catch(e){ console.warn("clearInspirationAfterSaveExport failed:", e); }
-}
-
-
-/* framework names (correct) */
+/* ---------- Framework step names (correct) ---------- */
 function applyFrameworkStepNames(frameworkKey, procedures){
   const steps = Array.isArray(procedures) ? procedures.map(p => ({...p})) : [];
 
@@ -543,28 +426,18 @@ function applyFrameworkStepNames(frameworkKey, procedures){
       "Closure"
     ]);
   }
-
-  if (frameworkKey === "5e-model"){
-    setNames(["Engage","Explore","Explain","Elaborate","Evaluate"]);
-  }
-
-  if (frameworkKey === "gradual-release"){
-    setNames(["I Do","We Do","You Do Together","You Do Alone"]);
-  }
-
-  if (frameworkKey === "ubd"){
-    setNames(["Stage 1: Desired Results","Stage 2: Assessment Evidence","Stage 3: Learning Plan"]);
-  }
+  if (frameworkKey === "5e-model") setNames(["Engage","Explore","Explain","Elaborate","Evaluate"]);
+  if (frameworkKey === "gradual-release") setNames(["I Do","We Do","You Do Together","You Do Alone"]);
+  if (frameworkKey === "ubd") setNames(["Stage 1: Desired Results","Stage 2: Assessment Evidence","Stage 3: Learning Plan"]);
 
   return steps;
 }
 
-/* standards section */
-function getStandardsForDisplay(lesson){
-  const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : null;
-  const b = Array.isArray(verifiedStandards) ? verifiedStandards : null;
-  const c = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : null;
-  return (a && a.length ? a : (b && b.length ? b : (c && c.length ? c : [])));
+/* ---------- Standards display in lesson: codes + source only ---------- */
+function getStandardsForDisplay(){
+  const a = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : [];
+  const b = Array.isArray(verifiedStandards) ? verifiedStandards : [];
+  return (a.length ? a : b);
 }
 function renderStandardsSection(standardsArr, includeSourceLinks=true){
   if (!Array.isArray(standardsArr) || !standardsArr.length) return "";
@@ -584,162 +457,11 @@ function renderStandardsSection(standardsArr, includeSourceLinks=true){
   `;
 }
 
-/* generation */
-
-function generateLesson(){
-  const step1 = lessonData.step1 || {};
-  const step2 = lessonData.step2 || {};
-  const step3 = lessonData.step3 || {};
-  const step5 = lessonData.step5 || {};
-
-  const topic = step1.topic || "Untitled Lesson";
-  const topicClean = String(topic || "").trim();
-  const gradeClean = String(grade || "").trim();
-  const subjectClean = String(subject || "").trim();
-  const durationNum = Number(duration || 0);
-
-  // Guard: backend requires these (prevents 500 "missing required fields")
-  if (!topicClean || !gradeClean || !subjectClean || !durationNum) {
-    alert("Missing required lesson fields (topic/grade/subject/duration). Please return to Step 1 and try again.");
-    window.location.href = "build-step1.html";
-    return;
-  }
-
-  const grade = step1.grade || "5th Grade";
-  const subject = step1.subject || "Science";
-  const duration = step1.duration || 45;
-  const framework = step3.framework || "madeline-hunter";
-
-  // Guard: backend requires basic fields
-  if (!String(topic).trim() || !String(grade).trim() || !String(subject).trim()) {
-    hideLoading();
-    alert("Missing required fields (topic/grade/subject).\n\nPlease go back to Step 1 and complete Basic Information.");
-    return;
-  }
-
-  document.getElementById("lessonTitle").textContent = topic;
-  document.getElementById("lessonMeta").innerHTML = `
-    <p><strong>Grade:</strong> ${escapeHtml(grade)} | <strong>Subject:</strong> ${escapeHtml(subject)} | <strong>Duration:</strong> ${escapeHtml(String(duration))} minutes</p>
-    <p><strong>Framework:</strong> ${escapeHtml(frameworkNames[framework] || framework)}</p>
-  `;
-
-  setBannerVerifying();
-  showLoading();
-
-  generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback: null });
-}
-
-async function generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback }){
-  try{
-    let standards = [];
-    try{
-      const gradeLabel = String(grade || "");
-      const gradeNum = gradeLabel.match(/\b(\d{1,2})\b/)?.[1] || gradeLabel.trim();
-      const subjectLabel = String(subject || "");
-      const subjectNorm = subjectLabel.toLowerCase().trim();
-
-      const verifyBody = {
-        grade: gradeNum,
-        subject: subjectNorm,
-        subjectLabel,
-        gradeLabel,
-        topic,
-        standardFocus: (lessonData?.step1?.standardFocus || "").trim()
-      };
-
-      const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(verifyBody)
-      });
-
-      const verifyData = await safeJson(verifyRes);
-
-      const returnedStandards = Array.isArray(verifyData?.verifiedStandards)
-        ? verifyData.verifiedStandards
-        : (Array.isArray(verifyData?.standards) ? verifyData.standards : []);
-
-      if (verifyRes.ok && verifyData){
-        standards = slimStandards(returnedStandards);
-        verifiedStandards = standards;
-        persistVerifiedStandards(verifiedStandards);
-
-        if (standards.length) updateVerificationBanner(standards, {
-          source: verifyData.source,
-          matchType: verifyData.matchType,
-          confidence: verifyData.confidence
-        });
-        else setBannerNoMatch(verifyData?.message || `No match for grade=${gradeNum}, subject=${subjectNorm}.`);
-      } else {
-        setBannerFallback(verifyData?.message || "Continuing without verified standards.");
-      }
-    } catch(e){
-      console.warn("Standards verification failed:", e);
-      setBannerFallback("Continuing without verified standards.");
-    }
-
-    // ✅ Inspiration injected schema-safely as TEXT
-    const inspiration = getInspirationFromStep1();
-    const inspirationDirective = buildInspirationDirective(inspiration);
-
-    const existingContext = String(lessonData?.step1?.additionalContext || "").trim();
-    const combinedAdditionalContext = [existingContext, inspirationDirective].filter(Boolean).join("\n\n");
-
-
-// Keep backend schema compatible by sending the full Step 1 object,
-// then overriding the canonical fields we know the backend expects.
-const step1Full = Object.assign({}, (lessonData.step1 || {}), {
-  topic, grade, subject, duration,
-  state: (lessonData.step1 && lessonData.step1.state) ? lessonData.step1.state : "California",
-  additionalContext: combinedAdditionalContext,
-  inspiration
-});
-
-const payload = {
-      step1: step1Full,
-      step2: step2 || {},
-      step3: { framework },
-      step5: step5 || {},
-      verifiedStandards: Array.isArray(standards) ? standards : []
-    };
-
-    // ✅ Only include feedback when present; on FIRST run also inject inspiration as feedback
-    if (feedback && inspirationDirective) payload.feedback = feedback + "\n\n" + inspirationDirective;
-    else if (feedback) payload.feedback = feedback;
-    else if (inspirationDirective) payload.feedback = inspirationDirective;
-
-    const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    const genData = await safeJson(genRes);
-    if (!genRes.ok) throw new Error(genData?.error || genData?.message || "Lesson generation failed.");
-
-    const lesson = normalizeLessonFromBackend(genData);
-    lesson.verifiedStandards = (standards && standards.length) ? standards : getStandardsForDisplay(lesson);
-
-    lastLessonJSON = lesson;
-    persistGeneratedLesson(lesson);
-
-    hideLoading();
-    displayGeneratedLesson(lesson, framework);
-
-    document.getElementById("feedbackBox").style.display = "block";
-  } catch(err){
-    console.error("generateLessonViaBackend error:", err);
-    hideLoading();
-    alert("Lesson generation error:\n\n" + (err.message || ""));
-    document.getElementById("feedbackBox").style.display = "block";
-  }
-}
-
-/* rendering */
+/* ---------- Render lesson ---------- */
 function displayGeneratedLesson(lesson, frameworkKey){
   document.getElementById("lessonSummary").textContent = lesson.summary || "";
 
-  const standardsHTML = renderStandardsSection(getStandardsForDisplay(lesson), true);
+  const standardsHTML = renderStandardsSection(getStandardsForDisplay(), true);
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const keyVocab = Array.isArray(lesson.keyVocabulary) ? lesson.keyVocabulary : [];
@@ -752,22 +474,6 @@ function displayGeneratedLesson(lesson, frameworkKey){
 
   const proceduresRaw = Array.isArray(lesson.procedures) ? lesson.procedures : [];
   const procedures = applyFrameworkStepNames(frameworkKey, proceduresRaw);
-
-  const keyVocabHTML = `
-    <div class="lesson-section">
-      <h3>Key Vocabulary</h3>
-      <p>${escapeHtml(keyVocabLine)}</p>
-    </div>
-  `;
-
-  const udlHTML = `
-    <div class="lesson-section">
-      <h3>UDL Connections</h3>
-      <p><strong>Engagement:</strong> ${escapeHtml(udlEngage)}</p>
-      <p><strong>Representation:</strong> ${escapeHtml(udlRepresent)}</p>
-      <p><strong>Action &amp; Expression:</strong> ${escapeHtml(udlAction)}</p>
-    </div>
-  `;
 
   const proceduresHTML = `
     <div class="lesson-section">
@@ -787,12 +493,6 @@ function displayGeneratedLesson(lesson, frameworkKey){
   `;
 
   const assessmentSummary = lesson.assessmentSummary || (lesson.assessments && lesson.assessments.summary) || "";
-  const assessmentsHTML = `
-    <div class="lesson-section">
-      <h3>Assessment Summary</h3>
-      <p>${escapeHtml(assessmentSummary)}</p>
-    </div>
-  `;
 
   const content = `
     ${standardsHTML}
@@ -807,40 +507,197 @@ function displayGeneratedLesson(lesson, frameworkKey){
       <ul>${materials.map(m=>`<li>${escapeHtml(m)}</li>`).join("")}</ul>
     </div>
 
-    ${keyVocabHTML}
-    ${udlHTML}
+    <div class="lesson-section">
+      <h3>Key Vocabulary</h3>
+      <p>${escapeHtml(keyVocabLine)}</p>
+    </div>
+
+    <div class="lesson-section">
+      <h3>UDL Connections</h3>
+      <p><strong>Engagement:</strong> ${escapeHtml(udlEngage)}</p>
+      <p><strong>Representation:</strong> ${escapeHtml(udlRepresent)}</p>
+      <p><strong>Action &amp; Expression:</strong> ${escapeHtml(udlAction)}</p>
+    </div>
+
     ${proceduresHTML}
-    ${assessmentsHTML}
+
+    <div class="lesson-section">
+      <h3>Assessment Summary</h3>
+      <p>${escapeHtml(assessmentSummary)}</p>
+    </div>
   `;
   document.getElementById("lessonContent").innerHTML = content;
 }
 
-/* feedback */
-function regenerateLesson(){
-  const feedback = document.getElementById("feedbackTextarea").value.trim();
-  if (!feedback) { alert("Please describe what changes you want to make."); return; }
-  document.getElementById("feedbackBox").style.display = "none";
-  showLoading();
-
+/* ---------- Generate or use cached ---------- */
+function hydrateHeader(){
   const step1 = lessonData.step1 || {};
-  const step2 = lessonData.step2 || {};
   const step3 = lessonData.step3 || {};
-  const step5 = lessonData.step5 || {};
-
   const topic = step1.topic || "Untitled Lesson";
   const grade = step1.grade || "5th Grade";
   const subject = step1.subject || "Science";
   const duration = step1.duration || 45;
   const framework = step3.framework || "madeline-hunter";
 
-  generateLessonViaBackend({ topic, grade, subject, duration, framework, step2, step5, feedback });
+  document.getElementById("lessonTitle").textContent = topic;
+  document.getElementById("lessonMeta").innerHTML = `
+    <p><strong>Grade:</strong> ${escapeHtml(grade)} | <strong>Subject:</strong> ${escapeHtml(subject)} | <strong>Duration:</strong> ${escapeHtml(String(duration))} minutes</p>
+    <p><strong>Framework:</strong> ${escapeHtml(frameworkNames[framework] || framework)}</p>
+  `;
+  return { topic, grade, subject, duration, framework };
 }
 
-/* export/continue */
-function exportPDF(){
-  clearInspirationAfterSaveExport();
-  window.print();
+async function verifyStandards({ topic, grade, subject }){
+  try{
+    const gradeLabel = String(grade || "");
+    const gradeNum = gradeLabel.match(/\b(\d{1,2})\b/)?.[1] || gradeLabel.trim();
+    const subjectLabel = String(subject || "");
+    const subjectNorm = subjectLabel.toLowerCase().trim();
+
+    const verifyBody = {
+      grade: gradeNum,
+      subject: subjectNorm,
+      subjectLabel,
+      gradeLabel,
+      topic,
+      standardFocus: (lessonData?.step1?.standardFocus || "").trim()
+    };
+
+    const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify(verifyBody)
+    });
+    const verifyData = await safeJson(verifyRes);
+
+    const returnedStandards = Array.isArray(verifyData?.verifiedStandards)
+      ? verifyData.verifiedStandards
+      : (Array.isArray(verifyData?.standards) ? verifyData.standards : []);
+
+    return {
+      ok: verifyRes.ok,
+      standards: returnedStandards || [],
+      meta: { source: verifyData?.source, matchType: verifyData?.matchType, confidence: verifyData?.confidence, message: verifyData?.message }
+    };
+  } catch(e){
+    return { ok:false, standards:[], meta:{ message:"Continuing without verified standards." } };
+  }
 }
+
+async function generateLesson({ topic, grade, subject, duration, framework, feedback }){
+  const step2 = lessonData.step2 || {};
+  const step5 = lessonData.step5 || {};
+  const directive = buildInspirationDirective();
+
+  const payload = {
+    step1: { topic, grade, subject, duration, inspirationDirective: directive },
+    step2: step2 || {},
+    step3: { framework },
+    step5: step5 || {},
+    verifiedStandards: [] // keep empty; display verifiedStandards separately
+  };
+  if (feedback) payload.feedback = feedback;
+
+  const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify(payload)
+  });
+  const genData = await safeJson(genRes);
+  if (!genRes.ok) throw new Error(genData?.error || genData?.message || "Lesson generation failed.");
+  return normalizeLessonFromBackend(genData);
+}
+
+async function ensureLessonReady(){
+  const { topic, grade, subject, duration, framework } = hydrateHeader();
+
+  // If Step 5 already generated it, render immediately
+  const cached = lessonData.generatedLesson;
+  if (cached && (cached.summary || cached.procedures)) {
+    lastLessonJSON = cached;
+
+    // Banner/standards from storage
+    verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
+    standardsMeta = lessonData.standardsMeta || {};
+
+    if (verifiedStandards.length) updateVerificationBanner(verifiedStandards, standardsMeta);
+    else setBannerFallback("Continuing without verified standards.");
+
+    displayGeneratedLesson(cached, framework);
+    document.getElementById("feedbackBox").style.display = "block";
+    return;
+  }
+
+  // Otherwise: do parallel verify + generate
+  setBannerVerifying();
+  showLoading();
+
+  const verifyP = verifyStandards({ topic, grade, subject });
+  const genP = generateLesson({ topic, grade, subject, duration, framework, feedback:null });
+
+  const [verifyR, lessonR] = await Promise.allSettled([verifyP, genP]);
+
+  // Handle lesson result
+  if (lessonR.status !== "fulfilled") {
+    hideLoading();
+    throw (lessonR.reason || new Error("Lesson generation failed."));
+  }
+
+  const lesson = lessonR.value;
+  lastLessonJSON = lesson;
+
+  // Handle verify result
+  if (verifyR.status === "fulfilled") {
+    verifiedStandards = Array.isArray(verifyR.value?.standards) ? verifyR.value.standards : [];
+    standardsMeta = verifyR.value?.meta || {};
+
+    if (verifiedStandards.length) updateVerificationBanner(verifiedStandards, standardsMeta);
+    else if (verifyR.value?.ok) setBannerNoMatch(standardsMeta?.message || "Backend returned 0 matches.");
+    else setBannerFallback(standardsMeta?.message || "Continuing without verified standards.");
+  } else {
+    setBannerFallback("Continuing without verified standards.");
+  }
+
+  // Save so refresh doesn't re-call
+  lessonData.generatedLesson = lesson;
+  lessonData.verifiedStandards = verifiedStandards;
+  lessonData.standardsMeta = standardsMeta;
+  lessonData.generatedAt = new Date().toISOString();
+  setLessonData(lessonData);
+
+  hideLoading();
+  displayGeneratedLesson(lesson, framework);
+  document.getElementById("feedbackBox").style.display = "block";
+}
+
+/* ---------- Feedback ---------- */
+async function regenerateLesson(){
+  const feedback = document.getElementById("feedbackTextarea").value.trim();
+  if (!feedback) { alert("Please describe what changes you want to make."); return; }
+  document.getElementById("feedbackBox").style.display = "none";
+  showLoading();
+
+  try{
+    const { topic, grade, subject, duration, framework } = hydrateHeader();
+    const lesson = await generateLesson({ topic, grade, subject, duration, framework, feedback });
+
+    lastLessonJSON = lesson;
+    lessonData.generatedLesson = lesson;
+    setLessonData(lessonData);
+
+    hideLoading();
+    displayGeneratedLesson(lesson, framework);
+    document.getElementById("feedbackBox").style.display = "block";
+  } catch(err){
+    hideLoading();
+    console.error(err);
+    alert("Lesson update error:\n\n" + (err?.message || err));
+    document.getElementById("feedbackBox").style.display = "block";
+  }
+}
+
+/* ---------- Export / Continue ---------- */
+function exportPDF(){ window.print(); }
 
 function exportDOC(){
   if (!lastLessonJSON) { alert("Lesson not ready yet."); return; }
@@ -849,7 +706,8 @@ function exportDOC(){
   const title = (step1.topic || "Lesson").replace(/[^\w\-]+/g,"_");
   const frameworkKey = (lessonData.step3 || {}).framework || "madeline-hunter";
 
-  const standardsHTML = renderStandardsSection(getStandardsForDisplay(lesson), false);
+  const standardsArr = getStandardsForDisplay();
+  const standardsHTML = renderStandardsSection(standardsArr, false);
   const objectives = Array.isArray(lesson.objectives) ? lesson.objectives : [];
   const materials = Array.isArray(lesson.materials) ? lesson.materials : [];
   const keyVocab = Array.isArray(lesson.keyVocabulary) ? lesson.keyVocabulary : [];
@@ -911,15 +769,10 @@ function exportDOC(){
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-
-  clearInspirationAfterSaveExport();
 }
 
 function saveToLibrary(){
-  const saved = localStorage.getItem("lessonData");
-  if (!saved) return;
-  const data = JSON.parse(saved);
-
+  const data = getLessonData();
   const lesson = {
     id: Date.now(),
     title: data.step1?.topic || "Untitled Lesson",
@@ -927,26 +780,46 @@ function saveToLibrary(){
     subject: data.step1?.subject || "Science",
     duration: data.step1?.duration || 45,
     framework: data.step3?.framework || "madeline-hunter",
-    verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : verifiedStandards,
+    verifiedStandards: Array.isArray(data.verifiedStandards) ? data.verifiedStandards : [],
+    standardsMeta: data.standardsMeta || {},
     savedAt: new Date().toISOString(),
-    generatedLesson: lastLessonJSON || data.generatedLesson || null,
+    generatedLesson: data.generatedLesson || null,
     fullLesson: data
   };
 
   let savedLessons = [];
   const existing = localStorage.getItem("savedLessons");
-  if (existing) savedLessons = JSON.parse(existing);
+  if (existing) savedLessons = safeParse(existing) || [];
   savedLessons.push(lesson);
   localStorage.setItem("savedLessons", JSON.stringify(savedLessons));
 }
 
 function continueToStep7(){
   saveToLibrary();
-  if (lastLessonJSON) persistGeneratedLesson(lastLessonJSON);
-  clearInspirationAfterSaveExport();
   window.location.href = "build-step7.html";
 }
 
+/* ---------- Init ---------- */
+window.addEventListener("DOMContentLoaded", async () => {
+  const saved = localStorage.getItem("lessonData");
+  if (!saved) {
+    document.getElementById("lessonTitle").textContent = "Missing lesson data";
+    document.getElementById("lessonSummary").textContent = "Go back to Step 1 to start building a lesson.";
+    return;
+  }
+  lessonData = safeParse(saved) || {};
+  verifiedStandards = Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : [];
+  standardsMeta = lessonData.standardsMeta || {};
+
+  try{
+    await ensureLessonReady();
+  } catch(err){
+    console.error(err);
+    hideLoading();
+    setBannerFallback("Lesson generation error. Please go back and try again.");
+    alert("Lesson generation error:\n\n" + (err?.message || err));
+  }
+});
 </script>
 </body>
 </html>
