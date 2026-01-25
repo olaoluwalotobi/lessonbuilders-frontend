@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Basic Information - LessonBuilders</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<style>  
+<style>
 :root{--navy:#0D2847;--orange:#FF8C42;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
@@ -17,17 +17,20 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .nav-link:hover{color:var(--navy);}
 .nav-right{display:flex;align-items:center;gap:16px;}
 .user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+
 .container{display:flex;max-width:1400px;margin:0 auto;}
-.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
+.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:22px 20px;}
 .nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
 .nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
+
 .main-content{flex:1;padding:40px 60px;max-width:900px;}
 .page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
 .page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
 .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+
 .form-group{margin-bottom:24px;}
 .form-label{display:block;font-weight:600;margin-bottom:8px;color:var(--navy);font-size:15px;}
 .form-input,.form-select{width:100%;padding:12px 16px;border:2px solid #E2E8F0;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
@@ -35,12 +38,14 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .slider{width:100%;height:8px;border-radius:4px;background:#E2E8F0;appearance:none;cursor:pointer;}
 .slider::-webkit-slider-thumb{appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);cursor:pointer;}
 .slider-value{text-align:center;margin-top:8px;font-weight:600;color:var(--navy);}
+
 .btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
 .btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+
 .optional-section{background:rgba(255,140,66,0.05);border:2px dashed rgba(255,140,66,0.3);border-radius:12px;padding:20px;margin:32px 0;transition:all 0.3s;}
 .optional-section:hover{background:rgba(255,140,66,0.1);}
 .optional-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
@@ -48,83 +53,45 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .optional-icon{font-size:20px;transition:transform 0.3s;}
 .optional-icon.expanded{transform:rotate(180deg);}
 .optional-content{max-height:0;overflow:hidden;transition:max-height 0.3s;}
-.optional-content.show{max-height:1000px;margin-top:24px;}
+.optional-content.show{max-height:1200px;margin-top:24px;}
 
-/* Inspiration Uploads (Dropdown) */
-.inspiration-wrap{margin-bottom:18px;}
-.insp-header{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:12px;border:2px solid #E2E8F0;border-radius:12px;background:white;
-  cursor:pointer;user-select:none;transition:all .2s;
-}
-.insp-header:hover{border-color:rgba(255,140,66,0.55);}
-.insp-title{
-  font-weight:800;color:var(--navy);font-size:13px;
-  text-transform:uppercase;letter-spacing:.6px;
-  display:flex;align-items:center;gap:10px;
-}
-.badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:22px;height:22px;padding:0 8px;border-radius:999px;
-  background:rgba(255,140,66,0.12);color:var(--navy);font-weight:800;font-size:12px;
-  border:1px solid rgba(255,140,66,0.25);
-}
-.insp-caret{font-size:12px;color:#718096;transition:transform .25s;}
-.insp-caret.expanded{transform:rotate(180deg);}
+/* ---------- Inspiration dropdown (sidebar) ---------- */
+.insp-wrap{border:2px solid rgba(13,40,71,0.10);border-radius:14px;padding:10px 12px;margin-bottom:16px;background:white;}
+.insp-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;gap:10px;}
+.insp-title{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--navy);display:flex;align-items:center;gap:10px;}
+.insp-badge{min-width:24px;height:24px;border-radius:999px;background:rgba(255,140,66,0.12);color:var(--navy);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;padding:0 8px;}
+.insp-caret{font-size:14px;transition:transform .25s;}
+.insp-caret.open{transform:rotate(180deg);}
+.insp-body{display:none;margin-top:10px;}
+.insp-body.open{display:block;}
 
-.insp-body{margin-top:10px;max-height:0;overflow:hidden;transition:max-height .3s ease;}
-.insp-body.show{max-height:1200px;}
+.dropzone{border:2px dashed rgba(13,40,71,0.25);border-radius:12px;padding:14px;text-align:center;color:#4A5568;background:#FAFCFF;cursor:pointer;transition:.2s;}
+.dropzone.dragover{border-color:var(--orange);background:rgba(255,140,66,0.08);}
+.dropzone small{display:block;color:#718096;margin-top:6px;font-size:12px;}
+.insp-actions{display:flex;gap:10px;margin-top:10px;}
+.insp-btn{flex:1;padding:10px 12px;border-radius:10px;border:2px solid #E2E8F0;background:white;font-weight:800;cursor:pointer;}
+.insp-btn.primary{background:linear-gradient(135deg,var(--orange),#FFB380);border:none;color:white;}
+.insp-btn:active{transform:translateY(1px);}
+.file-list{margin-top:10px;font-size:12px;color:#4A5568;}
+.file-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:2px solid #E2E8F0;border-radius:10px;margin-top:8px;background:white;}
+.file-meta{display:flex;flex-direction:column;gap:2px;overflow:hidden;}
+.file-name{font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;}
+.file-sub{color:#718096;font-size:12px;}
+.file-remove{border:2px solid #E2E8F0;background:white;border-radius:10px;padding:6px 10px;font-weight:800;cursor:pointer;}
+.file-remove:hover{border-color:var(--orange);}
 
-.dropzone{
-  border:2px dashed rgba(13,40,71,0.25);
-  border-radius:12px;
-  padding:14px;
-  background:rgba(247,250,252,0.6);
-  color:#4A5568;
-  font-size:13px;
-  line-height:1.35;
-  text-align:center;
-  cursor:pointer;
-  transition:all .2s;
-}
-.dropzone:hover{border-color:rgba(255,140,66,0.55);background:rgba(255,140,66,0.06);}
-.dropzone.dragover{border-color:var(--orange);background:rgba(255,140,66,0.10);}
-
-.sidebar-actions{display:flex;gap:10px;margin-top:10px;}
-.mini-btn{
-  width:100%;
-  padding:10px 12px;border-radius:10px;
-  font-size:13px;font-weight:700;cursor:pointer;border:none;
-  transition:all .2s;font-family:'DM Sans',sans-serif;
-}
-.mini-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
-.mini-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,140,66,0.25);}
-.mini-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
-.mini-secondary:hover{border-color:var(--orange);}
-
-.file-list{margin-top:10px;display:grid;gap:8px;}
-.file-item{
-  background:white;border:2px solid #E2E8F0;border-radius:12px;
-  padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;
-}
-.file-name{font-size:13px;color:var(--navy);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px;}
-.file-meta{font-size:12px;color:#718096;}
-
-.sidebar-note{margin-top:12px;}
-.sidebar-note textarea{
-  width:100%;
-  padding:12px 12px;
-  border:2px solid #E2E8F0;border-radius:12px;
-  font-size:13px;font-family:'DM Sans',sans-serif;
-  resize:vertical;min-height:88px;
-}
-.sidebar-note textarea:focus{outline:none;border-color:var(--orange);}
-
-.sidebar-hint{margin-top:10px;font-size:12px;color:#718096;line-height:1.35;}
+.insp-q{margin-top:12px;}
+.insp-q label{display:block;font-weight:800;color:var(--navy);font-size:12px;margin-bottom:6px;}
+.insp-q textarea{width:100%;border:2px solid #E2E8F0;border-radius:10px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;min-height:64px;resize:vertical;}
+.insp-q textarea:focus{outline:none;border-color:var(--orange);}
+.insp-help{margin-top:10px;color:#718096;font-size:12px;line-height:1.35;}
+/* Only show the two “image/doc” questions when at least one file exists */
+.insp-file-questions{display:none;}
+.insp-file-questions.show{display:block;}
 </style>
 </head>
-<body>
 
+<body>
 <nav class="top-nav">
   <div class="nav-left">
     <a href="index.html" class="logo-text">LessonBuilders</a>
@@ -142,39 +109,49 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 <div class="container">
   <aside class="sidebar">
 
-    <!-- Inspiration Uploads dropdown -->
-    <div class="inspiration-wrap" id="inspirationPanel">
-      <div class="insp-header" id="inspHeader" role="button" tabindex="0" aria-expanded="false">
+    <!-- Inspiration Uploads dropdown (starts CLOSED by default) -->
+    <div class="insp-wrap">
+      <div class="insp-head" id="inspHeader">
         <div class="insp-title">
-          INSPIRATION UPLOADS <span class="badge" id="inspCountBadge">0</span>
+          INSPIRATION UPLOADS <span class="insp-badge" id="inspCount">0</span>
         </div>
         <div class="insp-caret" id="inspCaret">▼</div>
       </div>
 
       <div class="insp-body" id="inspBody">
-        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload inspiration">
-          <strong>Drag &amp; drop</strong> PDF, DOC, or image<br>
-          or click “Browse Files”
+        <div class="dropzone" id="dropzone">
+          Drag &amp; drop a PDF, DOC/DOCX, or image here<br>
+          or click <strong>“Browse Files”</strong>
+          <small>(Stored locally for this lesson build, deleted after lesson save/export)</small>
         </div>
 
-        <input id="filePicker" type="file" multiple
-          accept="image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          style="display:none;">
+        <input id="inspFileInput" type="file" multiple
+               accept=".pdf,.doc,.docx,image/*" style="display:none" />
 
-        <div class="sidebar-actions">
-          <button class="mini-btn mini-primary" type="button" onclick="openFilePicker()">Browse Files</button>
-          <button class="mini-btn mini-secondary" type="button" onclick="clearAllInspiration()">Clear</button>
+        <div class="insp-actions">
+          <button class="insp-btn primary" type="button" id="browseBtn">Browse Files</button>
+          <button class="insp-btn" type="button" id="clearBtn">Clear</button>
         </div>
 
-        <div class="file-list" id="fileList" aria-live="polite"></div>
+        <div class="file-list" id="fileList">No files uploaded yet.</div>
 
-        <div class="sidebar-note">
-          <label style="display:block;font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;">What do you want to focus on?</label>
-          <textarea id="inspirationNotes" placeholder="Example: Build the lesson around the image. Use it in the hook, modeling, guided practice, and the assessment."></textarea>
+        <!-- Only shown if there is at least 1 uploaded file -->
+        <div class="insp-file-questions" id="inspFileQuestions">
+          <div class="insp-q">
+            <label for="inspObserved">What do you see in the file?</label>
+            <textarea id="inspObserved" placeholder="Example: A diagram of the water cycle with labels..."></textarea>
+            <div class="insp-help">Optional (recommended) when you upload a file so the lesson can be built around it.</div>
+          </div>
+
+          <div class="insp-q">
+            <label for="inspLearning">What should students learn from it?</label>
+            <textarea id="inspLearning" placeholder="Example: How energy moves through a system..."></textarea>
+          </div>
         </div>
 
-        <div class="sidebar-hint">
-          Stored locally for this lesson build, deleted after lesson save/export
+        <div class="insp-q">
+          <label for="inspFocus">What do you want to focus on?</label>
+          <textarea id="inspFocus" placeholder="Example: Use the image in the hook and assessment."></textarea>
         </div>
       </div>
     </div>
@@ -197,19 +174,9 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     <div class="form-group">
       <label class="form-label">Grade Level</label>
       <select class="form-select" id="gradeSelect">
-        <option>Kindergarten</option>
-        <option>1st Grade</option>
-        <option>2nd Grade</option>
-        <option>3rd Grade</option>
-        <option>4th Grade</option>
-        <option selected>5th Grade</option>
-        <option>6th Grade</option>
-        <option>7th Grade</option>
-        <option>8th Grade</option>
-        <option>9th Grade</option>
-        <option>10th Grade</option>
-        <option>11th Grade</option>
-        <option>12th Grade</option>
+        <option>Kindergarten</option><option>1st Grade</option><option>2nd Grade</option><option>3rd Grade</option>
+        <option>4th Grade</option><option selected>5th Grade</option><option>6th Grade</option><option>7th Grade</option>
+        <option>8th Grade</option><option>9th Grade</option><option>10th Grade</option><option>11th Grade</option><option>12th Grade</option>
       </select>
     </div>
 
@@ -290,7 +257,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
         <div class="form-group">
           <label class="form-label">Additional context</label>
-          <textarea class="form-input" id="contextTextarea" rows="4" style="resize:vertical;" placeholder="Special needs, timing, classroom setup, reading materials used, vocabulary to include, etc."></textarea>
+          <textarea class="form-input" id="contextTextarea" rows="4" style="resize:vertical;" placeholder="Special needs, timing, classroom setup, etc."></textarea>
         </div>
       </div>
     </div>
@@ -303,234 +270,149 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 </div>
 
 <script>
-/* ===== LessonBuilders Step 1 (MVP) =====
-   - Keeps Inspiration Uploads interactive
-   - DOES NOT store file contents (prevents localStorage quota errors)
-   - Resets build data only when starting a brand-new build (session-based)
-*/
-(function(){
-  const BUILD_FLAG = "LB_BUILD_ACTIVE";
+/* ----------------- Inspiration: local-only metadata ----------------- */
+let inspFiles = []; // [{name,type,size,lastModified}]
 
-  // Reset only when starting a new build (not when navigating back from other steps)
-  if (!sessionStorage.getItem(BUILD_FLAG)) {
-    try {
-      localStorage.removeItem("lessonData");
-      localStorage.removeItem("verifiedStandards");
-      // Keep savedLessons if you want a library. If not, uncomment:
-      // localStorage.removeItem("savedLessons");
-    } catch(e){}
-    sessionStorage.setItem(BUILD_FLAG, "1");
-  }
-})();
-
-function safeParse(jsonStr){
-  try { return JSON.parse(jsonStr); } catch { return null; }
+function escapeStr(s){ return String(s ?? "").trim(); }
+function formatBytes(bytes){
+  const b = Number(bytes||0);
+  if (b < 1024) return b + " B";
+  const kb = b/1024;
+  if (kb < 1024) return kb.toFixed(1) + " KB";
+  return (kb/1024).toFixed(1) + " MB";
 }
-
-function getLessonData(){
-  const saved = localStorage.getItem("lessonData");
-  return saved ? (safeParse(saved) || {}) : {};
+function setInspCount(){
+  document.getElementById("inspCount").textContent = String(inspFiles.length);
+  const qWrap = document.getElementById("inspFileQuestions");
+  if (inspFiles.length > 0) qWrap.classList.add("show");
+  else qWrap.classList.remove("show");
 }
-function setLessonData(data){
-  localStorage.setItem("lessonData", JSON.stringify(data));
-}
-
-/* ---------- Inspiration Uploads (sidebar dropdown) ---------- */
-let inspirationFiles = []; // metadata only: {name,type,size}
-
-function setInspirationCountBadge(){
-  const badge = document.getElementById("inspCountBadge");
-  if (!badge) return;
-  badge.textContent = String(inspirationFiles.length);
-}
-
 function renderFileList(){
-  const list = document.getElementById("fileList");
-  if (!list) return;
-  if (!inspirationFiles.length){
-    list.innerHTML = "";
-    setInspirationCountBadge();
+  const el = document.getElementById("fileList");
+  if (!inspFiles.length){
+    el.textContent = "No files uploaded yet.";
+    setInspCount();
     return;
   }
-  list.innerHTML = inspirationFiles.map((f, idx) => {
-    const sizeKb = Math.round((Number(f.size||0)/1024));
-    const label = `${escapeHtml(f.name)} <span style="color:#718096;">(${sizeKb} KB)</span>`;
-    return `
-      <div class="file-pill" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-        <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;">${label}</div>
-        <button type="button" class="mini-btn mini-secondary" style="padding:6px 10px;" onclick="removeInspirationFile(${idx})">Remove</button>
+  el.innerHTML = inspFiles.map((f,idx)=>`
+    <div class="file-item">
+      <div class="file-meta">
+        <div class="file-name" title="${f.name}">${f.name}</div>
+        <div class="file-sub">${f.type || "file"} • ${formatBytes(f.size)}</div>
       </div>
-    `;
-  }).join("");
-  setInspirationCountBadge();
+      <button class="file-remove" type="button" onclick="removeInspFile(${idx})">Remove</button>
+    </div>
+  `).join("");
+  setInspCount();
 }
-
-function removeInspirationFile(idx){
-  inspirationFiles.splice(idx, 1);
+function addFiles(fileList){
+  const arr = Array.from(fileList || []);
+  if (!arr.length) return;
+  for (const file of arr){
+    inspFiles.push({
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      lastModified: file.lastModified
+    });
+  }
+  // de-dupe by name+size+lastModified
+  const seen = new Set();
+  inspFiles = inspFiles.filter(f=>{
+    const key = `${f.name}|${f.size}|${f.lastModified}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   renderFileList();
-  persistInspirationToLessonData();
 }
-
-function openFilePicker(){
-  const picker = document.getElementById("filePicker");
-  if (picker) picker.click();
-}
-
-function clearAllInspiration(){
-  inspirationFiles = [];
-  const notes = document.getElementById("inspirationNotes");
-  if (notes) notes.value = "";
+function removeInspFile(idx){
+  inspFiles.splice(idx,1);
+  if (!inspFiles.length){
+    // also clear the three textareas when last file removed (feels nicer)
+    document.getElementById("inspObserved").value = "";
+    document.getElementById("inspLearning").value = "";
+  }
   renderFileList();
-  persistInspirationToLessonData();
 }
-
-function persistInspirationToLessonData(){
-  const data = getLessonData();
-  data.step1 = data.step1 || {};
-  const notes = (document.getElementById("inspirationNotes")?.value || "").trim();
-  data.step1.inspiration = {
-    notes,
-    // metadata only — avoids localStorage quota issues
-    files: inspirationFiles.map(f => ({ name:f.name, type:f.type, size:f.size })),
-    storedLocally: true,
-    deleteAfter: "save/export"
-  };
-  setLessonData(data);
-}
-
-function handlePickedFiles(fileList){
-  const files = Array.from(fileList || []);
-  if (!files.length) return;
-
-  // Keep it simple: cap number of files to prevent UX issues
-  const MAX_FILES = 5;
-  const remaining = Math.max(0, MAX_FILES - inspirationFiles.length);
-  const toAdd = files.slice(0, remaining);
-
-  for (const f of toAdd){
-    inspirationFiles.push({
-      name: f.name || "file",
-      type: f.type || "",
-      size: f.size || 0
-    });
-  }
-
-  renderFileList();
-  persistInspirationToLessonData();
-}
-
-function setupInspirationUI(){
-  const header = document.getElementById("inspHeader");
-  const body = document.getElementById("inspBody");
-  const caret = document.getElementById("inspCaret");
-  const dropzone = document.getElementById("dropzone");
-  const picker = document.getElementById("filePicker");
-  const notes = document.getElementById("inspirationNotes");
-
-  // Start CLOSED every time you land on Step 1 (your request)
-  if (body) body.classList.remove("show");
-  if (caret) caret.classList.remove("expanded");
-  if (header) header.setAttribute("aria-expanded", "false");
-
-  const toggle = () => {
-    if (!body || !caret || !header) return;
-    const isOpen = body.classList.toggle("show");
-    caret.classList.toggle("expanded", isOpen);
-    header.setAttribute("aria-expanded", isOpen ? "true" : "false");
-  };
-
-  if (header){
-    header.addEventListener("click", toggle);
-    header.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " "){
-        e.preventDefault(); toggle();
-      }
-    });
-  }
-
-  if (dropzone){
-    dropzone.addEventListener("click", openFilePicker);
-
-    dropzone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropzone.style.borderColor = "var(--orange)";
-      dropzone.style.background = "rgba(255,140,66,0.08)";
-    });
-    dropzone.addEventListener("dragleave", () => {
-      dropzone.style.borderColor = "rgba(13,40,71,0.18)";
-      dropzone.style.background = "rgba(255,255,255,0.7)";
-    });
-    dropzone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropzone.style.borderColor = "rgba(13,40,71,0.18)";
-      dropzone.style.background = "rgba(255,255,255,0.7)";
-      handlePickedFiles(e.dataTransfer?.files);
-    });
-  }
-
-  if (picker){
-    picker.addEventListener("change", (e) => {
-      handlePickedFiles(e.target.files);
-      // reset so same file can be chosen again
-      picker.value = "";
-    });
-  }
-
-  if (notes){
-    notes.addEventListener("input", () => {
-      // don't save on every keystroke if you don't want; but this is lightweight
-      persistInspirationToLessonData();
-    });
-  }
-
-  // Load existing inspiration (only within same build session)
-  const data = getLessonData();
-  const insp = data?.step1?.inspiration || {};
-  const savedFiles = Array.isArray(insp.files) ? insp.files : [];
-  inspirationFiles = savedFiles.map(f => ({ name:f.name, type:f.type, size:f.size }));
-  if (notes && typeof insp.notes === "string") notes.value = insp.notes;
+function clearInspiration(){
+  inspFiles = [];
+  document.getElementById("inspObserved").value = "";
+  document.getElementById("inspLearning").value = "";
+  document.getElementById("inspFocus").value = "";
   renderFileList();
 }
 
-/* ---------- Existing Step 1 fields ---------- */
-window.addEventListener('DOMContentLoaded', function() {
-  setupInspirationUI();
-
-  const savedData = localStorage.getItem('lessonData');
-  const data = savedData ? safeParse(savedData) : null;
-
-  // Fill defaults (only if we are mid-build and data exists)
-  if (data && data.step1) {
-    const s = data.step1;
-    document.getElementById('gradeSelect').value = s.grade || '5th Grade';
-    document.getElementById('subjectSelect').value = s.subject || 'Mathematics';
-    document.getElementById('topicInput').value = s.topic || '';
-    document.getElementById('stateSelect').value = s.state || 'California';
-    document.getElementById('durationSlider').value = s.duration || 45;
-    document.getElementById('durationValue').textContent = (s.duration || 45) + ' minutes';
-
-    if (s.classSize) document.getElementById('classSizeSelect').value = s.classSize;
-    if (s.standardFocus) document.getElementById('standardInput').value = s.standardFocus;
-    if (s.priorKnowledge) document.getElementById('priorKnowledgeSelect').value = s.priorKnowledge;
-    if (s.additionalContext) document.getElementById('contextTextarea').value = s.additionalContext;
-
-    if (Array.isArray(s.studentNeeds)) {
-      for (let i = 0; i < 6; i++) {
-        const cb = document.getElementById('cb' + (i+1));
-        if (cb) cb.checked = !!s.studentNeeds[i];
-      }
-    }
-  }
+/* Dropdown open/close (starts CLOSED) */
+const inspHeader = document.getElementById("inspHeader");
+const inspBody = document.getElementById("inspBody");
+const inspCaret = document.getElementById("inspCaret");
+inspHeader.addEventListener("click", ()=>{
+  const open = inspBody.classList.toggle("open");
+  inspCaret.classList.toggle("open", open);
 });
 
-function escapeHtml(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
+/* Dropzone + browse */
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("inspFileInput");
+document.getElementById("browseBtn").addEventListener("click", ()=>fileInput.click());
+fileInput.addEventListener("change", (e)=> addFiles(e.target.files));
+
+dropzone.addEventListener("click", ()=>fileInput.click());
+dropzone.addEventListener("dragover", (e)=>{ e.preventDefault(); dropzone.classList.add("dragover"); });
+dropzone.addEventListener("dragleave", ()=> dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", (e)=>{
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+  addFiles(e.dataTransfer.files);
+});
+
+document.getElementById("clearBtn").addEventListener("click", clearInspiration);
+
+/* ----------------- Existing Step 1 logic ----------------- */
+window.addEventListener('DOMContentLoaded', function() {
+  // Load saved data if present
+  const savedData = localStorage.getItem('lessonData');
+  if (savedData) {
+    const data = JSON.parse(savedData);
+    if (data.step1) {
+      document.getElementById('gradeSelect').value = data.step1.grade || '5th Grade';
+      document.getElementById('subjectSelect').value = data.step1.subject || 'Mathematics';
+      document.getElementById('topicInput').value = data.step1.topic || '';
+      document.getElementById('stateSelect').value = data.step1.state || 'California';
+      document.getElementById('durationSlider').value = data.step1.duration || 45;
+      document.getElementById('durationValue').textContent = (data.step1.duration || 45) + ' minutes';
+
+      if (data.step1.classSize) document.getElementById('classSizeSelect').value = data.step1.classSize;
+      if (data.step1.standardFocus) document.getElementById('standardInput').value = data.step1.standardFocus;
+      if (data.step1.priorKnowledge) document.getElementById('priorKnowledgeSelect').value = data.step1.priorKnowledge;
+      if (data.step1.additionalContext) document.getElementById('contextTextarea').value = data.step1.additionalContext;
+
+      if (data.step1.studentNeeds) {
+        for (let i = 0; i < 6; i++) {
+          const cb = document.getElementById('cb' + (i+1));
+          if (cb && data.step1.studentNeeds[i]) cb.checked = true;
+        }
+      }
+
+      // Load inspiration if present
+      if (data.step1.inspiration) {
+        const insp = data.step1.inspiration;
+        inspFiles = Array.isArray(insp.files) ? insp.files : [];
+        document.getElementById("inspObserved").value = insp.observedDetails || "";
+        document.getElementById("inspLearning").value = insp.learningGoal || "";
+        document.getElementById("inspFocus").value = insp.focusNotes || "";
+        renderFileList();
+      } else {
+        renderFileList();
+      }
+    } else {
+      renderFileList();
+    }
+  } else {
+    renderFileList();
+  }
+});
 
 function saveAndContinue() {
   const grade = document.getElementById('gradeSelect').value;
@@ -555,25 +437,33 @@ function saveAndContinue() {
     return;
   }
 
-  // Persist inspiration notes/files metadata too
-  persistInspirationToLessonData();
+  // ✅ Inspiration fields are OPTIONAL (do not block Next)
+  const inspiration = {
+    files: Array.isArray(inspFiles) ? inspFiles : [],
+    observedDetails: escapeStr(document.getElementById("inspObserved").value),
+    learningGoal: escapeStr(document.getElementById("inspLearning").value),
+    focusNotes: escapeStr(document.getElementById("inspFocus").value)
+  };
 
-  const data = getLessonData();
-  data.step1 = {
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) lessonData = JSON.parse(saved);
+
+  lessonData.step1 = {
     grade,
     subject,
     topic,
     state,
-    duration: parseInt(duration, 10),
+    duration: parseInt(duration),
     classSize,
     standardFocus,
     priorKnowledge,
     additionalContext,
     studentNeeds,
-    inspiration: data?.step1?.inspiration || { notes:"", files:[] }
+    inspiration
   };
 
-  setLessonData(data);
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
   window.location.href = 'build-step2.html';
 }
 
@@ -592,6 +482,5 @@ header.addEventListener('click', function(e){
 });
 content.addEventListener('click', function(e){ e.stopPropagation(); });
 </script>
-
 </body>
 </html>
