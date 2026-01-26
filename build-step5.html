@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Assessments - LessonBuilders</title>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-
-/* Sidebar is a progress indicator only */
-.sidebar .nav-step{
-  cursor: default;
-}
-.sidebar .nav-step.is-static{
-  pointer-events: none;     /* disables clicking */
-}
+<link rel="icon" type="image/png" href="/favicon.png">
 
   
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Build Method - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
 :root{--navy:#0D2847;--orange:#FF8C42;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
@@ -26,11 +19,14 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
 .nav-link:hover{color:var(--navy);}
 .nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:default;}
+.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
 .container{display:flex;max-width:1400px;margin:0 auto;}
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
-.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:default;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
 .nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+/* lock left-step navigation (visual only) */
+.sidebar .nav-step{pointer-events:none;cursor:default;}
+
 .nav-step.completed{color:#10B981;}
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
@@ -40,35 +36,23 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
 .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
-.assessment-options{display:grid;gap:16px;margin-bottom:32px;}
-.assessment-option{background:white;border:2px solid #E2E8F0;border-radius:12px;padding:20px;cursor:default;transition:all 0.3s;display:flex;align-items:center;gap:16px;}
-.assessment-option:hover{border-color:var(--orange);background:rgba(255,140,66,0.05);}
-.assessment-option input[type="checkbox"]{width:20px;height:20px;cursor:default;}
-.assessment-info{flex:1;}
-.assessment-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:4px;}
-.assessment-description{font-size:14px;color:#4A5568;}
-.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:default;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.method-options{display:grid;gap:24px;margin-bottom:40px;}
+.method-card{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:32px;cursor:pointer;transition:all 0.3s;}
+.method-card:hover{border-color:var(--orange);box-shadow:0 8px 24px rgba(0,0,0,0.08);transform:translateY(-4px);}
+.method-card.selected{border-color:var(--orange);background:rgba(255,140,66,0.05);}
+.method-header{display:flex;align-items:start;gap:16px;margin-bottom:16px;}
+.method-icon{font-size:32px;}
+.method-info{flex:1;}
+.method-title{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.method-description{color:#4A5568;font-size:15px;line-height:1.6;}
+.method-features{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;}
+.feature-tag{background:rgba(255,140,66,0.1);color:var(--navy);padding:6px 12px;border-radius:6px;font-size:13px;font-weight:500;}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
 .btn-group{display:flex;justify-content:space-between;margin-top:40px;}
-
-/* Loading overlay (Step 5 -> Step 6 prebuild) */
-.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;}
-.loading-overlay.hidden{display:none;}
-.blocks-loader{position:relative;width:73px;height:66px;margin-bottom:18px;}
-.block{position:absolute;border-radius:6px;opacity:0;animation-duration:2.6s;animation-timing-function:cubic-bezier(.2,.9,.2,1);animation-iteration-count:infinite;will-change:transform, opacity;}
-.bl{width:48px;height:20px;left:0;bottom:0;background:var(--navy);animation-name:bl-in;}
-.tl{width:22px;height:20px;left:26px;bottom:24px;background:var(--navy);animation-name:tl-in;}
-.br{width:22px;height:44px;left:51px;bottom:0;background:var(--navy);animation-name:br-in;}
-.tr{width:22px;height:20px;left:51px;top:0;background:var(--orange);animation-name:tr-in;}
-@keyframes bl-in{0%{opacity:0;transform:translateX(16px);}12%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
-@keyframes br-in{0%,14%{opacity:0;transform:translateY(16px);}26%{opacity:1;transform:translateY(0);}80%{opacity:1;}100%{opacity:0;}}
-@keyframes tl-in{0%,28%{opacity:0;transform:translateX(-16px);}40%{opacity:1;transform:translateX(0);}80%{opacity:1;}100%{opacity:0;}}
-@keyframes tr-in{0%,42%{opacity:0;transform:translateY(-18px) scale(.96);}54%{opacity:1;transform:translateY(0) scale(1.06);}60%{transform:translateY(1px) scale(.99);}66%{transform:translateY(0) scale(1);}80%{opacity:1;}100%{opacity:0;}}
-.loading-message{font-size:16px;color:var(--navy);font-weight:500;text-align:center;min-height:24px;padding:0 16px;}
-
 </style>
 </head>
 <body>
@@ -91,302 +75,95 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 <a href="build-step1.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></a>
 <a href="build-step2.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Teaching Style</div></a>
 <a href="build-step3.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Choose Template</div></a>
-<a href="build-step4.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Build Method</div></a>
-<a href="build-step5.html" class="nav-step active"><div class="step-number">5</div><div>Assessments</div></a>
+<a href="build-step5.html" class="nav-step active"><div class="step-number">5</div><div>Build Method</div></a>
+<a href="build-step4.html" class="nav-step completed"><div class="step-number">&#10003;</div><div>Assessments</div></a>
 <a href="build-step6.html" class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></a>
 <a href="build-step7.html" class="nav-step"><div class="step-number">7</div><div>Collaborate</div></a>
 </aside>
 <main class="main-content">
-<h1 class="page-title">What assessments do you need?</h1>
-<p class="page-subtitle">Choose what to include</p>
+<h1 class="page-title">How do you want to build?</h1>
+<p class="page-subtitle">Choose your workflow</p>
 <div class="progress-bar"><div class="progress-fill" style="width:71%;"></div></div>
 
-<div class="assessment-options">
-<label class="assessment-option">
-<input type="checkbox" id="exitTicket">
-<div class="assessment-info">
-<div class="assessment-title">Exit Ticket (3-5 min)</div>
-<div class="assessment-description">Quick check at end of lesson to see what students learned</div>
+<div class="method-options">
+<div class="method-card selected" data-method="generate" onclick="selectMethod(this)">
+<div class="method-header">
+<div class="method-icon">&#9889;</div>
+<div class="method-info">
+<div class="method-title">Generate Now</div>
+<div class="method-description">Get a complete lesson instantly. Perfect when you need something ready to teach tomorrow.</div>
 </div>
-</label>
+</div>
+<div class="method-features">
+<span class="feature-tag">Complete lesson plan</span>
+<span class="feature-tag">All sections included</span>
+<span class="feature-tag">Edit after generation</span>
+</div>
+</div>
 
-<label class="assessment-option">
-<input type="checkbox" id="formativeChecks">
-<div class="assessment-info">
-<div class="assessment-title">Formative Checks</div>
-<div class="assessment-description">Questions to ask during the lesson to check understanding</div>
+<div class="method-card" data-method="section" onclick="selectMethod(this)">
+<div class="method-header">
+<div class="method-icon">&#128295;</div>
+<div class="method-info">
+<div class="method-title">Build Section-by-Section</div>
+<div class="method-description">Guide the process step by step. Perfect when you want more control over each part of your lesson.</div>
 </div>
-</label>
-
-<label class="assessment-option">
-<input type="checkbox" id="homework">
-<div class="assessment-info">
-<div class="assessment-title">Homework Assignment</div>
-<div class="assessment-description">Independent practice to reinforce concepts</div>
 </div>
-</label>
-
-<label class="assessment-option">
-<input type="checkbox" id="quiz">
-<div class="assessment-info">
-<div class="assessment-title">Quiz (next day)</div>
-<div class="assessment-description">Short assessment for following class period</div>
+<div class="method-features">
+<span class="feature-tag">Guided workflow</span>
+<span class="feature-tag">Customize each section</span>
+<span class="feature-tag">More detailed options</span>
 </div>
-</label>
+</div>
 </div>
 
 <div class="btn-group">
-<button class="btn btn-secondary" onclick="goBack()">&larr; Back</button>
-<button class="btn btn-primary" onclick="saveAndContinue()">See Your Lesson &rarr;</button>
+<a href="build-step4.html" class="btn btn-secondary">&larr; Back</a>
+<button class="btn btn-primary" onclick="saveAndContinue()">Continue &rarr;</button>
 </div>
 </main>
 </div>
-
 <script>
-/* ===== LessonBuilders Step 5 (MVP) =====
-   Fixes:
-   - Do NOT default-check assessments unless user chose them (prevents "Exit Ticket" surprise)
-   - Prefetch standards + lesson generation in parallel on Next, so Step 6 loads instantly
-*/
-const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
-
-function safeParse(jsonStr){ try { return JSON.parse(jsonStr); } catch { return null; } }
-function getLessonData(){
-  const saved = localStorage.getItem("lessonData");
-  return saved ? (safeParse(saved) || {}) : {};
-}
-function setLessonData(data){ localStorage.setItem("lessonData", JSON.stringify(data)); }
-
-function stripControlChars(s){
-  return String(s ?? "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "");
-}
-async function safeJson(res){
-  const text = await res.text();
-  const cleaned = stripControlChars(text);
-  try { return JSON.parse(cleaned); } catch { return { _raw: cleaned }; }
-}
-function extractJsonObject(text){
-  const t = stripControlChars(text);
-  const start = t.indexOf("{");
-  const end = t.lastIndexOf("}");
-  if (start === -1 || end === -1 || end <= start) return null;
-  return t.slice(start, end + 1);
-}
-function normalizeLessonFromBackend(payload){
-  if (!payload) throw new Error("Empty server response.");
-  if (payload.summary && (payload.objectives || payload.procedures)) return payload;
-
-  const maybeText = payload?.content?.[0]?.text;
-  if (typeof maybeText === "string") {
-    const jsonStr = extractJsonObject(maybeText);
-    if (!jsonStr) throw new Error("Could not parse lesson JSON from AI text.");
-    return JSON.parse(jsonStr);
+window.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    if (data.step4 && data.step4.buildMethod) {
+      const cards = document.querySelectorAll('.method-card');
+      cards.forEach(card => {
+        card.classList.remove('selected');
+        if (card.dataset.method === data.step4.buildMethod) {
+          card.classList.add('selected');
+        }
+      });
+    }
   }
-
-  if (typeof payload._raw === "string") {
-    const jsonStr = extractJsonObject(payload._raw);
-    if (!jsonStr) throw new Error("Could not parse lesson JSON from server response.");
-    return JSON.parse(jsonStr);
-  }
-
-  if (payload.lesson && typeof payload.lesson === "object") return payload.lesson;
-
-  throw new Error("Unexpected response format from backend.");
-}
-
-/* Loading overlay (added below in HTML) */
-function showLoading(msg){
-  const overlay = document.getElementById("loadingOverlay");
-  const msgEl = document.getElementById("loadingMessage");
-  if (msgEl) msgEl.textContent = msg || "Preparing your lesson preview...";
-  if (overlay) overlay.classList.remove("hidden");
-}
-function hideLoading(){
-  const overlay = document.getElementById("loadingOverlay");
-  if (overlay) overlay.classList.add("hidden");
-}
-
-/* Inspiration directive (teacher-provided only; no AI vision) */
-function buildInspirationDirective(data){
-  const insp = data?.step1?.inspiration || {};
-  const notes = String(insp.notes || "").trim();
-  const files = Array.isArray(insp.files) ? insp.files : [];
-  const fileList = files.map(f => f?.name).filter(Boolean).join(", ");
-  if (!notes && !fileList) return "";
-
-  return [
-    "INSPIRATION (teacher-provided):",
-    fileList ? `Files uploaded: ${fileList}. (System does NOT read file contents; use teacher notes below.)` : "",
-    notes ? `Teacher notes/description: ${notes}` : "",
-    "",
-    "REQUIREMENTS:",
-    "Build the lesson around the inspiration notes. Use it in Hook/Engage, Guided Practice, and Assessment.",
-    "Include at least 6 explicit references to the teacher-provided description (quote short phrases).",
-    "If details are missing, include 2–4 clarifying 'Teacher Prompts' inside the lesson."
-  ].filter(Boolean).join("\n");
-}
-
-async function verifyStandards(data){
-  try{
-    const step1 = data.step1 || {};
-    const topic = step1.topic || "";
-    const grade = step1.grade || "";
-    const subject = step1.subject || "";
-
-    const gradeLabel = String(grade || "");
-    const gradeNum = gradeLabel.match(/\b(\d{1,2})\b/)?.[1] || gradeLabel.trim();
-    const subjectLabel = String(subject || "");
-    const subjectNorm = subjectLabel.toLowerCase().trim();
-
-    const verifyBody = {
-      grade: gradeNum,
-      subject: subjectNorm,
-      subjectLabel,
-      gradeLabel,
-      topic,
-      standardFocus: (step1.standardFocus || "").trim()
-    };
-
-    const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(verifyBody)
-    });
-    const verifyData = await safeJson(verifyRes);
-
-    const returnedStandards = Array.isArray(verifyData?.verifiedStandards)
-      ? verifyData.verifiedStandards
-      : (Array.isArray(verifyData?.standards) ? verifyData.standards : []);
-
-    return {
-      ok: verifyRes.ok,
-      standards: returnedStandards || [],
-      meta: { source: verifyData?.source, matchType: verifyData?.matchType, confidence: verifyData?.confidence, message: verifyData?.message }
-    };
-  } catch(e){
-    return { ok:false, standards:[], meta:{ message:"Continuing without verified standards." } };
-  }
-}
-
-async function generateLesson(data){
-  const step1 = data.step1 || {};
-  const step2 = data.step2 || {};
-  const step3 = data.step3 || {};
-  const step5 = data.step5 || {};
-
-  const payload = {
-    step1: {
-      topic: step1.topic || "Untitled Lesson",
-      grade: step1.grade || "5th Grade",
-      subject: step1.subject || "Science",
-      duration: step1.duration || 45,
-      inspirationDirective: buildInspirationDirective(data)
-    },
-    step2,
-    step3: { framework: step3.framework || "madeline-hunter" },
-    step5,
-    verifiedStandards: [] // empty; standards verified separately for display
-  };
-
-  const genRes = await fetch(`${API_URL}/api/generate-lesson`, {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify(payload)
-  });
-  const genData = await safeJson(genRes);
-  if (!genRes.ok) throw new Error(genData?.error || genData?.message || "Lesson generation failed.");
-  return normalizeLessonFromBackend(genData);
-}
-
-async function prefetch(data){
-  // parallel: verify + generate
-  const verifyP = verifyStandards(data);
-  const generateP = generateLesson(data);
-
-  const [verifyR, lessonR] = await Promise.allSettled([verifyP, generateP]);
-
-  if (lessonR.status !== "fulfilled") throw (lessonR.reason || new Error("Lesson generation failed."));
-  const lesson = lessonR.value;
-
-  let standards = [];
-  let standardsMeta = {};
-  if (verifyR.status === "fulfilled") {
-    standards = Array.isArray(verifyR.value?.standards) ? verifyR.value.standards : [];
-    standardsMeta = verifyR.value?.meta || {};
-  }
-
-  const updated = getLessonData();
-  updated.generatedLesson = lesson;
-  updated.verifiedStandards = standards;
-  updated.standardsMeta = standardsMeta;
-  updated.generatedAt = new Date().toISOString();
-  setLessonData(updated);
-}
-
-/* ---------- Existing page functions ---------- */
-function goBack(){ window.location.href = "build-step4.html"; }
-
-window.addEventListener("DOMContentLoaded", () => {
-  // Load prior selections (do not default-check)
-  const data = getLessonData();
-  const s = data.step5 || {};
-
-  // Ensure no accidental default-checks
-  document.getElementById("exitTicket").checked = !!s.exitTicket;
-  document.getElementById("formativeChecks").checked = !!s.formativeChecks;
-  document.getElementById("homework").checked = !!s.homework;
-  document.getElementById("quiz").checked = !!s.quiz;
 });
 
-function getAssessmentTypes(){
-  const types = [];
-  if (document.getElementById("exitTicket")?.checked) types.push("Exit Ticket");
-  if (document.getElementById("formativeChecks")?.checked) types.push("Formative Checks");
-  if (document.getElementById("homework")?.checked) types.push("Homework Assignment");
-  if (document.getElementById("quiz")?.checked) types.push("Quiz");
-  return types;
+function selectMethod(card){
+  document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
 }
 
-function saveAndContinue(){
-  // Persist Step 5 selections in a way that matches how this page re-hydrates on load
-  const data = getLessonData();
-  data.step5 = {
-    // Keep booleans for re-checking on reload
-    exitTicket: !!document.getElementById("exitTicket")?.checked,
-    formativeChecks: !!document.getElementById("formativeChecks")?.checked,
-    homework: !!document.getElementById("homework")?.checked,
-    quiz: !!document.getElementById("quiz")?.checked,
-
-    // Also keep the friendly array Step 6 can use if it expects a list
-    assessmentTypes: getAssessmentTypes(),
-
-    // Guard: this checkbox is not present in MVP, so default false
-    includeRubric: !!document.getElementById("rubricCheck")?.checked
-  };
-  setLessonData(data);
-
-  // IMPORTANT: never block navigation if something above changes later
-  window.location.href = "build-step6.html";
+function saveAndContinue() {
+  const selectedCard = document.querySelector('.method-card.selected');
+  const buildMethod = selectedCard.dataset.method;
+  
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    lessonData = JSON.parse(saved);
+  }
+  
+  lessonData.step4 = { buildMethod };
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+  
+  if (buildMethod === 'generate') {
+    window.location.href = 'build-step6.html';
+  } else {
+    window.location.href = 'build-section-by-section.html';
+  }
 }
-
-/* Keep your sidebar lock (progress indicator only) */
-function lockSidebarProgressNav(){
-  document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
-    a.classList.add("is-static");
-    a.setAttribute("aria-disabled","true");
-    a.setAttribute("tabindex","-1");
-    a.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); });
-  });
-}
-lockSidebarProgressNav();
 </script>
-
-<div class="loading-overlay hidden" id="loadingOverlay" role="status" aria-live="polite">
-  <div class="blocks-loader" aria-hidden="true">
-    <div class="block bl"></div><div class="block tl"></div><div class="block br"></div><div class="block tr"></div>
-  </div>
-  <div class="loading-message" id="loadingMessage">Preparing your lesson preview...</div>
-</div>
-
 </body>
 </html>
