@@ -1,457 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LessonBuilders - Build Better Lessons in Minutes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LessonBuilders - Build Better Lessons in Minutes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy: #0D2847;
-            --orange: #FF8C42;
-            --orange-light: #FFB380;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: linear-gradient(135deg, #F7FAFC 0%, #FFF 100%);
-            color: #0D2847;
-        }
-        
-        .top-nav {
-            background: white;
-            border-bottom: 2px solid rgba(13, 40, 71, 0.1);
-            padding: 16px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-        
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-        
-        .logo-text {
-            font-family: 'Crimson Pro', serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--navy);
-            text-decoration: none;
-        }
-        
-        .nav-menu {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-        
-        .nav-link {
-            text-decoration: none;
-            color: #4A5568;
-            font-weight: 500;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-        
-        .nav-link:hover {
-            color: var(--navy);
-        }
-        
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .user-profile {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--orange), var(--orange-light));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        
-        .hero {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 40px;
-            text-align: center;
-        }
-        
-        .hero-title {
-            font-family: 'Crimson Pro', serif;
-            font-size: 56px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-        
-        .hero-subtitle {
-            font-size: 20px;
-            color: #4A5568;
-            margin-bottom: 12px;
-        }
-        
-        .hero-description {
-            font-size: 16px;
-            color: #718096;
-            margin-bottom: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .cta-group {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-        
-        .btn {
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            border: none;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--orange), var(--orange-light));
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
-        }
-        
-        .standards-section {
-            max-width: 1200px;
-            margin: 80px auto;
-            padding: 0 40px;
-        }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .section-title {
-            font-family: 'Crimson Pro', serif;
-            font-size: 42px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 16px;
-        }
-        
-        .section-subtitle {
-            font-size: 18px;
-            color: #4A5568;
-        }
-        
-        .standards-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 50px 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .standard-item {
-            text-align: center;
-        }
-        
-        .standard-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(255, 179, 128, 0.15));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-        }
-        
-        .standard-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-        
-        .standard-description {
-            font-size: 14px;
-            color: #718096;
-            line-height: 1.5;
-        }
-        
-        .testimonials {
-            max-width: 1200px;
-            margin: 80px auto;
-            padding: 0 40px;
-        }
-        
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-            margin-top: 40px;
-        }
-        
-        .testimonial-card {
-            background: white;
-            border: 2px solid #E2E8F0;
-            border-radius: 16px;
-            padding: 32px;
-            transition: all 0.3s;
-        }
-        
-        .testimonial-card:hover {
-            border-color: var(--orange);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transform: translateY(-4px);
-        }
-        
-        .testimonial-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-        
-        .testimonial-text {
-            font-size: 15px;
-            color: #4A5568;
-            line-height: 1.6;
-        }
-        
-        .cta-section {
-            max-width: 800px;
-            margin: 80px auto;
-            padding: 60px 40px;
-            text-align: center;
-            background: white;
-            border-radius: 24px;
-            border: 2px solid #E2E8F0;
-        }
-        
-        .cta-title {
-            font-family: 'Crimson Pro', serif;
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 16px;
-        }
-        
-        .cta-description {
-            font-size: 18px;
-            color: #4A5568;
-            margin-bottom: 32px;
-        }
-        
-        .footer {
-            background: var(--navy);
-            color: white;
-            padding: 60px 40px 40px;
-            margin-top: 80px;
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 60px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-column h4 {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 12px;
-        }
-        
-        .footer-column a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-        
-        .footer-column a:hover {
-            color: var(--orange);
-        }
-        
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        
-        .footer-bottom-text {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        @media (max-width: 768px) {
-            .standards-grid,
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-title {
-                font-size: 36px;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-        }
-    /* ================================
-   Mobile / Tablet responsiveness
-   (added by LessonBuilders)
-   ================================ */
-@media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;}
-  .nav-menu{gap:16px;flex-wrap:wrap;}
-  .container{flex-direction:column;max-width:100%;}
-  .sidebar{
-    width:100%;
-    border-right:none;
-    border-bottom:1px solid rgba(13,40,71,0.1);
-    padding:14px 12px;
-    display:flex;
-    gap:10px;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-  }
-  .sidebar > div:first-child{display:none;} /* hide "BUILD LESSON" label on mobile */
-  .nav-step{
-    flex:0 0 auto;
-    margin-bottom:0;
-    padding:10px 12px;
-    border-left:none;
-    border-bottom:3px solid transparent;
-    border-radius:10px;
-    background:#fff;
-    white-space:nowrap;
-  }
-  .nav-step.active{
-    border-bottom-color:var(--orange);
-    background:rgba(255,140,66,0.08);
-  }
-  .nav-step.completed{
-    color:var(--green);
-  }
-  .step-number{flex:0 0 auto;}
-  .main-content{padding:22px 16px;max-width:100%;}
-  .btn-row{flex-wrap:wrap;gap:10px;}
-  .export-group{width:100%;}
-  .btn{width:auto;}
-}
+  <style>
+    :root {
+      --navy: #0D2847;
+      --orange: #FF8C42;
+      --orange-light: #FFB380;
+    }
 
-@media (max-width: 520px){
-  .logo-text{font-size:20px;}
-  .page-title{font-size:32px;}
-  .page-subtitle{font-size:15px;}
-  .lesson-title{font-size:22px;}
-  .btn-row{flex-direction:column;align-items:stretch;}
-  .btn-row .btn{width:100%;}
-  .export-group{justify-content:space-between;}
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, #F7FAFC 0%, #FFF 100%);
+      color: #0D2847;
+    }
 
-/* =========================
-   Access Gate (Landing)
-   ========================= */
-.lb-gate-overlay{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,0.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  z-index:9999;
-}
-.lb-gate-overlay.is-open{ display:flex; }
-.lb-gate-card{
-  width:min(520px, 100%);
-  background:#0f172a;
-  border:1px solid rgba(148,163,184,.25);
-  border-radius:16px;
-  box-shadow:0 24px 60px rgba(0,0,0,.35);
-  padding:18px;
-}
-.lb-gate-title{ margin:0 0 6px; font-size:18px; font-weight:800; color:#e2e8f0; }
-.lb-gate-subtitle{ margin:0 0 12px; font-size:13px; color:#94a3b8; }
-.lb-gate-label{ display:block; font-size:12px; color:#cbd5e1; margin:10px 0 6px; }
-.lb-gate-row{ display:flex; gap:10px; align-items:center; }
-.lb-gate-input{
-  flex:1;
-  padding:12px 12px;
-  border-radius:12px;
-  border:1px solid rgba(148,163,184,.25);
-  background:#0b1220;
-  color:#e2e8f0;
-}
-.lb-gate-btn{
-  padding:12px 14px;
-  border-radius:12px;
-  border:1px solid rgba(148,163,184,.25);
-  background:#2563eb;
-  color:white;
-  font-weight:800;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.lb-gate-btn:hover{ filter:brightness(1.05); }
-.lb-gate-btn-secondary{ background:#334155; }
-.lb-gate-error{ min-height:18px; margin-top:8px; font-size:12px; color:#fca5a5; }
-.lb-gate-hint{ min-height:18px; margin-top:8px; font-size:12px; color:#a7f3d0; }
-.lb-gate-divider{ height:1px; background:rgba(148,163,184,.2); margin:14px 0; }
-.lb-gate-footnote{ margin:12px 0 0; font-size:11px; color:#94a3b8; }
+    .top-nav {
+      background: white;
+      border-bottom: 2px solid rgba(13, 40, 71, 0.1);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
 
-</style>
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .logo-text {
+      font-family: 'Crimson Pro', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy);
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #4A5568;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--navy);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-profile {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange), var(--orange-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 40px;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-family: 'Crimson Pro', serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: #4A5568;
+      margin-bottom: 12px;
+    }
+
+    .hero-description {
+      font-size: 16px;
+      color: #718096;
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange), var(--orange-light));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+    }
+
+    .standards-section {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 40px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-family: 'Crimson Pro', serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: #4A5568;
+    }
+
+    .standards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .standard-item {
+      text-align: center;
+    }
+
+    .standard-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .standard-description {
+      font-size: 14px;
+      color: #718096;
+      line-height: 1.5;
+    }
+
+    .testimonials {
+      max-width: 1200px;
+      margin: 80px auto;
+      padding: 0 40px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .testimonial-card {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s;
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--orange);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-4px);
+    }
+
+    .testimonial-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .testimonial-text {
+      font-size: 15px;
+      color: #4A5568;
+      line-height: 1.6;
+    }
+
+    .footer {
+      background: var(--navy);
+      color: white;
+      padding: 60px 40px 40px;
+      margin-top: 80px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 60px;
+      margin-bottom: 40px;
+    }
+
+    .footer-column h4 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-column a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-column a:hover {
+      color: var(--orange);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .footer-bottom-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      .standards-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .top-nav { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
+      .nav-left { gap: 16px; flex-wrap: wrap; }
+      .nav-menu { gap: 16px; flex-wrap: wrap; }
+    }
+
+    /* =========================
+       Access Gate (Landing)
+       ========================= */
+    .lb-gate-overlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:9999;
+    }
+    .lb-gate-overlay.is-open{ display:flex; }
+    .lb-gate-card{
+      width:min(520px, 100%);
+      background:#0f172a;
+      border:1px solid rgba(148,163,184,.25);
+      border-radius:16px;
+      box-shadow:0 24px 60px rgba(0,0,0,.35);
+      padding:18px;
+    }
+    .lb-gate-title{ margin:0 0 6px; font-size:18px; font-weight:800; color:#e2e8f0; }
+    .lb-gate-subtitle{ margin:0 0 12px; font-size:13px; color:#94a3b8; }
+    .lb-gate-label{ display:block; font-size:12px; color:#cbd5e1; margin:10px 0 6px; }
+    .lb-gate-row{ display:flex; gap:10px; align-items:center; }
+    .lb-gate-input{
+      flex:1;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.25);
+      background:#0b1220;
+      color:#e2e8f0;
+    }
+    .lb-gate-btn{
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.25);
+      background:#2563eb;
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .lb-gate-btn:hover{ filter:brightness(1.05); }
+    .lb-gate-btn-secondary{ background:#334155; }
+    .lb-gate-error{ min-height:18px; margin-top:8px; font-size:12px; color:#fca5a5; }
+    .lb-gate-hint{ min-height:18px; margin-top:8px; font-size:12px; color:#a7f3d0; }
+    .lb-gate-divider{ height:1px; background:rgba(148,163,184,.2); margin:14px 0; }
+    .lb-gate-footnote{ margin:12px 0 0; font-size:11px; color:#94a3b8; }
+  </style>
 </head>
+
 <body>
 
   <!-- Access Gate Modal (auto-shown) -->
@@ -481,135 +395,312 @@
     </div>
   </div>
 
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="logo-text">LessonBuilders</a>
+      <div class="nav-menu">
+        <a href="library.html" class="nav-link">My Lessons</a>
+        <a href="discover.html" class="nav-link">Discover</a>
+        <a href="about.html" class="nav-link">Help</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="user-profile">JD</div>
+    </div>
+  </nav>
 
-    <nav class="top-nav">
-        <div class="nav-left">
-            <a href="index.html" class="logo-text">LessonBuilders</a>
-            <div class="nav-menu">
-                <a href="library.html" class="nav-link">My Lessons</a>
-                <a href="discover.html" class="nav-link">Discover</a>
-                <a href="about.html" class="nav-link">Help</a>
-            </div>
-        </div>
-        <div class="nav-right">
-            <div class="user-profile">JD</div>
-        </div>
-    </nav>
+  <section class="hero">
+    <h1 class="hero-title">Build Better Lessons</h1>
+    <p class="hero-subtitle">Turn what inspires you into standards-aligned lesson plans</p>
+    <p class="hero-description">Great lessons, standards-aligned, all yours. Build new in minutes or modernize your favorites. No more throwing away what works.</p>
 
-    <section class="hero">
-        <h1 class="hero-title">Build Better Lessons</h1>
-        <p class="hero-subtitle">Turn what inspires you into standards-aligned lesson plans</p>
-        <p class="hero-description">Great lessons, standards-aligned, all yours. Build new in minutes or modernize your favorites. No more throwing away what works.</p>
-        
-        <div class="cta-group">
-            <a href="build-step1.html" class="btn btn-primary">Start Building &rarr;</a>
-        </div>
-    </section>
-    <section class="standards-section">
-        
-        <div class="standards-grid">            
-            <div class="standard-item">
-                <h4 class="standard-title">California Standards</h4>
-                <p class="standard-description">Automatically aligned to CA frameworks. Every lesson cites specific standards so you're always covered.</p>
-            </div>
-            
-            <div class="standard-item">
-                <h4 class="standard-title">Built-In Differentiation</h4>
-             
-  import { checkHealth } from "./api.js";
-  import { initAccessGate } from "./auth.js";
+    <div class="cta-group">
+      <a href="build-step1.html" class="btn btn-primary">Start Building &rarr;</a>
+    </div>
+  </section>
 
-  initAccessGate();
+  <section class="standards-section">
+    <div class="standards-grid">
+      <div class="standard-item">
+        <h4 class="standard-title">California Standards</h4>
+        <p class="standard-description">Automatically aligned to CA frameworks. Every lesson cites specific standards so you're always covered.</p>
+      </div>
 
-  checkHealth()
-    .then(data => {
-      console.log("API OK:", data);
-    })
-    .catch(err => {
-      console.error("API ERROR:", err);
+      <div class="standard-item">
+        <h4 class="standard-title">Built-In Differentiation</h4>
+        <p class="standard-description">Adjust teaching style, assessments, and collaboration to build plans that fit your classroom — not templates.</p>
+      </div>
+
+      <div class="standard-item">
+        <h4 class="standard-title">Community-Driven</h4>
+        <p class="standard-description">Share your lessons, discover what works for others, and build a collective library of great teaching.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="section-header">
+      <h2 class="section-title">Why Teachers Love LessonBuilders</h2>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <h4 class="testimonial-title">Balance</h4>
+        <p class="testimonial-text">"I used to spend Sunday afternoons planning. Now I build a week's worth of lessons during my prep period. Game changer for work-life balance."</p>
+      </div>
+
+      <div class="testimonial-card">
+        <h4 class="testimonial-title">Stress-Free Observations</h4>
+        <p class="testimonial-text">"Admin walk-ins don't stress me anymore. My lesson plans are as detailed as I want, standards-aligned, and ready to show."</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h4>LessonBuilders</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html">How It Works</a></li>
+          <li><a href="about.html">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="build-step1.html">Build Lesson</a></li>
+          <li><a href="library.html">My Lessons</a></li>
+          <li><a href="discover.html">Discover</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="about.html">Help Center</a></li>
+          <li><a href="about.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">Our Story</a></li>
+          <li><a href="about.html">Privacy</a></li>
+          <li><a href="about.html">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-text">
+        &copy; 2025 LessonBuilders. Built by educators for educators.
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { checkHealth } from "./api.js";
+
+    // ----------------------------
+    // Access Gate (simple + reliable)
+    // ----------------------------
+    const overlay = document.getElementById("accessGateOverlay");
+    const codeInput = document.getElementById("lbAccessCode");
+    const codeBtn = document.getElementById("lbAccessSubmit");
+    const codeErr = document.getElementById("lbAccessError");
+
+    const emailInput = document.getElementById("lbEmail");
+    const emailBtn = document.getElementById("lbEmailSubmit");
+    const emailStatus = document.getElementById("lbEmailStatus");
+
+    function openGate() {
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+      setTimeout(() => codeInput?.focus(), 100);
+      // prevent scroll behind modal
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeGate() {
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+
+    function setCodeError(msg) {
+      codeErr.textContent = msg || "";
+    }
+
+    function setEmailStatus(msg) {
+      emailStatus.textContent = msg || "";
+    }
+
+    async function apiFetch(path, opts) {
+      // Uses your api.js base (API_BASE) because api.js already points to Railway.
+      // We simply call the relative endpoints here.
+      const base = (typeof window.API_BASE_OVERRIDE === "string" && window.API_BASE_OVERRIDE)
+        ? window.API_BASE_OVERRIDE.replace(/\/+$/, "")
+        : null;
+
+      // If you ever want override, set window.API_BASE_OVERRIDE in console.
+      const url = base ? `${base}${path}` : path;
+
+      const res = await fetch(url, {
+        cache: "no-store",
+        ...opts,
+        headers: {
+          "Content-Type": "application/json",
+          ...(opts && opts.headers ? opts.headers : {}),
+        },
+      });
+
+      return res;
+    }
+
+    async function checkGateEnabled() {
+      try {
+        // Prefer calling your backend directly by using checkHealth() first
+        // (If backend is down, we still show the gate)
+        await checkHealth();
+
+        const res = await fetch(`${(await getApiBaseFromApiJs())}/api/access/enabled`, { cache: "no-store" });
+        if (!res.ok) return true; // fail closed
+        const data = await res.json();
+        return !!data.enabled;
+      } catch {
+        return true; // fail closed (gate stays)
+      }
+    }
+
+    async function verifyCode(code) {
+      const base = await getApiBaseFromApiJs();
+      const res = await fetch(`${base}/api/access/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+
+      if (res.ok) return { ok: true, data: await res.json().catch(() => ({})) };
+      const err = await res.json().catch(() => ({}));
+      return { ok: false, message: err.message || "Incorrect code" };
+    }
+
+    // If you implemented this endpoint server-side, we’ll call it.
+    async function requestEmailLink(email) {
+      const base = await getApiBaseFromApiJs();
+      const res = await fetch(`${base}/api/auth/request-link`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) return { ok: true, data: await res.json().catch(() => ({})) };
+      const err = await res.json().catch(() => ({}));
+      return { ok: false, message: err.message || "Email link not available yet" };
+    }
+
+    // Pull API_BASE from your existing api.js (hardcoded to Railway).
+    async function getApiBaseFromApiJs() {
+      // Your api.js has: const API_BASE = "https://....railway.app";
+      // We can’t import that const directly unless api.js exports it.
+      // So we safely compute it from a known call by using checkHealth fetch behavior:
+      // We'll just store your current value here as a single source of truth.
+      return "https://lessonbuilders-backend-production.up.railway.app";
+    }
+
+    // Gate boot
+    (async function bootGate() {
+      // Always start locked until proven otherwise
+      openGate();
+
+      const enabled = await checkGateEnabled();
+      if (!enabled) {
+        // Gate disabled server-side
+        closeGate();
+        return;
+      }
+
+      // If enabled, check session memory so repeat visitors don’t re-enter constantly
+      const alreadyOk = localStorage.getItem("LB_ACCESS_OK") === "true";
+      if (alreadyOk) {
+        closeGate();
+      } else {
+        openGate();
+      }
+    })();
+
+    // Submit handlers
+    async function handleCodeSubmit() {
+      setCodeError("");
+      const code = String(codeInput.value || "").trim();
+      if (!code) {
+        setCodeError("Please enter the access code.");
+        return;
+      }
+
+      codeBtn.disabled = true;
+      codeBtn.textContent = "Checking...";
+      try {
+        const result = await verifyCode(code);
+        if (result.ok) {
+          localStorage.setItem("LB_ACCESS_OK", "true");
+          closeGate();
+        } else {
+          setCodeError(result.message || "Incorrect code");
+        }
+      } catch {
+        setCodeError("Could not verify code (backend unreachable).");
+      } finally {
+        codeBtn.disabled = false;
+        codeBtn.textContent = "Enter";
+      }
+    }
+
+    async function handleEmailSubmit() {
+      setEmailStatus("");
+      const email = String(emailInput.value || "").trim();
+      if (!email || !email.includes("@")) {
+        setEmailStatus("Enter a valid email address.");
+        return;
+      }
+
+      emailBtn.disabled = true;
+      emailBtn.textContent = "Sending...";
+      try {
+        const result = await requestEmailLink(email);
+        if (result.ok) {
+          setEmailStatus("Check your email for a sign-in link.");
+        } else {
+          setEmailStatus(result.message || "Email sign-in not available yet.");
+        }
+      } catch {
+        setEmailStatus("Could not send link (backend unreachable).");
+      } finally {
+        emailBtn.disabled = false;
+        emailBtn.textContent = "Send";
+      }
+    }
+
+    codeBtn.addEventListener("click", handleCodeSubmit);
+    codeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleCodeSubmit();
     });
-andard-item">
-                <h4 class="standard-title">Community-Driven</h4>
-                <p class="standard-description">Share your lessons, discover what works for others, and build a collective library of great teaching.</p>
-            </div>
-        </div>
-    </section>
 
-    <section class="testimonials">
-        <div class="section-header">
-            <h2 class="section-title">Why Teachers Love LessonBuilders</h2>
-        </div>
-        
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <h4 class="testimonial-title">Balance</h4>
-                <p class="testimonial-text">"I used to spend Sunday afternoons planning. Now I build a week's worth of lessons during my prep period. Game changer for work-life balance."</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <h4 class="testimonial-title">Stress-Free Observations</h4>
-                <p class="testimonial-text">"Admin walk-ins don't stress me anymore. My lesson plans are as detailed as I want, standards-aligned, and ready to show."</p>
-            </div>
-
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-column">
-                <h4>LessonBuilders</h4>
-                <ul>
-                    <li><a href="about.html">About Us</a></li>
-                    <li><a href="about.html">How It Works</a></li>
-                    <li><a href="about.html">Pricing</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>Product</h4>
-                <ul>
-                    <li><a href="build-step1.html">Build Lesson</a></li>
-                    <li><a href="library.html">My Lessons</a></li>
-                    <li><a href="discover.html">Discover</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>Resources</h4>
-                <ul>
-                    <li><a href="about.html">Help Center</a></li>
-                    <li><a href="about.html">Contact</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>Company</h4>
-                <ul>
-                    <li><a href="about.html">Our Story</a></li>
-                    <li><a href="about.html">Privacy</a></li>
-                    <li><a href="about.html">Terms</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div class="footer-bottom-text">
-                &copy; 2025 LessonBuilders. Built by educators for educators.
-            </div>
-        </div>
-    </footer>
-    
-<script type="module">
-  import { checkHealth } from "./api.js";
-
-  checkHealth()
-    .then(data => {
-      console.log("API OK:", data);
-    })
-    .catch(err => {
-      console.error("API ERROR:", err);
+    emailBtn.addEventListener("click", handleEmailSubmit);
+    emailInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleEmailSubmit();
     });
-</script>
+
+    // Optional debug health check (won’t render on page)
+    checkHealth()
+      .then(data => console.log("API OK:", data))
+      .catch(err => console.error("API ERROR:", err));
+  </script>
 
 </body>
 </html>
