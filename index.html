@@ -145,7 +145,7 @@
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+      box-shadow: 0 6px 20px (255, 140, 66, 0.4);
     }
 
     .standards-section {
@@ -318,13 +318,17 @@
        Access Gate (Landing)
        ========================= */
     .lb-gate-overlay{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.55);
+      position:fixed; 
+      inset:0;
       display:none;
       align-items:center;
       justify-content:center;
       padding:16px;
       z-index:9999;
+
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);      
     }
     .lb-gate-overlay.is-open{ display:flex; }
     .lb-gate-card{
