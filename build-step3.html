@@ -243,5 +243,35 @@ function saveAndContinue() {
   window.location.href = 'build-step4.html';
 }
 </script>
+  <script type="module">
+  // Update the top-right bubble to show initials when logged in.
+  // Falls back to "LB" when logged out or if auth isn't available.
+  function initialsFromEmail(email) {
+    if (!email) return "LB";
+    const namePart = String(email).split("@")[0] || "";
+    const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+    const a = tokens[0]?.[0] || "";
+    const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+    const ini = (a + b).toUpperCase();
+    return ini || "LB";
+  }
+
+  const el = document.getElementById("userProfile");
+  if (!el) return;
+
+  try {
+    // If you store auth in localStorage (common for MVP)
+    const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+    if (raw) {
+      const u = JSON.parse(raw);
+      const email = u?.email || u?.user?.email;
+      el.textContent = initialsFromEmail(email);
+    } else {
+      el.textContent = "LB";
+    }
+  } catch {
+    el.textContent = "LB";
+  }
+</script>
 </body>
 </html>
