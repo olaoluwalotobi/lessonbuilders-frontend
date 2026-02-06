@@ -3,7 +3,6 @@
 <head>
 <link rel="icon" type="image/png" href="/favicon.png">
 
-  
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <title>Preview & Export - LessonBuilders</title>
@@ -19,7 +18,6 @@
   pointer-events: none;     /* disables clicking */
 }
 
-  
 :root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
@@ -42,7 +40,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
 .nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
 .nav-step.locked{cursor:default;pointer-events:none;}
-
 
 .main-content{flex:1;padding:40px 60px;max-width:900px;}
 .page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:10px;color:var(--navy);}
@@ -181,7 +178,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   .export-group{justify-content:space-between;}
 }
 
-
 /* Sidebar nav is visual only (locked) */
 .nav-step{cursor:default;}
 
@@ -276,11 +272,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 
 <script>
 /* ===== LessonBuilders Step 6 (MVP) =====
-   Fixes:
-   - If Step 5 already generated the lesson, Step 6 renders instantly (no re-fetch)
-   - If not, Step 6 generates the lesson; standards verification + generation run in parallel
-   - Inspiration files are metadata only; directive forces the model to use teacher notes
-   - Standards shown ONLY as codes + Source links (no standard wording / no matchType)
+   Updates (requested):
+   - If feedback asks for a different/closer-aligned standard, Step 6 re-verifies standards
+     AND passes the new verifiedStandards into generation (so it actually changes).
+   - Also clears standardFocus override when re-picking standards, so backend won't keep returning the same exact code.
 */
 const API_URL = (localStorage.getItem('API_URL') || "https://lessonbuilders-backend-production.up.railway.app").replace(/\/$/, "");
 
@@ -614,7 +609,7 @@ function hydrateHeader(){
   return { topic, grade, subject, duration, framework };
 }
 
-async function verifyStandards({ topic, grade, subject }){
+async function verifyStandards({ topic, grade, subject, standardFocusOverride }){
   try{
     const gradeLabel = String(grade || "");
     const gradeNum = gradeLabel.match(/\b(\d{1,2})\b/)?.[1] || gradeLabel.trim();
@@ -627,7 +622,7 @@ async function verifyStandards({ topic, grade, subject }){
       subjectLabel,
       gradeLabel,
       topic,
-      standardFocus: (lessonData?.step1?.standardFocus || "").trim()
+      standardFocus: (typeof standardFocusOverride === "string" ? standardFocusOverride : (lessonData?.step1?.standardFocus || "")).trim()
     };
 
     const verifyRes = await fetch(`${API_URL}/api/verify-standards`, {
@@ -651,7 +646,7 @@ async function verifyStandards({ topic, grade, subject }){
   }
 }
 
-async function generateLesson({ topic, grade, subject, duration, framework, feedback }){
+async function generateLesson({ topic, grade, subject, duration, framework, feedback, verifiedStandards }){
   const step2 = lessonData.step2 || {};
   const step5 = lessonData.step5 || {};
   const directive = buildInspirationDirective();
@@ -661,7 +656,7 @@ async function generateLesson({ topic, grade, subject, duration, framework, feed
     step2: step2 || {},
     step3: { framework },
     step5: step5 || {},
-    verifiedStandards: [] // keep empty; display verifiedStandards separately
+    verifiedStandards: Array.isArray(verifiedStandards) ? verifiedStandards : []
   };
   if (feedback) payload.feedback = feedback;
 
@@ -695,35 +690,39 @@ async function ensureLessonReady(){
     return;
   }
 
-  // Otherwise: do parallel verify + generate
+  // Otherwise: verify standards first (fast), then generate lesson using those codes
   setBannerVerifying();
   showLoading();
 
-  const verifyP = verifyStandards({ topic, grade, subject });
-  const genP = generateLesson({ topic, grade, subject, duration, framework, feedback:null });
-
-  const [verifyR, lessonR] = await Promise.allSettled([verifyP, genP]);
-
-  // Handle lesson result
-  if (lessonR.status !== "fulfilled") {
-    hideLoading();
-    throw (lessonR.reason || new Error("Lesson generation failed."));
-  }
-
-  const lesson = lessonR.value;
-  lastLessonJSON = lesson;
-
-  // Handle verify result
-  if (verifyR.status === "fulfilled") {
-    verifiedStandards = Array.isArray(verifyR.value?.standards) ? verifyR.value.standards : [];
-    standardsMeta = verifyR.value?.meta || {};
+  // 1) Verify standards
+  const verifyR = await verifyStandards({ topic, grade, subject });
+  if (verifyR && Array.isArray(verifyR.standards)) {
+    verifiedStandards = verifyR.standards;
+    standardsMeta = verifyR.meta || {};
 
     if (verifiedStandards.length) updateVerificationBanner(verifiedStandards, standardsMeta);
-    else if (verifyR.value?.ok) setBannerNoMatch(standardsMeta?.message || "Backend returned 0 matches.");
+    else if (verifyR.ok) setBannerNoMatch(standardsMeta?.message || "Backend returned 0 matches.");
     else setBannerFallback(standardsMeta?.message || "Continuing without verified standards.");
   } else {
+    verifiedStandards = [];
+    standardsMeta = {};
     setBannerFallback("Continuing without verified standards.");
   }
+
+  // 2) Generate lesson (pass verified standards so the model can align)
+  let lesson;
+  try {
+    lesson = await generateLesson({
+      topic, grade, subject, duration, framework,
+      feedback: null,
+      verifiedStandards
+    });
+  } catch (err) {
+    hideLoading();
+    throw (err || new Error("Lesson generation failed."));
+  }
+
+  lastLessonJSON = lesson;
 
   // Save so refresh doesn't re-call
   lessonData.generatedLesson = lesson;
@@ -741,15 +740,55 @@ async function ensureLessonReady(){
 async function regenerateLesson(){
   const feedback = document.getElementById("feedbackTextarea").value.trim();
   if (!feedback) { alert("Please describe what changes you want to make."); return; }
+
   document.getElementById("feedbackBox").style.display = "none";
   showLoading();
 
   try{
     const { topic, grade, subject, duration, framework } = hydrateHeader();
-    const lesson = await generateLesson({ topic, grade, subject, duration, framework, feedback });
+
+    // Detect "change standards" requests in feedback.
+    // If teacher asks for a different/closer-aligned standard, we re-run verification
+    // and PASS the new verifiedStandards into generation (otherwise Claude will keep the old ones).
+    const wantsNewStandard = /\b(standard|standards)\b|pick\s+another\s+standard|different\s+standard|new\s+standard|closer\s+aligned|more\s+aligned|better\s+aligned|align\s+more\s+closely/i.test(feedback);
+
+    if (wantsNewStandard) {
+      setBannerVerifying();
+
+      // Important: clear any hard override so /api/verify-standards doesn't keep returning the same exact code
+      const verifyR = await verifyStandards({
+        topic, grade, subject,
+        standardFocusOverride: ""
+      });
+
+      if (verifyR && Array.isArray(verifyR.standards)) {
+        verifiedStandards = verifyR.standards;
+        standardsMeta = verifyR.meta || {};
+
+        if (verifiedStandards.length) updateVerificationBanner(verifiedStandards, standardsMeta);
+        else if (verifyR.ok) setBannerNoMatch(standardsMeta?.message || "Backend returned 0 matches.");
+        else setBannerFallback(standardsMeta?.message || "Continuing without verified standards.");
+      } else {
+        verifiedStandards = [];
+        standardsMeta = {};
+        setBannerFallback("Continuing without verified standards.");
+      }
+
+      // Persist the new verified standards in lessonData
+      lessonData.verifiedStandards = verifiedStandards;
+      lessonData.standardsMeta = standardsMeta;
+      setLessonData(lessonData);
+    }
+
+    const lesson = await generateLesson({
+      topic, grade, subject, duration, framework,
+      feedback,
+      verifiedStandards: Array.isArray(lessonData.verifiedStandards) ? lessonData.verifiedStandards : verifiedStandards
+    });
 
     lastLessonJSON = lesson;
     lessonData.generatedLesson = lesson;
+    lessonData.generatedAt = new Date().toISOString();
     setLessonData(lessonData);
 
     hideLoading();
@@ -888,7 +927,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 </script>
-  <script type="module">
+
+<script type="module">
   // Update the top-right bubble to show initials when logged in.
   // Falls back to "LB" when logged out or if auth isn't available.
   function initialsFromEmail(email) {
@@ -902,22 +942,24 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   const el = document.getElementById("userProfile");
-  if (!el) return;
-
-  try {
-    // If you store auth in localStorage (common for MVP)
-    const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-    if (raw) {
-      const u = JSON.parse(raw);
-      const email = u?.email || u?.user?.email;
-      el.textContent = initialsFromEmail(email);
-    } else {
+  if (!el) {
+    // no profile bubble on this page
+  } else {
+    try {
+      // If you store auth in localStorage (common for MVP)
+      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+      if (raw) {
+        const u = JSON.parse(raw);
+        const email = u?.email || u?.user?.email;
+        el.textContent = initialsFromEmail(email);
+      } else {
+        el.textContent = "LB";
+      }
+    } catch {
       el.textContent = "LB";
     }
-  } catch {
-    el.textContent = "LB";
   }
 </script>
-  
+
 </body>
 </html>
