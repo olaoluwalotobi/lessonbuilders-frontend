@@ -327,26 +327,21 @@
     @media (max-width: 900px){
       .top-nav{
         padding:12px 16px;
-        flex-wrap:wrap;
-        gap:10px;
+        display:grid;
+        grid-template-columns: 1fr auto;
+        align-item:center;
       }
 
       /* Make left area wrap like About, and allow menu to occupy full row if needed */
       .nav-left{
+        display:flex;
         gap:16px;
         flex-wrap:wrap;
-        width:100%;
-      }
-
-      .nav-menu{
-        gap:16px;
-        flex-wrap:wrap;
-        width:100%;
       }
 
       /* Keep the profile bubble from causing horizontal overflow */
       .nav-right{
-        margin-left:auto;
+        justify-self:end;
       }
 
       .container{flex-direction:column;max-width:100%;}
