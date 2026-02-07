@@ -12,26 +12,26 @@
     :root{
       --navy:#0D2847;
       --orange:#FF8C42;
-      --orange-light:#FFB380;
+      --orangeLight:#FFB380;
       --green:#10B981;
-      --slate:#4A5568;
-      --muted:#718096;
-      --border:#E2E8F0;
-      --bg1:#F7FAFC;
-      --bg2:#FFFFFF;
       --blue:#3B82F6;
+      --gray1:#F7FAFC;
+      --gray2:#E2E8F0;
+      --text:#0D2847;
+      --muted:#4A5568;
+      --muted2:#718096;
     }
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
       font-family:'DM Sans',sans-serif;
-      background:linear-gradient(135deg,var(--bg1) 0%, var(--bg2) 100%);
-      color:var(--navy);
+      background:linear-gradient(135deg,#F7FAFC 0%, #FFF 100%);
+      color:var(--text);
     }
 
-    /* Top Nav (same as your pages) */
+    /* Top nav (matches your theme) */
     .top-nav{
-      background:#fff;
-      border-bottom:2px solid rgba(13,40,71,.1);
+      background:white;
+      border-bottom:2px solid rgba(13,40,71,0.1);
       padding:16px 40px;
       display:flex;
       justify-content:space-between;
@@ -39,7 +39,7 @@
       position:sticky;
       top:0;
       z-index:1000;
-      box-shadow:0 2px 8px rgba(0,0,0,.05);
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
     .nav-left{display:flex;align-items:center;gap:40px;}
     .logo-text{
@@ -52,7 +52,7 @@
     .nav-menu{display:flex;gap:32px;align-items:center;}
     .nav-link{
       text-decoration:none;
-      color:var(--slate);
+      color:var(--muted);
       font-weight:500;
       font-size:15px;
       transition:color .2s;
@@ -62,35 +62,30 @@
     .nav-right{display:flex;align-items:center;gap:16px;}
     .user-profile{
       width:36px;height:36px;border-radius:50%;
-      background:linear-gradient(135deg,var(--orange),var(--orange-light));
+      background:linear-gradient(135deg,var(--orange),var(--orangeLight));
       display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:700;font-size:14px;
+      color:white;font-weight:700;font-size:14px;
       cursor:default;
+      user-select:none;
     }
 
-    /* Layout container */
-    .container{
-      display:flex;
-      max-width:1400px;
-      margin:0 auto;
-      min-height:calc(100vh - 74px);
-    }
-
-    /* Sidebar matches Step 1–7 vibe */
+    /* Layout */
+    .container{display:flex;max-width:1400px;margin:0 auto;}
     .sidebar{
       width:280px;
-      background:#fff;
-      border-right:1px solid rgba(13,40,71,.1);
+      background:white;
+      border-right:1px solid rgba(13,40,71,0.1);
       padding:30px 20px;
     }
     .sidebar-title{
       font-size:13px;
       font-weight:800;
       text-transform:uppercase;
-      letter-spacing:.5px;
+      letter-spacing:.6px;
       color:#999;
       margin-bottom:16px;
     }
+
     .nav-step{
       display:flex;
       align-items:center;
@@ -100,250 +95,207 @@
       transition:all .2s;
       border-left:3px solid transparent;
       text-decoration:none;
-      color:var(--slate);
+      color:var(--muted);
+      cursor:pointer;
       border-radius:10px;
     }
     .nav-step:hover{
-      background:rgba(255,140,66,.06);
+      background:rgba(255,140,66,0.06);
       color:var(--navy);
     }
     .nav-step.active{
-      background:rgba(255,140,66,.10);
+      background:rgba(255,140,66,0.10);
       border-left-color:var(--orange);
       color:var(--navy);
-      font-weight:800;
+      font-weight:700;
     }
-    .nav-step.completed{ color:var(--green); }
-    .step-number{
+    .step-icon{
       width:28px;height:28px;border-radius:50%;
-      background:var(--bg1);
-      border:2px solid var(--border);
+      background:var(--gray1);
+      border:2px solid var(--gray2);
       display:flex;align-items:center;justify-content:center;
       font-size:13px;font-weight:800;color:#999;
       flex:0 0 auto;
     }
-    .nav-step.active .step-number{
+    .nav-step.active .step-icon{
       background:var(--orange);
       border-color:var(--orange);
-      color:#fff;
-    }
-    .nav-step.completed .step-number{
-      background:var(--green);
-      border-color:var(--green);
-      color:#fff;
+      color:white;
     }
 
-    /* Main content */
-    .main-content{
-      flex:1;
-      padding:40px 60px;
-      max-width:940px;
-    }
-
-    /* Clean “Tell us what you need” header like your ref */
+    .main-content{flex:1;padding:40px 60px;max-width:980px;}
     .page-title{
       font-family:'Crimson Pro',serif;
       font-size:42px;
       font-weight:700;
+      margin-bottom:10px;
       color:var(--navy);
-      margin-bottom:8px;
     }
     .page-subtitle{
-      font-size:16px;
+      font-size:18px;
       color:var(--muted);
       margin-bottom:18px;
+      line-height:1.4;
     }
+    .progress-bar{height:6px;background:var(--gray2);border-radius:3px;margin-bottom:18px;}
+    .progress-fill{height:100%;width:40%;background:linear-gradient(90deg,var(--orange),var(--orangeLight));border-radius:3px;}
 
+    /* Cards */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
     .card{
-      background:#fff;
-      border:2px solid var(--border);
+      background:white;
+      border:2px solid var(--gray2);
       border-radius:16px;
-      padding:20px;
-      margin-bottom:14px;
+      padding:18px;
+    }
+    .card-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:12px;
     }
     .card-title{
-      font-size:16px;
+      font-size:18px;
       font-weight:800;
       color:var(--navy);
-      margin-bottom:6px;
+      margin-bottom:4px;
     }
-    .card-sub{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:12px;
-      line-height:1.5;
+    .card-subtitle{
+      font-size:14px;
+      color:var(--muted2);
+      line-height:1.4;
     }
 
-    /* Better dropdown */
-    .field-label{
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+    .field{flex:1;min-width:240px;}
+    .label{
       display:block;
       font-size:12px;
       font-weight:800;
       letter-spacing:.2px;
-      color:#64748B;
       text-transform:uppercase;
+      color:var(--muted2);
       margin:10px 0 6px;
     }
-    .select-wrap{
-      position:relative;
+    select, input[type="text"], input[type="file"]{
       width:100%;
-    }
-    .select{
-      width:100%;
-      appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      padding:12px 44px 12px 14px;
-      border:2px solid var(--border);
+      padding:12px 12px;
       border-radius:12px;
-      font-size:15px;
+      border:2px solid var(--gray2);
+      background:white;
       color:var(--navy);
-      background:#fff;
+      font-size:15px;
+      font-family:'DM Sans',sans-serif;
+    }
+    select:focus, input:focus{
       outline:none;
-      transition:border-color .2s, box-shadow .2s;
-    }
-    .select:focus{
-      border-color:rgba(255,140,66,.6);
-      box-shadow:0 0 0 4px rgba(255,140,66,.12);
-    }
-    .chev{
-      position:absolute;
-      right:14px;
-      top:50%;
-      transform:translateY(-50%);
-      pointer-events:none;
-      color:#94A3B8;
-      font-size:14px;
-      font-weight:900;
-    }
-    .lesson-preview-line{
-      margin-top:8px;
-      font-size:13px;
-      color:var(--muted);
+      border-color:var(--orange);
+      box-shadow:0 0 0 3px rgba(255,140,66,0.12);
     }
 
-    /* Assessment types */
-    .pill-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
+    .pill-group{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
     .pill{
-      border:2px solid var(--border);
-      background:#fff;
+      border:2px solid var(--gray2);
+      background:white;
+      color:var(--navy);
       padding:10px 12px;
       border-radius:999px;
+      font-weight:800;
       font-size:14px;
-      font-weight:700;
-      color:var(--navy);
       cursor:pointer;
       transition:all .2s;
       user-select:none;
     }
-    .pill:hover{ border-color:rgba(255,140,66,.6); }
+    .pill:hover{border-color:var(--orange);}
     .pill.active{
-      background:rgba(255,140,66,.10);
-      border-color:rgba(255,140,66,.65);
-      color:var(--navy);
+      border-color:var(--orange);
+      background:rgba(255,140,66,0.10);
     }
 
-    .textarea{
-      width:100%;
-      padding:14px;
-      border:2px solid var(--border);
-      border-radius:12px;
-      font-size:15px;
-      font-family:'DM Sans',sans-serif;
-      resize:vertical;
-      min-height:120px;
-      outline:none;
-      transition:border-color .2s, box-shadow .2s;
-    }
-    .textarea:focus{
-      border-color:rgba(255,140,66,.6);
-      box-shadow:0 0 0 4px rgba(255,140,66,.12);
-    }
-
-    .btn-row{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:12px;
-    }
+    .btn-row{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap;}
     .btn{
-      padding:14px 18px;
+      padding:12px 16px;
       border-radius:12px;
       font-size:15px;
       font-weight:800;
-      border:none;
       cursor:pointer;
       transition:all .25s;
+      border:none;
       font-family:'DM Sans',sans-serif;
+      user-select:none;
     }
     .btn-primary{
-      background:linear-gradient(135deg,var(--orange),var(--orange-light));
-      color:#fff;
+      background:linear-gradient(135deg,var(--orange),var(--orangeLight));
+      color:white;
     }
-    .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,140,66,.25); }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 26px rgba(255,140,66,0.22);
+    }
     .btn-secondary{
-      background:#fff;
-      border:2px solid var(--border);
+      background:white;
+      border:2px solid var(--gray2);
       color:var(--navy);
     }
-    .btn-secondary:hover{ border-color:rgba(255,140,66,.6); }
+    .btn-secondary:hover{border-color:var(--orange);}
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+      transform:none !important;
+      box-shadow:none !important;
+    }
 
-    .output-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
-      margin-top:12px;
+    .hint{
+      font-size:13px;
+      color:var(--muted2);
+      margin-top:8px;
+      line-height:1.4;
     }
-    .output-block{
-      border:2px solid var(--border);
-      border-radius:14px;
+
+    /* Right preview (optional stub) */
+    .preview{
+      margin-top:14px;
+      background:rgba(13,40,71,0.03);
+      border:2px dashed rgba(13,40,71,0.18);
+      border-radius:16px;
       padding:14px;
-      background:#fff;
     }
-    .output-h{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:8px;
-    }
-    .output-title{
+    .preview-title{
       font-weight:900;
       color:var(--navy);
-      font-size:14px;
+      margin-bottom:6px;
     }
-    .mini{
-      font-size:12px;
+    .preview-body{
       color:var(--muted);
-    }
-    .output-pre{
-      white-space:pre-wrap;
       font-size:14px;
-      color:var(--slate);
-      line-height:1.55;
+      line-height:1.45;
+      white-space:pre-wrap;
     }
+
+    /* Tabs (main content) */
+    .tab{display:none;}
+    .tab.active{display:block;}
 
     /* Responsive */
     @media (max-width: 900px){
       .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
       .nav-left{gap:16px;flex-wrap:wrap;}
       .nav-menu{gap:16px;flex-wrap:wrap;}
-
-      .container{flex-direction:column;}
+      .container{flex-direction:column;max-width:100%;}
       .sidebar{
         width:100%;
         border-right:none;
-        border-bottom:1px solid rgba(13,40,71,.1);
+        border-bottom:1px solid rgba(13,40,71,0.1);
+        padding:14px 12px;
         display:flex;
         gap:10px;
         overflow-x:auto;
         -webkit-overflow-scrolling:touch;
-        padding:14px 12px;
       }
       .sidebar-title{display:none;}
       .nav-step{
@@ -351,9 +303,19 @@
         margin-bottom:0;
         border-left:none;
         border-bottom:3px solid transparent;
+        border-radius:12px;
+        background:#fff;
+        white-space:nowrap;
       }
-      .nav-step.active{ border-bottom-color:var(--orange); }
+      .nav-step.active{
+        border-bottom-color:var(--orange);
+      }
       .main-content{padding:22px 16px;max-width:100%;}
+    }
+    @media (max-width: 520px){
+      .page-title{font-size:32px;}
+      .page-subtitle{font-size:15px;}
+      .field{min-width: 100%;}
     }
   </style>
 </head>
@@ -375,263 +337,128 @@
   </nav>
 
   <div class="container">
-    <!-- Left rail: Step-style visual language -->
     <aside class="sidebar">
-      <div class="sidebar-title">BUILD LESSON</div>
-
-      <a class="nav-step" href="build-step1.html">
-        <div class="step-number">1</div><div>Basic Information</div>
-      </a>
-      <a class="nav-step" href="build-step2.html">
-        <div class="step-number">2</div><div>Teaching Style</div>
-      </a>
-      <a class="nav-step" href="build-step3.html">
-        <div class="step-number">3</div><div>Choose Template</div>
-      </a>
-      <a class="nav-step" href="build-step4.html">
-        <div class="step-number">4</div><div>Assessments</div>
-      </a>
-      <a class="nav-step" href="build-step5.html">
-        <div class="step-number">5</div><div>Build Method</div>
-      </a>
-      <a class="nav-step" href="build-step6.html">
-        <div class="step-number">6</div><div>Preview &amp; Export</div>
-      </a>
-      <a class="nav-step" href="build-step7.html">
-        <div class="step-number">7</div><div>Collaborate</div>
-      </a>
-
-      <div style="height:12px"></div>
-
       <div class="sidebar-title">ASSESSMENTS</div>
-      <div class="nav-step active">
-        <div class="step-number">✓</div><div>Create from a lesson</div>
+
+      <div class="nav-step active" id="tabBtnCreate" onclick="switchTab('create')">
+        <div class="step-icon">A</div>
+        <div>Create from Lesson</div>
+      </div>
+
+      <div class="nav-step" id="tabBtnUpload" onclick="switchTab('upload')">
+        <div class="step-icon">↑</div>
+        <div>Upload Existing</div>
       </div>
     </aside>
 
     <main class="main-content">
-      <h1 class="page-title">Tell us what you need</h1>
-      <p class="page-subtitle">We’ll generate student-ready assessments aligned to your lesson.</p>
+      <h1 class="page-title">Assessments</h1>
+      <p class="page-subtitle">Create classroom-ready assessments from your lessons — or upload what you already have and enhance it.</p>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
 
-      <div class="card">
-        <div class="card-title">Choose a lesson</div>
-        <div class="card-sub">Pick a saved lesson, or use your most recently generated one from the builder.</div>
+      <!-- =========================
+           TAB: CREATE FROM LESSON
+           ========================= -->
+      <section class="tab active" id="tab-create">
+        <div class="grid">
 
-        <label class="field-label" for="lessonSelect">Lesson</label>
-        <div class="select-wrap">
-          <select id="lessonSelect" class="select">
-            <option value="latest">Most recent lesson (from builder)</option>
-          </select>
-          <div class="chev">▼</div>
-        </div>
-        <div id="lessonPreviewLine" class="lesson-preview-line"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Assessment type</div>
-        <div class="card-sub">Select one. (We’ll return <b>studentCopy</b>, <b>answerKey</b>, <b>rubric</b>, and <b>metadata</b>.)</div>
-
-        <div class="pill-row" id="typePills">
-          <div class="pill active" data-type="exit_ticket">Exit ticket</div>
-          <div class="pill" data-type="in_class_activity">In-class activity</div>
-          <div class="pill" data-type="homework_assignment">Homework assignment</div>
-          <div class="pill" data-type="quiz">Quiz</div>
-        </div>
-
-        <label class="field-label" for="guidance">Any guidance?</label>
-        <textarea id="guidance" class="textarea" placeholder="Example: Make it 10 minutes. Include 2 higher-order questions. Differentiate for ELL."></textarea>
-
-        <div class="btn-row">
-          <button class="btn btn-primary" id="generateBtn">Generate assessment</button>
-          <button class="btn btn-secondary" id="clearBtn">Clear</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Output</div>
-        <div class="card-sub">This is a UI mock — the generate button will show placeholder content until we wire the backend endpoint.</div>
-
-        <div class="output-grid">
-          <div class="output-block">
-            <div class="output-h">
-              <div class="output-title">studentCopy</div>
-              <div class="mini" id="metaType"></div>
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Create from a lesson</div>
+                <div class="card-subtitle">Choose a saved lesson (or your current build) and generate an assessment draft.</div>
+              </div>
             </div>
-            <div class="output-pre" id="outStudent">—</div>
+
+            <div class="row">
+              <div class="field">
+                <label class="label" for="lessonSelect">Select lesson</label>
+                <select id="lessonSelect"></select>
+                <div class="hint" id="lessonHint"></div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="assessmentNotes">Teacher notes (optional)</label>
+                <input id="assessmentNotes" type="text" placeholder="Ex: focus on vocabulary + guided practice outcomes" />
+                <div class="hint">Tip: Use this to steer difficulty, format, or focus.</div>
+              </div>
+            </div>
+
+            <label class="label" style="margin-top:12px;">Assessment type</label>
+            <div class="pill-group" id="typePills">
+              <div class="pill active" data-type="exit_ticket">Exit Ticket</div>
+              <div class="pill" data-type="in_class_activity">In-Class Activity</div>
+              <div class="pill" data-type="homework_assignment">Homework Assignment</div>
+              <div class="pill" data-type="quiz">Quiz</div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" id="btnGenerate" onclick="mockGenerate()">Generate Draft</button>
+              <button class="btn btn-secondary" onclick="clearPreview()">Clear</button>
+            </div>
+
+            <div class="preview" id="previewBox" style="display:none;">
+              <div class="preview-title">Preview (UI stub)</div>
+              <div class="preview-body" id="previewText"></div>
+            </div>
+
+            <div class="hint" style="margin-top:10px;">
+              Note: This page currently shows a UI preview. When you’re ready, we’ll wire this to your backend endpoint (e.g., <code>/api/generate-assessment</code>).
+            </div>
           </div>
 
-          <div class="output-block">
-            <div class="output-h">
-              <div class="output-title">answerKey</div>
-              <div class="mini">teacher-facing</div>
-            </div>
-            <div class="output-pre" id="outKey">—</div>
-          </div>
-
-          <div class="output-block">
-            <div class="output-h">
-              <div class="output-title">rubric</div>
-              <div class="mini">scoring guidance</div>
-            </div>
-            <div class="output-pre" id="outRubric">—</div>
-          </div>
-
-          <div class="output-block">
-            <div class="output-h">
-              <div class="output-title">metadata</div>
-              <div class="mini">alignment</div>
-            </div>
-            <div class="output-pre" id="outMeta">—</div>
-          </div>
         </div>
-      </div>
+      </section>
+
+      <!-- =========================
+           TAB: UPLOAD EXISTING
+           ========================= -->
+      <section class="tab" id="tab-upload">
+        <div class="grid">
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Upload an existing assessment</div>
+                <div class="card-subtitle">Bring what you already use. Later we can generate an answer key, rubric, and standards alignment.</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label class="label" for="uploadFile">Upload file</label>
+                <input id="uploadFile" type="file" accept=".pdf,.doc,.docx,.txt" />
+                <div class="hint">Accepted: PDF, DOC/DOCX, TXT (MVP UI). Upload processing comes next.</div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="uploadMeta">Optional notes</label>
+                <input id="uploadMeta" type="text" placeholder="Ex: Grade 4 math, focus on fractions + word problems" />
+                <div class="hint">This helps later when we build the enhancement tools.</div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" onclick="mockUpload()">Save Upload (UI stub)</button>
+              <button class="btn btn-secondary" onclick="resetUpload()">Reset</button>
+            </div>
+
+            <div class="preview" id="uploadPreview" style="display:none;">
+              <div class="preview-title">Upload captured (UI stub)</div>
+              <div class="preview-body" id="uploadPreviewText"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
     </main>
   </div>
 
   <script>
-    // ===== Load saved lessons to populate dropdown (better-looking list) =====
-    function safeParse(str){ try{ return JSON.parse(str); }catch{ return null; } }
-    function escapeHtml(s){
-      return String(s ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    const lessonSelect = document.getElementById("lessonSelect");
-    const lessonPreviewLine = document.getElementById("lessonPreviewLine");
-
-    function loadLessons(){
-      const saved = safeParse(localStorage.getItem("savedLessons") || "[]") || [];
-      // newest first
-      saved.sort((a,b)=> new Date(b.savedAt||0) - new Date(a.savedAt||0));
-
-      // add options
-      saved.forEach((l, idx) => {
-        const opt = document.createElement("option");
-        opt.value = "saved_" + idx;
-        const title = (l.title || l.step1?.topic || "Untitled").slice(0, 60);
-        const meta = `${l.grade || l.step1?.grade || ""} • ${l.subject || l.step1?.subject || ""}`;
-        opt.textContent = `${title} — ${meta}`;
-        opt.dataset.lesson = JSON.stringify(l);
-        lessonSelect.appendChild(opt);
-      });
-
-      updateLessonPreview();
-    }
-
-    function getSelectedLesson(){
-      const v = lessonSelect.value;
-      if (v === "latest"){
-        const ld = safeParse(localStorage.getItem("lessonData") || "{}") || {};
-        return {
-          title: ld.step1?.topic || "Most recent lesson",
-          grade: ld.step1?.grade || "",
-          subject: ld.step1?.subject || "",
-          verifiedStandards: ld.verifiedStandards || [],
-          generatedLesson: ld.generatedLesson || null
-        };
-      }
-      const opt = lessonSelect.options[lessonSelect.selectedIndex];
-      const raw = opt?.dataset?.lesson;
-      if (!raw) return null;
-      const savedObj = safeParse(raw) || null;
-      return savedObj;
-    }
-
-    function updateLessonPreview(){
-      const l = getSelectedLesson();
-      if (!l){
-        lessonPreviewLine.textContent = "";
-        return;
-      }
-      const title = l.title || l.step1?.topic || "Untitled";
-      const grade = l.grade || l.step1?.grade || "";
-      const subject = l.subject || l.step1?.subject || "";
-      const standards = Array.isArray(l.verifiedStandards) ? l.verifiedStandards : (l.fullLesson?.verifiedStandards || []);
-      const count = Array.isArray(standards) ? standards.length : 0;
-
-      lessonPreviewLine.innerHTML = `<b>${escapeHtml(title)}</b> — ${escapeHtml(grade)} • ${escapeHtml(subject)} • ${count} standard(s)`;
-    }
-
-    lessonSelect.addEventListener("change", updateLessonPreview);
-    loadLessons();
-
-    // ===== Assessment type pills =====
-    const pills = document.querySelectorAll(".pill");
-    let selectedType = "exit_ticket";
-
-    pills.forEach(p => {
-      p.addEventListener("click", () => {
-        pills.forEach(x => x.classList.remove("active"));
-        p.classList.add("active");
-        selectedType = p.dataset.type;
-        document.getElementById("metaType").textContent = selectedType.replaceAll("_"," ");
-      });
-    });
-    document.getElementById("metaType").textContent = "exit ticket";
-
-    // ===== Mock generate output (UI preview now; backend later) =====
-    const outStudent = document.getElementById("outStudent");
-    const outKey = document.getElementById("outKey");
-    const outRubric = document.getElementById("outRubric");
-    const outMeta = document.getElementById("outMeta");
-
-    document.getElementById("generateBtn").addEventListener("click", () => {
-      const l = getSelectedLesson();
-      const guidance = (document.getElementById("guidance").value || "").trim();
-      const title = l?.title || l?.step1?.topic || "Lesson";
-
-      outStudent.textContent =
-`[STUDENT COPY]
-Type: ${selectedType.replaceAll("_"," ")}
-Based on: ${title}
-
-1) ...
-2) ...
-3) ...
-
-Teacher guidance included:
-${guidance || "(none)"}`;
-
-      outKey.textContent =
-`[ANSWER KEY]
-1) ...
-2) ...
-3) ...`;
-
-      outRubric.textContent =
-`[RUBRIC]
-4 - Exceeds
-3 - Meets
-2 - Developing
-1 - Beginning`;
-
-      outMeta.textContent =
-`{
-  "alignedTo": {
-    "lessonTitle": "${title}",
-    "standards": ${(Array.isArray(l?.verifiedStandards) ? l.verifiedStandards : []).map(s => s.code || s.id).filter(Boolean).slice(0,5).join(", ") || "(none cached)"}
-  },
-  "type": "${selectedType}",
-  "generatedAt": "${new Date().toISOString()}"
-}`;
-    });
-
-    document.getElementById("clearBtn").addEventListener("click", () => {
-      document.getElementById("guidance").value = "";
-      outStudent.textContent = "—";
-      outKey.textContent = "—";
-      outRubric.textContent = "—";
-      outMeta.textContent = "—";
-    });
-  </script>
-
-  <script type="module">
-    // Top-right initials bubble (same behavior you use)
+    // -----------------------------
+    // Top-right initials bubble
+    // -----------------------------
     function initialsFromEmail(email) {
       if (!email) return "LB";
       const namePart = String(email).split("@")[0] || "";
@@ -641,22 +468,236 @@ ${guidance || "(none)"}`;
       const ini = (a + b).toUpperCase();
       return ini || "LB";
     }
+    (function setInitials(){
+      const el = document.getElementById("userProfile");
+      if (!el) return;
+      try{
+        const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+        if (raw) {
+          const u = JSON.parse(raw);
+          const email = u?.email || u?.user?.email;
+          el.textContent = initialsFromEmail(email);
+        } else {
+          el.textContent = "LB";
+        }
+      } catch { el.textContent = "LB"; }
+    })();
 
-    const el = document.getElementById("userProfile");
-    if (!el) return;
+    // -----------------------------
+    // Tabs (left nav)
+    // -----------------------------
+    function switchTab(which){
+      const createBtn = document.getElementById("tabBtnCreate");
+      const uploadBtn = document.getElementById("tabBtnUpload");
+      const createTab = document.getElementById("tab-create");
+      const uploadTab = document.getElementById("tab-upload");
 
-    try {
-      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-      if (raw) {
-        const u = JSON.parse(raw);
-        const email = u?.email || u?.user?.email;
-        el.textContent = initialsFromEmail(email);
+      if (which === "upload") {
+        createBtn.classList.remove("active");
+        uploadBtn.classList.add("active");
+        createTab.classList.remove("active");
+        uploadTab.classList.add("active");
       } else {
-        el.textContent = "LB";
+        uploadBtn.classList.remove("active");
+        createBtn.classList.add("active");
+        uploadTab.classList.remove("active");
+        createTab.classList.add("active");
       }
-    } catch {
-      el.textContent = "LB";
     }
+
+    // -----------------------------
+    // Lesson dropdown (better looking + useful)
+    // Pulls from:
+    // - localStorage.savedLessons (from Step 6 saveToLibrary)
+    // - fallback: localStorage.lessonData (current build)
+    // -----------------------------
+    function safeParse(jsonStr){ try { return JSON.parse(jsonStr); } catch { return null; } }
+
+    function getSavedLessons(){
+      const raw = localStorage.getItem("savedLessons");
+      const arr = raw ? safeParse(raw) : null;
+      return Array.isArray(arr) ? arr : [];
+    }
+
+    function getCurrentLessonData(){
+      const raw = localStorage.getItem("lessonData");
+      const obj = raw ? safeParse(raw) : null;
+      return obj && typeof obj === "object" ? obj : null;
+    }
+
+    function labelFromLessonItem(item){
+      // item might be a saved lesson object OR lessonData structure
+      const title = item?.title || item?.step1?.topic || "Untitled Lesson";
+      const grade = item?.grade || item?.step1?.grade || "";
+      const subject = item?.subject || item?.step1?.subject || "";
+      const parts = [title];
+      const meta = [grade, subject].filter(Boolean).join(" • ");
+      if (meta) parts.push(`(${meta})`);
+      return parts.join(" ");
+    }
+
+    function buildLessonSelect(){
+      const sel = document.getElementById("lessonSelect");
+      const hint = document.getElementById("lessonHint");
+      if (!sel) return;
+
+      const saved = getSavedLessons();
+      const current = getCurrentLessonData();
+
+      const options = [];
+
+      if (current && (current?.step1?.topic || current?.generatedLesson)) {
+        options.push({ key:"current", label:`Most recent build — ${labelFromLessonItem(current)}`, data: current });
+      }
+
+      // Most recent first
+      saved.slice().reverse().forEach((s, idx) => {
+        options.push({ key:`saved_${idx}`, label: labelFromLessonItem(s), data: s });
+      });
+
+      sel.innerHTML = "";
+      if (!options.length){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No lessons found yet (build one first)";
+        sel.appendChild(opt);
+        sel.disabled = true;
+        hint.textContent = "Go build a lesson and click Continue on Step 6 so it saves to 'My Lessons'.";
+        return;
+      }
+
+      options.forEach((o, i) => {
+        const opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = o.label;
+        sel.appendChild(opt);
+      });
+
+      sel.disabled = false;
+      hint.textContent = "Tip: saved lessons come from Step 6 → Continue (it writes to localStorage.savedLessons).";
+
+      // stash
+      window.__LB_ASSESSMENT_OPTIONS__ = options;
+    }
+
+    // -----------------------------
+    // Type pills selection
+    // -----------------------------
+    function getSelectedType(){
+      const pills = Array.from(document.querySelectorAll("#typePills .pill"));
+      const active = pills.find(p => p.classList.contains("active"));
+      return active ? active.getAttribute("data-type") : "exit_ticket";
+    }
+    function setupTypePills(){
+      const pills = Array.from(document.querySelectorAll("#typePills .pill"));
+      pills.forEach(p => {
+        p.addEventListener("click", () => {
+          pills.forEach(x => x.classList.remove("active"));
+          p.classList.add("active");
+        });
+      });
+    }
+
+    // -----------------------------
+    // UI stubs (no backend yet)
+    // These are placeholders so you can SEE the page today.
+    // -----------------------------
+    function mockGenerate(){
+      const sel = document.getElementById("lessonSelect");
+      const notes = document.getElementById("assessmentNotes").value || "";
+      const previewBox = document.getElementById("previewBox");
+      const previewText = document.getElementById("previewText");
+
+      const options = window.__LB_ASSESSMENT_OPTIONS__ || [];
+      const idx = Number(sel?.value || 0);
+      const chosen = options[idx]?.data || null;
+
+      const type = getSelectedType();
+      const typeLabel = ({
+        exit_ticket:"Exit Ticket",
+        in_class_activity:"In-Class Activity",
+        homework_assignment:"Homework Assignment",
+        quiz:"Quiz"
+      })[type] || "Assessment";
+
+      const title = chosen?.title || chosen?.step1?.topic || "Untitled Lesson";
+      const grade = chosen?.grade || chosen?.step1?.grade || "";
+      const subject = chosen?.subject || chosen?.step1?.subject || "";
+      const std = Array.isArray(chosen?.verifiedStandards || chosen?.fullLesson?.verifiedStandards)
+        ? (chosen.verifiedStandards || chosen.fullLesson.verifiedStandards)
+        : (Array.isArray(chosen?.verifiedStandards) ? chosen.verifiedStandards : []);
+
+      const stdCodes = (std || []).map(s => s.code || s.id).filter(Boolean).slice(0,3).join(", ");
+
+      const out = [
+        `${typeLabel} — Draft (UI Preview)`,
+        `Lesson: ${title}`,
+        [grade, subject].filter(Boolean).join(" • "),
+        stdCodes ? `Aligned (codes): ${stdCodes}` : "Aligned (codes): —",
+        notes ? `Teacher notes: ${notes}` : "",
+        "",
+        "Next step: wire this button to /api/generate-assessment",
+        "Return shape will be:",
+        "- studentCopy",
+        "- answerKey",
+        "- rubric",
+        "- metadata (alignment, difficulty, etc.)"
+      ].filter(Boolean).join("\n");
+
+      previewText.textContent = out;
+      previewBox.style.display = "block";
+    }
+
+    function clearPreview(){
+      const previewBox = document.getElementById("previewBox");
+      const previewText = document.getElementById("previewText");
+      previewText.textContent = "";
+      previewBox.style.display = "none";
+      document.getElementById("assessmentNotes").value = "";
+    }
+
+    function mockUpload(){
+      const file = document.getElementById("uploadFile")?.files?.[0] || null;
+      const meta = document.getElementById("uploadMeta")?.value || "";
+      const box = document.getElementById("uploadPreview");
+      const text = document.getElementById("uploadPreviewText");
+
+      if (!file){
+        alert("Please choose a file first.");
+        return;
+      }
+
+      text.textContent = [
+        "Upload captured (UI Preview)",
+        `File: ${file.name}`,
+        `Size: ${Math.round(file.size/1024)} KB`,
+        meta ? `Notes: ${meta}` : "",
+        "",
+        "Next step: wire this to an endpoint like /api/assessments/upload",
+        "Then allow enhancements: answer key, rubric, standards alignment."
+      ].filter(Boolean).join("\n");
+
+      box.style.display = "block";
+    }
+
+    function resetUpload(){
+      const input = document.getElementById("uploadFile");
+      const meta = document.getElementById("uploadMeta");
+      const box = document.getElementById("uploadPreview");
+      const text = document.getElementById("uploadPreviewText");
+      if (input) input.value = "";
+      if (meta) meta.value = "";
+      if (text) text.textContent = "";
+      if (box) box.style.display = "none";
+    }
+
+    // -----------------------------
+    // Init
+    // -----------------------------
+    window.addEventListener("DOMContentLoaded", () => {
+      buildLessonSelect();
+      setupTypePills();
+    });
   </script>
 </body>
 </html>
