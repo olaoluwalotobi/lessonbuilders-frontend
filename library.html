@@ -194,27 +194,44 @@
       .side-title{display:none;}
       .side-item{flex:0 0 auto;margin-bottom:0;}
     }
-  
 
-/* =========================
-   MOBILE FIX (ONLY)
-   - Matches About/Help behavior
-   - Keeps initials bubble top-right
-   - Prevents nav overflow + keeps nav items on one line
-   ========================= */
-@media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;width:100%;align-items:flex-start;}
-  .nav-menu{gap:16px;flex-wrap:wrap;width:100%;}
-  .nav-link{white-space:nowrap;}
-  .nav-right{justify-self:end;align-self:flex-start;margin-top:2px;}
-}
-@media (max-width: 520px){
-  .logo-text{font-size:20px;}
-  .nav-link{font-size:14px;}
-}
-
-</style>
+    /* =========================
+       MOBILE FIX (ONLY)
+       - keep initials bubble pinned top-right
+       - prevent weird wrapping/placement
+       ========================= */
+    @media (max-width: 900px){
+      .top-nav{
+        padding:12px 16px;
+        flex-wrap:wrap;
+        gap:10px;
+        align-items:flex-start;
+        position:relative; /* anchor the bubble */
+      }
+      .nav-left{
+        width:100%;
+        gap:16px;
+        flex-wrap:wrap;
+        align-items:flex-start;
+      }
+      .nav-menu{
+        width:100%;
+        gap:16px;
+        flex-wrap:wrap;
+      }
+      .nav-link{white-space:nowrap;}
+      .nav-right{
+        position:absolute;
+        top:12px;
+        right:16px;
+        margin-top:0;
+      }
+    }
+    @media (max-width: 520px){
+      .logo-text{font-size:20px;}
+      .nav-link{font-size:14px;}
+    }
+  </style>
 </head>
 
 <body>
@@ -268,7 +285,6 @@
     </div>
 
     <div class="filter-strip" id="filterStrip"></div>
-
     <div class="grid" id="grid"></div>
   </main>
 </div>
@@ -508,7 +524,6 @@
 
     setDiscoverLessons(discover);
 
-    // sanity check so “share” can’t silently fail
     const check = getDiscoverLessons().some(x => x.shareId === shareId);
     if (!check) throw new Error("Share failed: could not write to Discover storage.");
 
@@ -563,12 +578,10 @@
 
       const lesson = lessons[idx];
 
-      // write to Discover
       upsertDiscoverFromLesson(lesson);
 
       toast("Shared to Discover ✓");
 
-      // re-render so the button becomes “Shared ✓”
       render();
     } catch (e){
       console.error(e);
@@ -621,9 +634,6 @@
       const std = Array.isArray(l.verifiedStandards) ? l.verifiedStandards.map(x=>x.code||x.id).filter(Boolean).slice(0,4) : [];
       const shareState = isLessonSharedAndCurrent(l);
 
-      // NEW behavior:
-      // - if not shared yet OR the current version is NOT in Discover => show Share
-      // - else show disabled Shared ✓ button
       const needsShare = !shareState.shared || !shareState.current;
 
       return `
