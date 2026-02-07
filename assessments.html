@@ -30,7 +30,7 @@
       color: var(--navy);
     }
 
-    /* Top nav (matches your Step pages vibe) */
+    /* Top nav */
     .top-nav{
       background:#fff;
       padding:16px 40px;
@@ -81,6 +81,7 @@
       background:#fff;
       border-right:1px solid rgba(13,40,71,0.08);
       padding:30px 20px;
+      min-height: calc(100vh - 72px);
     }
 
     .side-title{
@@ -92,7 +93,6 @@
       margin-bottom:16px;
     }
 
-    /* Left menu (Step 1–7 look) */
     .side-step{
       display:flex;
       align-items:center;
@@ -143,8 +143,6 @@
       margin-bottom:18px;
       line-height:1.5;
     }
-    .progress-bar{height:6px;background:var(--gray-200);border-radius:3px;margin-bottom:18px;}
-    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:3px;width:60%;}
 
     /* Card */
     .card{
@@ -197,13 +195,13 @@
       border-color:var(--orange);
     }
 
-    /* Teacher notes: auto-height + wrap + resizer handle */
+    /* Teacher notes / paste box: auto-height + wrap + optional resize handle */
     .textarea{
       min-height:110px;
-      resize: vertical;               /* keep the resize handle */
-      overflow:hidden;                /* JS will auto-size; no horizontal scrolling */
-      white-space:pre-wrap;           /* wraps lines */
-      overflow-wrap:anywhere;         /* prevents long strings from pushing right */
+      resize: vertical;
+      overflow:hidden;
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
       word-break:break-word;
     }
 
@@ -214,7 +212,6 @@
       line-height:1.45;
     }
 
-    /* Buttons (outside the card like Steps 1–7) */
     .btn-row{
       display:flex;
       align-items:center;
@@ -248,7 +245,6 @@
     }
     .btn-secondary:hover{border-color:var(--orange);}
 
-    /* Output: keep EXACT keys you wanted */
     .output-card{
       background:#fff;
       border:2px solid var(--gray-200);
@@ -287,7 +283,42 @@
 
     .hidden{display:none !important;}
 
-    /* Mobile */
+    /* Upload icon button next to title */
+    .title-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:6px;
+    }
+    .icon-btn{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      border:2px solid var(--gray-200);
+      background:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:all .15s;
+      flex:0 0 auto;
+    }
+    .icon-btn:hover{
+      border-color:rgba(255,140,66,0.65);
+      background:rgba(255,140,66,0.06);
+    }
+    .icon-btn svg{
+      width:18px;height:18px;
+      fill:var(--navy);
+      opacity:.9;
+    }
+    .file-meta{
+      font-size:13px;
+      color:var(--gray-500);
+      margin-top:6px;
+    }
+
     @media (max-width: 900px){
       .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
       .nav-left{gap:16px;flex-wrap:wrap;}
@@ -301,6 +332,7 @@
         gap:10px;
         overflow-x:auto;
         -webkit-overflow-scrolling:touch;
+        min-height:auto;
       }
       .side-title{display:none;}
       .side-step{
@@ -354,8 +386,8 @@
     <main class="main-content">
       <h1 class="page-title">Assessments</h1>
       <p class="page-subtitle">
-        Create assessments from LessonBuilders, or upload your own lesson.</p>
-      
+        Create assessments from LessonBuilders, or upload your own lesson.
+      </p>
 
       <!-- =========================
            CREATE SECTION
@@ -400,7 +432,6 @@
           </div>
         </div>
 
-        <!-- Buttons OUTSIDE the card (like Steps 1–7) -->
         <div class="btn-row">
           <button class="btn btn-secondary" id="btnClearCreate" type="button">Clear</button>
           <div class="btn-spacer"></div>
@@ -413,10 +444,8 @@
             <div class="pill" id="draftPill">Ready</div>
           </div>
 
-          <!-- EXACT keys you wanted: studentCopy, answerKey, rubric, metadata -->
           <pre id="draftJson">{}</pre>
 
-          <!-- Buttons OUTSIDE output box too -->
           <div class="btn-row">
             <button class="btn btn-secondary" id="btnCopyJson" type="button">Copy JSON</button>
             <div class="btn-spacer"></div>
@@ -429,10 +458,27 @@
            UPLOAD SECTION
            ========================= -->
       <section id="uploadSection" class="hidden">
+
         <div class="card">
-          <div class="card-title">Upload a lesson</div>
-          <div class="card-subtitle">
-            Paste a lesson plan (or notes) and we’ll generate assessment drafts in your required output format.
+          <div class="title-row">
+            <div>
+              <div class="card-title" style="margin:0;">Upload a lesson</div>
+              <div class="card-subtitle" style="margin:6px 0 0;">
+                Paste a lesson plan (or notes) to create an assessment
+              </div>
+              <div class="file-meta" id="uploadedFileMeta" style="display:none;"></div>
+            </div>
+
+            <!-- Upload icon button -->
+            <button class="icon-btn" id="btnPickFile" type="button" title="Upload a .txt file">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 20h14a1 1 0 0 0 1-1v-6h-2v5H6v-5H4v6a1 1 0 0 0 1 1z"/>
+                <path d="M12 3l-5 5h3v6h4V8h3l-5-5z"/>
+              </svg>
+            </button>
+
+            <!-- Hidden file input (TXT only for MVP) -->
+            <input id="fileInput" type="file" accept=".txt,text/plain" class="hidden" />
           </div>
 
           <div class="grid grid-1">
@@ -464,7 +510,6 @@
           </div>
         </div>
 
-        <!-- Buttons OUTSIDE the card (like Steps 1–7) -->
         <div class="btn-row">
           <button class="btn btn-secondary" id="btnClearUpload" type="button">Clear</button>
           <div class="btn-spacer"></div>
@@ -488,7 +533,6 @@
     </main>
   </div>
 
-  <!-- initials bubble -->
   <script type="module">
     function initialsFromEmail(email) {
       if (!email) return "LB";
@@ -517,9 +561,7 @@
   </script>
 
   <script>
-    // =========
     // Tabs
-    // =========
     const tabCreate = document.getElementById("tabCreate");
     const tabUpload = document.getElementById("tabUpload");
     const createSection = document.getElementById("createSection");
@@ -533,13 +575,10 @@
       uploadSection.classList.toggle("hidden", isCreate);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
     tabCreate.addEventListener("click", () => setActiveTab("create"));
     tabUpload.addEventListener("click", () => setActiveTab("upload"));
 
-    // =========
-    // Auto-height textarea (keeps resize handle, wraps, no horizontal scroll)
-    // =========
+    // Auto-height textarea
     function autoSizeTextarea(el){
       if (!el) return;
       el.style.height = "auto";
@@ -554,9 +593,7 @@
       t.addEventListener("input", () => autoSizeTextarea(t));
     });
 
-    // =========
     // Lesson dropdown (from localStorage savedLessons)
-    // =========
     function safeParse(str){ try { return JSON.parse(str); } catch { return null; } }
 
     function getSavedLessons(){
@@ -568,7 +605,6 @@
     function populateLessonPicker(){
       const picker = document.getElementById("lessonPicker");
       const lessons = getSavedLessons();
-
       picker.innerHTML = "";
 
       if (!lessons.length){
@@ -582,7 +618,6 @@
 
       picker.disabled = false;
 
-      // newest first
       lessons
         .slice()
         .sort((a,b) => String(b.savedAt || "").localeCompare(String(a.savedAt || "")))
@@ -595,15 +630,42 @@
           picker.appendChild(opt);
         });
     }
-
     populateLessonPicker();
 
-    // =========
-    // Draft generation (MVP: local-only demo output shape)
-    // Later: wire to backend endpoint /api/generate-assessment
-    // =========
+    // Upload button -> file input (TXT MVP)
+    const btnPickFile = document.getElementById("btnPickFile");
+    const fileInput = document.getElementById("fileInput");
+    const uploadedFileMeta = document.getElementById("uploadedFileMeta");
+
+    btnPickFile.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      // Only accept text/plain or .txt
+      const isTxt = file.type === "text/plain" || /\.txt$/i.test(file.name);
+      if (!isTxt){
+        alert("For MVP, please upload a .txt file.");
+        fileInput.value = "";
+        return;
+      }
+
+      try{
+        const text = await file.text();
+        uploadedLessonText.value = text;
+        autoSizeTextarea(uploadedLessonText);
+
+        uploadedFileMeta.style.display = "block";
+        uploadedFileMeta.textContent = `Uploaded: ${file.name}`;
+      } catch(err){
+        console.error(err);
+        alert("Could not read that file.");
+      }
+    });
+
+    // Draft generation (MVP local-only demo output shape)
     function buildDraft({ type, lessonTitle, standardsCodes, teacherNotes }){
-      // IMPORTANT: keys EXACTLY as you requested
       return {
         studentCopy: {
           title: `${type}: ${lessonTitle || "Untitled Lesson"}`,
@@ -666,9 +728,7 @@
       URL.revokeObjectURL(url);
     }
 
-    // =========
     // Create actions
-    // =========
     const btnClearCreate = document.getElementById("btnClearCreate");
     const btnGenerateDraft = document.getElementById("btnGenerateDraft");
     const draftOutputCard = document.getElementById("draftOutputCard");
@@ -725,9 +785,7 @@
       downloadJson(`assessment-draft-${ts}.json`, safeParse(draftJson.textContent) || {});
     });
 
-    // =========
     // Upload actions
-    // =========
     const btnClearUpload = document.getElementById("btnClearUpload");
     const btnGenerateUpload = document.getElementById("btnGenerateUpload");
     const uploadOutputCard = document.getElementById("uploadOutputCard");
@@ -744,19 +802,21 @@
       uploadOutputCard.classList.add("hidden");
       uploadJson.textContent = "{}";
       uploadPill.textContent = "Ready";
+      uploadedFileMeta.style.display = "none";
+      uploadedFileMeta.textContent = "";
+      fileInput.value = "";
     });
 
     btnGenerateUpload.addEventListener("click", () => {
       const lessonText = uploadedLessonText.value.trim();
       if (!lessonText){
-        alert("Paste a lesson first.");
+        alert("Paste a lesson (or upload a .txt) first.");
         return;
       }
 
       const type = document.getElementById("uploadAssessmentType").value;
       const notes = String(document.getElementById("uploadTeacherNotes").value || "").trim();
 
-      // naive standards detection (codes-like tokens) for metadata only
       const codes = Array.from(new Set(
         (lessonText.match(/\b[A-Z]{2,5}[-.]?\d{1,2}(?:\.\d+){0,3}\b/g) || [])
           .map(x => x.trim())
@@ -781,7 +841,6 @@
       downloadJson(`assessment-draft-upload-${ts}.json`, safeParse(uploadJson.textContent) || {});
     });
 
-    // Initial autosize pass (so it never scrolls right)
     window.addEventListener("DOMContentLoaded", () => {
       autoSizeTextarea(teacherNotes);
       autoSizeTextarea(uploadedLessonText);
