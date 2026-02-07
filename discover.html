@@ -5,501 +5,457 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Discover - LessonBuilders</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --navy:#0D2847;
-      --orange:#FF8C42;
-      --orange-light:#FFB380;
-      --gray-50:#F7FAFC;
-      --gray-200:#E2E8F0;
-      --gray-600:#4A5568;
-    }
+    :root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{
-      font-family:'DM Sans',sans-serif;
-      background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);
-      color:var(--navy);
-    }
+    body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
 
-    .top-nav{
-      background:#fff;
-      border-bottom:2px solid rgba(13,40,71,0.08);
-      padding:16px 40px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      position:sticky;
-      top:0;
-      z-index:1000;
-      box-shadow:0 2px 8px rgba(0,0,0,0.05);
-    }
+    .top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
     .nav-left{display:flex;align-items:center;gap:40px;}
-    .logo-text{
-      font-family:'Crimson Pro',serif;
-      font-size:24px;font-weight:700;
-      color:var(--navy);
-      text-decoration:none;
-    }
+    .logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
     .nav-menu{display:flex;gap:32px;align-items:center;}
-    .nav-link{
-      text-decoration:none;
-      color:var(--gray-600);
-      font-weight:500;
-      font-size:15px;
-      transition:color 0.2s;
-    }
+    .nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
     .nav-link:hover{color:var(--navy);}
-    .nav-link.active{
-      color:var(--navy);
-      font-weight:700;
-      position:relative;
-    }
-    .nav-link.active::after{
-      content:"";
-      position:absolute;
-      left:0; right:0;
-      bottom:-18px;
-      height:3px;border-radius:999px;
-      background:linear-gradient(90deg,var(--orange),var(--orange-light));
-    }
+    .nav-link.active{color:var(--navy);font-weight:700;}
     .nav-right{display:flex;align-items:center;gap:16px;}
-    .user-profile{
-      width:36px;height:36px;border-radius:50%;
-      background:linear-gradient(135deg,var(--orange),var(--orange-light));
-      display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:800;font-size:14px;
-      cursor:default;
-    }
+    .user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:default;}
 
-    .container{display:flex;max-width:1400px;margin:0 auto;}
+    .container{
+      display:flex;
+      max-width:1400px;
+      margin:0 auto;
+      min-height:calc(100vh - 72px);
+    }
     .sidebar{
-      width:300px;
-      background:#fff;
-      border-right:1px solid rgba(13,40,71,0.08);
-      padding:26px 18px;
+      width:280px;
+      background:white;
+      border-right:1px solid rgba(13,40,71,0.1);
+      padding:30px 20px;
+      min-height:calc(100vh - 72px);
     }
-    .side-title{
-      font-size:13px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.6px;
-      color:#999;
-      margin-bottom:14px;
+    .side-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;}
+    .side-item{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 12px;margin-bottom:8px;
+      border-left:3px solid transparent;border-radius:10px;
+      color:#4A5568;cursor:pointer;transition:all .2s;user-select:none;
     }
-    .filter-card{
-      background:#fff;
-      border:2px solid var(--gray-200);
-      border-radius:16px;
-      padding:14px;
-      margin-bottom:12px;
-    }
-    .filter-title{
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.4px;
-      text-transform:uppercase;
-      color:#6B7280;
-      margin-bottom:10px;
-    }
-    .filter-row{display:flex;flex-wrap:wrap;gap:8px;}
-    .chip{
-      border:1px solid var(--gray-200);
-      background:#fff;
+    .side-item:hover{background:#F7FAFC;}
+    .side-item.active{
+      background:rgba(255,140,66,0.08);
+      border-left-color:var(--orange);
       color:var(--navy);
-      font-size:13px;
-      font-weight:700;
-      padding:8px 10px;
-      border-radius:999px;
+      font-weight:800;
+    }
+    .side-dot{
+      width:28px;height:28px;border-radius:50%;
+      background:#F7FAFC;border:2px solid #E2E8F0;
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:800;color:#999;
+    }
+    .side-item.active .side-dot{background:var(--orange);border-color:var(--orange);color:white;}
+
+    .main-content{flex:1;padding:40px 60px;max-width:1000px;}
+    .page-title{font-family:'Crimson Pro',serif;font-size:44px;font-weight:700;margin-bottom:8px;color:var(--navy);}
+    .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:16px;}
+    .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:18px;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;width:55%;}
+
+    .controls-row{
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      margin-bottom:14px;flex-wrap:wrap;
+    }
+    .search-wrap{
+      flex:1;min-width:260px;
+      background:white;border:2px solid #E2E8F0;border-radius:12px;
+      padding:10px 12px;
+      display:flex;align-items:center;gap:10px;
+    }
+    .search-wrap input{
+      border:none;outline:none;width:100%;
+      font-size:15px;color:var(--navy);
+      font-family:'DM Sans',sans-serif;
+      background:transparent;
+    }
+    .sort-wrap{
+      display:flex;align-items:center;gap:10px;
+      background:white;border:2px solid #E2E8F0;border-radius:12px;
+      padding:10px 12px;
+    }
+    .sort-wrap label{font-size:13px;color:#718096;font-weight:700;}
+    .sort-wrap select{
+      border:none;outline:none;background:transparent;
+      font-family:'DM Sans',sans-serif;font-weight:700;color:var(--navy);
       cursor:pointer;
-      user-select:none;
-      transition:all .15s;
-    }
-    .chip:hover{border-color:rgba(255,140,66,.6);}
-    .chip.active{
-      background:rgba(255,140,66,0.12);
-      border-color:rgba(255,140,66,.5);
     }
 
-    .main{
-      flex:1;
-      padding:34px 44px;
-      max-width:1020px;
+    .filter-strip{
+      display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+      padding:10px 0 14px;border-bottom:2px solid #E2E8F0;margin-bottom:16px;
     }
-    .page-title{
-      font-family:'Crimson Pro',serif;
-      font-size:42px;
-      font-weight:700;
-      color:var(--navy);
-      margin-bottom:8px;
+    .filter-label{font-size:12px;font-weight:800;color:#718096;letter-spacing:.25px;text-transform:uppercase;margin-right:6px;}
+    .filter-item{
+      font-size:14px;font-weight:800;color:#4A5568;cursor:pointer;
+      padding:6px 2px;border-bottom:3px solid transparent;user-select:none;
     }
-    .page-subtitle{
-      font-size:16px;
-      color:var(--gray-600);
-      margin-bottom:16px;
-      line-height:1.5;
-    }
+    .filter-item:hover{color:var(--navy);}
+    .filter-item.active{color:var(--navy);border-bottom-color:var(--orange);}
 
-    .toolbar{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:14px;
-      flex-wrap:wrap;
-    }
-    .input{
-      width:100%;
-      border:2px solid var(--gray-200);
-      border-radius:12px;
-      padding:12px 12px;
-      font-size:15px;
-      outline:none;
-      transition:border-color .15s;
-      min-width:260px;
-      flex:1;
-    }
-    .input:focus{border-color:var(--orange);}
-    .select{
-      border:2px solid var(--gray-200);
-      border-radius:12px;
-      padding:12px 12px;
-      font-size:14px;
-      font-weight:700;
-      outline:none;
-      background:#fff;
-      color:var(--navy);
-    }
-    .select:focus{border-color:var(--orange);}
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2, 1fr);
-      gap:14px;
-      margin-top:10px;
-    }
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
     .card{
-      background:#fff;
-      border:2px solid var(--gray-200);
-      border-radius:16px;
-      padding:16px;
-      transition:all .2s;
+      background:white;border:2px solid #E2E8F0;border-radius:16px;
+      padding:16px;display:flex;flex-direction:column;gap:10px;min-height:160px;
     }
-    .card:hover{
-      border-color:rgba(255,140,66,.55);
-      box-shadow:0 8px 24px rgba(0,0,0,0.08);
-      transform:translateY(-2px);
+    .card-title{font-size:18px;font-weight:900;color:var(--navy);}
+    .card-meta{font-size:13px;color:#4A5568;line-height:1.45;}
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap;}
+    .tag{
+      font-size:12px;font-weight:900;color:var(--navy);
+      background:#F7FAFC;border:1px solid #E2E8F0;border-radius:999px;
+      padding:6px 10px;
     }
-    .card-title{
-      font-size:16px;
-      font-weight:900;
-      color:var(--navy);
-      margin-bottom:6px;
-      line-height:1.25;
+    .card-actions{
+      margin-top:auto;
+      display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;
     }
-    .card-meta{
-      font-size:13px;
-      color:var(--gray-600);
-      line-height:1.45;
-      margin-bottom:12px;
+    .version-wrap{
+      display:flex;align-items:center;gap:8px;
+      background:#F7FAFC;border:1px solid #E2E8F0;border-radius:12px;
+      padding:8px 10px;
     }
-
-    .version-row{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      margin-top:10px;
-      flex-wrap:wrap;
+    .version-wrap label{font-size:12px;font-weight:900;color:#718096;text-transform:uppercase;letter-spacing:.2px;}
+    .version-wrap select{
+      border:none;outline:none;background:transparent;
+      font-family:'DM Sans',sans-serif;font-weight:900;color:var(--navy);
+      cursor:pointer;
     }
-    .version-select{
-      flex:1;
-      min-width:220px;
-      border:2px solid var(--gray-200);
-      border-radius:12px;
-      padding:10px 10px;
-      font-size:14px;
-      font-weight:800;
-      outline:none;
-      background:#fff;
-      color:var(--navy);
-    }
-    .version-select:focus{border-color:var(--orange);}
 
     .btn{
-      padding:10px 14px;
-      border-radius:12px;
-      font-size:13px;
-      font-weight:900;
-      cursor:pointer;
-      border:none;
-      transition:all .2s;
-      white-space:nowrap;
+      padding:10px 14px;border-radius:10px;font-size:14px;font-weight:900;
+      cursor:pointer;transition:all .2s;border:none;font-family:'DM Sans',sans-serif;
     }
-    .btn-primary{
-      background:linear-gradient(135deg,var(--orange),var(--orange-light));
-      color:#fff;
-    }
+    .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,140,66,0.25);}
+    .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+    .btn-secondary:hover{border-color:var(--orange);}
 
     .empty{
-      background:#fff;
-      border:2px dashed var(--gray-200);
-      border-radius:16px;
-      padding:18px;
-      color:var(--gray-600);
-      line-height:1.55;
+      background:white;border:2px dashed #E2E8F0;border-radius:16px;
+      padding:18px;color:#718096;line-height:1.5;
     }
 
-    @media (max-width: 900px){
-      .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-      .nav-left{gap:16px;flex-wrap:wrap;}
-      .nav-menu{gap:16px;flex-wrap:wrap;}
+    @media (max-width: 1000px){
+      .main-content{padding:22px 16px;max-width:100%;}
+      .grid{grid-template-columns:1fr;}
       .container{flex-direction:column;}
       .sidebar{
-        width:100%;
-        border-right:none;
-        border-bottom:1px solid rgba(13,40,71,0.08);
-        padding:14px 12px;
+        width:100%;min-height:auto;
+        border-right:none;border-bottom:1px solid rgba(13,40,71,0.1);
+        display:flex;gap:10px;overflow-x:auto;padding:14px 12px;
       }
-      .main{padding:22px 16px;max-width:100%;}
-      .grid{grid-template-columns:1fr;}
+      .side-title{display:none;}
+      .side-item{flex:0 0 auto;margin-bottom:0;}
     }
   </style>
 </head>
 
 <body>
-  <nav class="top-nav">
-    <div class="nav-left">
-      <a href="index.html" class="logo-text">LessonBuilders</a>
-      <div class="nav-menu">
-        <a href="library.html" class="nav-link">My Lessons</a>
-        <a href="assessments.html" class="nav-link">Assessments</a>
-        <a href="discover.html" class="nav-link active">Discover</a>
-        <a href="about.html" class="nav-link">Help</a>
-      </div>
+<nav class="top-nav">
+  <div class="nav-left">
+    <a href="index.html" class="logo-text">LessonBuilders</a>
+    <div class="nav-menu">
+      <a href="library.html" class="nav-link">My Lessons</a>
+      <a href="assessments.html" class="nav-link">Assessments</a>
+      <a href="discover.html" class="nav-link active">Discover</a>
+      <a href="about.html" class="nav-link">Help</a>
     </div>
-    <div class="nav-right">
-      <div class="user-profile" id="userProfile">LB</div>
+  </div>
+  <div class="nav-right">
+    <div class="user-profile" id="userProfile">LB</div>
+  </div>
+</nav>
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="side-title">DISCOVER</div>
+    <div class="side-item active" data-mode="subject" onclick="setMode('subject')">
+      <div class="side-dot">S</div><div>By Subject</div>
     </div>
-  </nav>
+    <div class="side-item" data-mode="template" onclick="setMode('template')">
+      <div class="side-dot">T</div><div>By Template</div>
+    </div>
+    <div class="side-item" data-mode="grade" onclick="setMode('grade')">
+      <div class="side-dot">G</div><div>By Grade</div>
+    </div>
+  </aside>
 
-  <div class="container">
-    <aside class="sidebar">
-      <div class="side-title">FILTER</div>
+  <main class="main-content">
+    <h1 class="page-title">Discover</h1>
+    <p class="page-subtitle">Shared lessons from your community (MVP: stored locally). Filter by subject, template, or grade.</p>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
 
-      <div class="filter-card">
-        <div class="filter-title">By Subject</div>
-        <div class="filter-row" id="subjectChips"></div>
+    <div class="controls-row">
+      <div class="search-wrap">
+        <span style="font-weight:900;color:#A0AEC0;">⌕</span>
+        <input id="searchInput" type="text" placeholder="Search titles, standards codes, or keywords..." oninput="render()">
       </div>
 
-      <div class="filter-card">
-        <div class="filter-title">By Template</div>
-        <div class="filter-row" id="templateChips"></div>
-      </div>
-
-      <div class="filter-card">
-        <div class="filter-title">By Grade</div>
-        <div class="filter-row" id="gradeChips"></div>
-      </div>
-    </aside>
-
-    <main class="main">
-      <h1 class="page-title">Discover</h1>
-      <p class="page-subtitle">Shared lessons from your community. Choose a version and use it as a starting point.</p>
-
-      <div class="toolbar">
-        <input id="searchInput" class="input" placeholder="Search topics, subjects, grades..." />
-        <select id="sortSelect" class="select">
-          <option value="newest">Sort: Newest</option>
-          <option value="titleAZ">Sort: Title A–Z</option>
+      <div class="sort-wrap">
+        <label for="sortSelect">Sort:</label>
+        <select id="sortSelect" onchange="render()">
+          <option value="newest" selected>Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="title">Title</option>
         </select>
       </div>
+    </div>
 
-      <div id="resultsMeta" class="page-subtitle" style="margin-bottom:10px;"></div>
+    <div class="filter-strip" id="filterStrip"></div>
 
-      <div id="grid" class="grid"></div>
-      <div id="empty" class="empty" style="display:none;"></div>
-    </main>
-  </div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
 
-  <script type="module">
-    function initialsFromEmail(email) {
-      if (!email) return "LB";
-      const namePart = String(email).split("@")[0] || "";
-      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-      const a = tokens[0]?.[0] || "";
-      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-      return (a + b).toUpperCase() || "LB";
-    }
+<script>
+  function initialsFromEmail(email) {
+    if (!email) return "LB";
+    const namePart = String(email).split("@")[0] || "";
+    const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+    const a = tokens[0]?.[0] || "";
+    const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+    const ini = (a + b).toUpperCase();
+    return ini || "LB";
+  }
+  (function(){
     const el = document.getElementById("userProfile");
-    if (el) {
-      try {
-        const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-        if (raw) {
-          const u = JSON.parse(raw);
-          const email = u?.email || u?.user?.email;
-          el.textContent = initialsFromEmail(email);
-        } else el.textContent = "LB";
-      } catch { el.textContent = "LB"; }
+    if (!el) return;
+    try{
+      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+      if (raw){
+        const u = JSON.parse(raw);
+        const email = u?.email || u?.user?.email;
+        el.textContent = initialsFromEmail(email);
+      }
+    } catch {}
+  })();
+
+  const KEY_DISCOVER = "discoverLessons";
+  function safeParse(x){ try{ return JSON.parse(x); }catch{ return null; } }
+  function getDiscoverLessons(){
+    const raw = localStorage.getItem(KEY_DISCOVER);
+    const arr = raw ? (safeParse(raw) || []) : [];
+    return Array.isArray(arr) ? arr : [];
+  }
+
+  const frameworkNames = {
+    "madeline-hunter": "Madeline Hunter",
+    "5e-model": "5E Model",
+    "ubd": "Understanding by Design",
+    "gradual-release": "Gradual Release"
+  };
+
+  let mode = "subject";
+  let activeFilter = "All";
+
+  function setMode(next){
+    mode = next;
+    activeFilter = "All";
+    document.querySelectorAll(".side-item").forEach(el=>{
+      el.classList.toggle("active", el.dataset.mode === mode);
+    });
+    render();
+  }
+
+  function getFilterOptions(items){
+    if (mode === "subject"){
+      const set = new Set(items.map(x => (x.subject || "").trim()).filter(Boolean));
+      return ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
     }
-  </script>
-
-  <script>
-    const KEY_DISCOVER = "discoverShared";
-
-    function safeParse(str){ try { return JSON.parse(str); } catch { return null; } }
-    function getDiscover(){
-      const raw = localStorage.getItem(KEY_DISCOVER);
-      const arr = raw ? (safeParse(raw) || []) : [];
-      return Array.isArray(arr) ? arr : [];
+    if (mode === "template"){
+      const set = new Set(items.map(x => frameworkNames[x.framework] || x.framework || "").filter(Boolean));
+      return ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
     }
-
-    function escapeHtml(str) {
-      return String(str ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function uniqueSorted(arr){
-      return Array.from(new Set(arr.filter(Boolean))).sort((a,b)=>String(a).localeCompare(String(b)));
-    }
-
-    function buildChips(container, values, activeValue, onPick){
-      container.innerHTML = "";
-      const all = document.createElement("div");
-      all.className = "chip" + (!activeValue ? " active" : "");
-      all.textContent = "All";
-      all.addEventListener("click", () => onPick(null));
-      container.appendChild(all);
-
-      values.forEach(v => {
-        const c = document.createElement("div");
-        c.className = "chip" + (activeValue === v ? " active" : "");
-        c.textContent = v;
-        c.addEventListener("click", () => onPick(v));
-        container.appendChild(c);
+    if (mode === "grade"){
+      const set = new Set(items.map(x => (x.grade || "").trim()).filter(Boolean));
+      const arr = Array.from(set);
+      arr.sort((a,b)=>{
+        const na = parseInt(a.match(/\d+/)?.[0] || "",10);
+        const nb = parseInt(b.match(/\d+/)?.[0] || "",10);
+        if (Number.isFinite(na) && Number.isFinite(nb)) return na-nb;
+        return a.localeCompare(b);
       });
+      return ["All", ...arr];
     }
+    return ["All"];
+  }
 
-    const state = { subject:null, template:null, grade:null, search:"", sort:"newest" };
+  function matchesModeFilter(item){
+    if (activeFilter === "All") return true;
+    if (mode === "subject") return (item.subject || "").trim() === activeFilter;
+    if (mode === "template") return (frameworkNames[item.framework] || item.framework || "") === activeFilter;
+    if (mode === "grade") return (item.grade || "").trim() === activeFilter;
+    return true;
+  }
 
-    const subjectChips = document.getElementById("subjectChips");
-    const templateChips = document.getElementById("templateChips");
-    const gradeChips = document.getElementById("gradeChips");
+  function searchMatch(item, q){
+    if (!q) return true;
+    const s = q.toLowerCase();
+    const title = String(item.title || "").toLowerCase();
+    const subject = String(item.subject || "").toLowerCase();
+    const grade = String(item.grade || "").toLowerCase();
+    const template = String(frameworkNames[item.framework] || item.framework || "").toLowerCase();
+    const stdCodes = Array.isArray(item.verifiedStandards)
+      ? item.verifiedStandards.map(x => String(x.code || x.id || "")).join(" ").toLowerCase()
+      : "";
+
+    // look into latest version snapshot too (optional)
+    const v0 = item.versions?.[0]?.snapshot || {};
+    const gl = v0.generatedLesson || {};
+    const summary = String(gl.summary || "").toLowerCase();
+    const objectives = Array.isArray(gl.objectives) ? gl.objectives.join(" ").toLowerCase() : "";
+
+    return (
+      title.includes(s) ||
+      subject.includes(s) ||
+      grade.includes(s) ||
+      template.includes(s) ||
+      stdCodes.includes(s) ||
+      summary.includes(s) ||
+      objectives.includes(s)
+    );
+  }
+
+  function sortItems(arr){
+    const v = document.getElementById("sortSelect").value;
+    const copy = [...arr];
+    if (v === "title"){
+      copy.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||"")));
+      return copy;
+    }
+    if (v === "oldest"){
+      copy.sort((a,b)=>new Date(a.sharedAt||0) - new Date(b.sharedAt||0));
+      return copy;
+    }
+    copy.sort((a,b)=>new Date(b.sharedAt||0) - new Date(a.sharedAt||0));
+    return copy;
+  }
+
+  function renderFilterStrip(items){
+    const strip = document.getElementById("filterStrip");
+    const opts = getFilterOptions(items);
+    strip.innerHTML = `
+      <div class="filter-label">Filter:</div>
+      ${opts.map(opt => `
+        <div class="filter-item ${opt===activeFilter?'active':''}" onclick="setFilter('${escapeAttr(opt)}')">${escapeHtml(opt)}</div>
+      `).join("")}
+    `;
+  }
+  function setFilter(v){ activeFilter = v; render(); }
+
+  function openShared(shareId, versionIndex){
+    const items = getDiscoverLessons();
+    const entry = items.find(x => x.shareId === shareId);
+    if (!entry) return alert("Could not find shared lesson.");
+    const versions = Array.isArray(entry.versions) ? entry.versions : [];
+    const v = versions[versionIndex] || versions[0];
+    if (!v?.snapshot) return alert("No version snapshot found.");
+
+    try{
+      // load into builder flow (Step 6 preview)
+      localStorage.setItem("lessonData", JSON.stringify(v.snapshot));
+    } catch {}
+
+    window.location.href = "build-step6.html";
+  }
+
+  function render(){
+    const all = getDiscoverLessons();
+    renderFilterStrip(all);
+
+    const q = (document.getElementById("searchInput").value || "").trim();
+    let list = all
+      .filter(matchesModeFilter)
+      .filter(x => searchMatch(x, q));
+
+    list = sortItems(list);
+
     const grid = document.getElementById("grid");
-    const empty = document.getElementById("empty");
-    const resultsMeta = document.getElementById("resultsMeta");
-    const searchInput = document.getElementById("searchInput");
-    const sortSelect = document.getElementById("sortSelect");
-
-    function applyFilters(items){
-      let list = items.slice();
-      if (state.subject) list = list.filter(x => String(x.subject||"") === String(state.subject));
-      if (state.template) list = list.filter(x => String(x.framework||"") === String(state.template));
-      if (state.grade) list = list.filter(x => String(x.grade||"") === String(state.grade));
-      if (state.search){
-        const q = state.search.toLowerCase();
-        list = list.filter(x =>
-          String(x.title||"").toLowerCase().includes(q) ||
-          String(x.subject||"").toLowerCase().includes(q) ||
-          String(x.grade||"").toLowerCase().includes(q)
-        );
-      }
-      if (state.sort === "titleAZ") list.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||"")));
-      else {
-        // newest: use most recent version timestamp
-        list.sort((a,b)=>{
-          const ad = Date.parse(a.versions?.[0]?.createdAt || "") || 0;
-          const bd = Date.parse(b.versions?.[0]?.createdAt || "") || 0;
-          return bd - ad;
-        });
-      }
-      return list;
+    if (!list.length){
+      grid.innerHTML = `
+        <div class="empty" style="grid-column:1/-1;">
+          <b>No shared lessons yet.</b><br>
+          Go to <b>My Lessons</b> and click <b>Share</b> to publish one to Discover.
+        </div>
+      `;
+      return;
     }
 
-    function render(items){
-      grid.innerHTML = "";
+    grid.innerHTML = list.map(item=>{
+      const shared = item.sharedAt ? new Date(item.sharedAt).toLocaleDateString() : "";
+      const tpl = frameworkNames[item.framework] || item.framework || "Template";
+      const std = Array.isArray(item.verifiedStandards) ? item.verifiedStandards.map(x=>x.code||x.id).filter(Boolean).slice(0,4) : [];
+      const versions = Array.isArray(item.versions) ? item.versions : [];
+      const vCount = versions.length;
 
-      if (!items.length){
-        empty.style.display = "block";
-        empty.innerHTML = `
-          <div style="font-weight:900;color:var(--navy);margin-bottom:6px;">Nothing shared yet</div>
-          <div>Go to <b>My Lessons</b> and press <b>Share</b> on a lesson to publish it here.</div>
-        `;
-        resultsMeta.textContent = `0 items shown`;
-        return;
-      }
-      empty.style.display = "none";
-      resultsMeta.textContent = `${items.length} item${items.length!==1?"s":""} shown`;
+      const versionSelect = (vCount > 1) ? `
+        <div class="version-wrap">
+          <label>Version</label>
+          <select id="ver_${item.shareId}">
+            ${versions.map((v,i)=>`<option value="${i}">${i===0 ? "Latest" : "Previous"}</option>`).join("")}
+          </select>
+        </div>
+      ` : `
+        <div class="version-wrap">
+          <label>Version</label>
+          <div style="font-weight:900;color:var(--navy);">Latest</div>
+        </div>
+      `;
 
-      items.forEach((d) => {
-        const versions = Array.isArray(d.versions) ? d.versions : [];
-        const v1 = versions[0];
-        const v2 = versions[1];
-
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const opts = versions.map((v, idx) => {
-          const label = idx === 0 ? "Latest" : "Previous";
-          const date = v?.createdAt ? new Date(v.createdAt).toLocaleDateString() : "";
-          return `<option value="${escapeHtml(v.versionId)}">${label}${date ? ` — ${date}` : ""}</option>`;
-        }).join("");
-
-        card.innerHTML = `
-          <div class="card-title">${escapeHtml(d.title || "Untitled Lesson")}</div>
+      return `
+        <div class="card">
+          <div class="card-title">${escapeHtml(item.title || "Untitled Lesson")}</div>
           <div class="card-meta">
-            <div><b>Grade:</b> ${escapeHtml(String(d.grade||""))} &nbsp; | &nbsp; <b>Subject:</b> ${escapeHtml(String(d.subject||""))} &nbsp; | &nbsp; <b>Template:</b> ${escapeHtml(String(d.framework||""))}</div>
-            <div style="margin-top:6px;color:var(--gray-600);">Choose a version to use.</div>
+            <b>Grade:</b> ${escapeHtml(item.grade || "")} &nbsp;|&nbsp;
+            <b>Subject:</b> ${escapeHtml(item.subject || "")} &nbsp;|&nbsp;
+            <b>Duration:</b> ${escapeHtml(String(item.duration || ""))} min<br>
+            <b>Template:</b> ${escapeHtml(tpl)} &nbsp;|&nbsp;
+            <b>Shared:</b> ${escapeHtml(shared)}
           </div>
-
-          <div class="version-row">
-            <select class="version-select" data-discover="${escapeHtml(d.discoverId)}">
-              ${opts || `<option value="">No versions</option>`}
-            </select>
-            <button class="btn btn-primary" data-use="${escapeHtml(d.discoverId)}">Use This Version</button>
+          <div class="tag-row">
+            ${item.subject ? `<div class="tag">${escapeHtml(item.subject)}</div>` : ``}
+            ${tpl ? `<div class="tag">${escapeHtml(tpl)}</div>` : ``}
+            ${std.map(code=>`<div class="tag">${escapeHtml(code)}</div>`).join("")}
           </div>
-        `;
+          <div class="card-actions">
+            ${versionSelect}
+            <button class="btn btn-primary" onclick="openFromUI(${item.shareId})">Open</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
 
-        // Use selected version -> copies into lessonData and sends to step1
-        card.querySelector('[data-use]').addEventListener("click", () => {
-          const sel = card.querySelector('select[data-discover]');
-          const verId = sel.value;
-          const version = versions.find(v => String(v.versionId) === String(verId)) || versions[0];
-          if (!version?.payload){ alert("That version is missing."); return; }
+  function openFromUI(shareId){
+    const sel = document.getElementById("ver_"+shareId);
+    const idx = sel ? parseInt(sel.value,10) : 0;
+    openShared(shareId, Number.isFinite(idx) ? idx : 0);
+  }
 
-          localStorage.setItem("lessonData", JSON.stringify(version.payload));
-          window.location.href = "build-step1.html";
-        });
+  function escapeHtml(str){
+    return String(str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function escapeAttr(str){
+    return String(str ?? "").replaceAll("\\","\\\\").replaceAll("'","\\'");
+  }
 
-        grid.appendChild(card);
-      });
-    }
-
-    function refresh(){
-      const all = getDiscover();
-
-      const subjects = uniqueSorted(all.map(x=>x.subject));
-      const templates = uniqueSorted(all.map(x=>x.framework));
-      const grades = uniqueSorted(all.map(x=>String(x.grade)));
-
-      buildChips(subjectChips, subjects, state.subject, (v)=>{ state.subject=v; refresh(); });
-      buildChips(templateChips, templates, state.template, (v)=>{ state.template=v; refresh(); });
-      buildChips(gradeChips, grades, state.grade, (v)=>{ state.grade=v; refresh(); });
-
-      const filtered = applyFilters(all);
-      render(filtered);
-    }
-
-    searchInput.addEventListener("input",(e)=>{ state.search = e.target.value.trim(); refresh(); });
-    sortSelect.addEventListener("change",(e)=>{ state.sort = e.target.value; refresh(); });
-
-    refresh();
-  </script>
+  render();
+</script>
 </body>
 </html>
