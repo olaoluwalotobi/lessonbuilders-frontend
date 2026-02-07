@@ -9,407 +9,215 @@
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --navy:#0D2847;
-      --orange:#FF8C42;
-      --green:#10B981;
-      --yellow:#F59E0B;
-      --red:#EF4444;
-      --blue:#3B82F6;
-      --bg:#F7FAFC;
-      --border:#E2E8F0;
-      --muted:#718096;
-      --text:#4A5568;
-      --card:#FFFFFF;
-      --shadow:0 8px 22px rgba(13,40,71,0.08);
-      --radius:16px;
-    }
-
+    :root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{
-      font-family:'DM Sans',sans-serif;
-      background:linear-gradient(135deg,var(--bg) 0%, #fff 100%);
-      color:var(--navy);
-    }
+    body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
 
-    /* Top nav */
+    /* Top nav (match Step 6 vibe) */
     .top-nav{
-      background:#fff;
-      border-bottom:2px solid rgba(13,40,71,0.08);
-      padding:16px 40px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      position:sticky;
-      top:0;
-      z-index:1000;
-      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+      background:white;border-bottom:2px solid rgba(13,40,71,0.1);
+      padding:16px 40px;display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
     .nav-left{display:flex;align-items:center;gap:40px;}
-    .logo{
-      display:flex;align-items:center;gap:10px;
-      text-decoration:none;
-    }
-    .logo-mark{
-      width:34px;height:34px;border-radius:10px;
-      background:linear-gradient(135deg,var(--orange),#FFB380);
-      display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:800;
-      letter-spacing:-0.5px;
-      box-shadow:0 8px 18px rgba(255,140,66,0.25);
-    }
-    .logo-text{
-      font-family:'Crimson Pro',serif;
-      font-size:24px;
-      font-weight:700;
-      color:var(--navy);
-    }
-    .nav-menu{display:flex;gap:26px;align-items:center;}
-    .nav-link{
-      text-decoration:none;
-      color:var(--text);
-      font-weight:600;
-      font-size:15px;
-      padding:8px 10px;
-      border-radius:10px;
-      transition:all 0.2s ease;
-    }
-    .nav-link:hover{color:var(--navy); background:rgba(13,40,71,0.04);}
-    .nav-link.active{
-      color:var(--navy);
-      background:rgba(255,140,66,0.12);
-      border:1px solid rgba(255,140,66,0.25);
-    }
-    .nav-right{display:flex;align-items:center;gap:14px;}
+    .logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+    .nav-menu{display:flex;gap:32px;align-items:center;}
+    .nav-link{text-decoration:none;color:#4A5568;font-weight:600;font-size:15px;transition:color 0.2s;}
+    .nav-link:hover{color:var(--navy);}
+    .nav-link.active{color:var(--navy);}
+
+    .nav-right{display:flex;align-items:center;gap:16px;}
     .user-profile{
       width:36px;height:36px;border-radius:50%;
       background:linear-gradient(135deg,var(--orange),#FFB380);
-      display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:700;font-size:14px;
-      cursor:default;
+      display:flex;align-items:center;justify-content:center;color:white;
+      font-weight:700;font-size:14px;cursor:default;
     }
 
     /* Layout */
-    .container{
-      display:flex;
-      max-width:1400px;
-      margin:0 auto;
-      min-height:calc(100vh - 72px);
-    }
-
-    /* Left sidebar (Assessment only) */
+    .container{display:flex;max-width:1400px;margin:0 auto;}
     .sidebar{
-      width:280px;
-      background:#fff;
-      border-right:1px solid rgba(13,40,71,0.08);
-      padding:28px 18px;
+      width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);
+      padding:30px 20px;
     }
     .sidebar-title{
-      font-size:13px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:0.6px;
-      color:#999;
-      margin-bottom:14px;
+      font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;
     }
 
+    /* Sidebar items (closer to Step 1–7 vibe, but “Assessments” only) */
     .side-item{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:12px 12px;
-      border-radius:14px;
-      border:2px solid transparent;
-      text-decoration:none;
-      color:var(--text);
-      cursor:pointer;
-      transition:all 0.2s ease;
-      margin-bottom:10px;
+      display:flex;align-items:center;gap:12px;
+      padding:12px;margin-bottom:10px;border-left:3px solid transparent;
+      border-radius:12px;color:#4A5568;cursor:pointer;user-select:none;
+      transition:all 0.2s;
     }
-    .side-item:hover{background:rgba(13,40,71,0.03); color:var(--navy);}
+    .side-item:hover{background:rgba(13,40,71,0.03);color:var(--navy);}
     .side-item.active{
       background:rgba(255,140,66,0.10);
-      border-color:rgba(255,140,66,0.25);
+      border-left-color:var(--orange);
       color:var(--navy);
       font-weight:800;
     }
     .side-icon{
-      width:30px;height:30px;border-radius:50%;
+      width:28px;height:28px;border-radius:50%;
+      background:#F7FAFC;border:2px solid #E2E8F0;
       display:flex;align-items:center;justify-content:center;
-      background:#F7FAFC;
-      border:2px solid var(--border);
-      font-weight:800;
-      color:#9AA3AE;
+      font-size:13px;font-weight:800;color:#999;
       flex:0 0 auto;
     }
     .side-item.active .side-icon{
-      background:var(--orange);
-      border-color:var(--orange);
-      color:#fff;
+      background:var(--orange);border-color:var(--orange);color:#fff;
     }
 
-    /* Main content */
-    .main{
-      flex:1;
-      padding:36px 56px;
-      max-width:980px;
-    }
-    .page-title{
-      font-family:'Crimson Pro',serif;
-      font-size:44px;
-      font-weight:700;
-      margin-bottom:8px;
-    }
-    .page-subtitle{
-      color:var(--text);
-      font-size:16px;
-      line-height:1.5;
-      margin-bottom:18px;
-      max-width:720px;
-    }
+    /* Main */
+    .main{flex:1;padding:40px 60px;max-width:980px;}
+    .page-title{font-family:'Crimson Pro',serif;font-size:44px;font-weight:700;margin-bottom:10px;color:var(--navy);}
+    .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:14px;max-width:760px;line-height:1.5;}
 
-    .progress-bar{
-      height:6px;
-      background:var(--border);
-      border-radius:999px;
-      overflow:hidden;
-      margin-bottom:18px;
-      max-width:720px;
+    /* Thin orange line like your reference */
+    .progress-line{
+      height:4px;background:#E2E8F0;border-radius:3px;margin-bottom:22px;overflow:hidden;max-width:860px;
     }
-    .progress-fill{
-      height:100%;
-      width:46%;
+    .progress-line > div{
+      height:100%;width:54%;
       background:linear-gradient(90deg,var(--orange),#FFB380);
-      border-radius:999px;
+      border-radius:3px;
     }
 
-    /* Card + grid */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 240px;
-      gap:16px;
-      align-items:start;
-      max-width:900px;
-    }
+    /* Main card */
     .card{
-      background:var(--card);
-      border:2px solid var(--border);
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:0 2px 10px rgba(13,40,71,0.05);
+      background:white;border:2px solid #E2E8F0;border-radius:16px;
+      padding:18px;max-width:860px;
     }
-    .card-title{
-      font-size:18px;
-      font-weight:800;
-      margin-bottom:6px;
+    .card-grid{
+      display:grid;
+      grid-template-columns: 1fr 200px; /* left form + right type buttons */
+      gap:18px;
+      align-items:start;
     }
-    .card-subtitle{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:14px;
-    }
+    .card-title{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+    .card-sub{font-size:13px;color:#718096;margin-bottom:14px;}
 
-    .field{
-      margin-bottom:14px;
-    }
-    .label{
-      display:block;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:0.3px;
-      color:#7C8797;
-      text-transform:uppercase;
-      margin-bottom:8px;
+    .field-label{
+      font-size:12px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;
+      color:#718096;margin:10px 0 8px;
     }
 
     /* Dropdown */
-    .select{
-      width:100%;
-      appearance:none;
-      background:#fff;
-      border:2px solid var(--border);
-      border-radius:14px;
-      padding:12px 42px 12px 14px;
-      font-size:15px;
-      font-weight:600;
-      color:var(--navy);
-      outline:none;
-      transition:border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .select:focus{
-      border-color:rgba(255,140,66,0.7);
-      box-shadow:0 0 0 4px rgba(255,140,66,0.12);
-    }
     .select-wrap{position:relative;}
+    select{
+      width:100%;
+      border:2px solid #E2E8F0;
+      border-radius:12px;
+      padding:12px 40px 12px 14px;
+      font-size:15px;font-weight:600;color:var(--navy);
+      background:white;outline:none;
+      appearance:none;
+    }
     .select-wrap:after{
       content:"▾";
-      position:absolute;
-      right:14px;
-      top:50%;
+      position:absolute;right:14px;top:50%;
       transform:translateY(-50%);
-      color:#8A95A5;
+      color:#8A95A5;font-weight:900;
       pointer-events:none;
-      font-size:14px;
-      font-weight:800;
     }
-
-    /* Textarea (AUTO-HEIGHT) */
-    textarea{
-      width:100%;
-      padding:12px 14px;
-      border-radius:14px;
-      border:2px solid var(--border);
-      font-family:'DM Sans',sans-serif;
-      font-size:15px;
-      line-height:1.45;
-      color:var(--navy);
-
-      resize:none;            /* auto-height UX */
-      overflow:hidden;        /* no scrollbars */
-      white-space:pre-wrap;   /* wrap lines */
-      word-wrap:break-word;   /* break long words */
-      min-height:86px;
-      transition:border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    textarea:focus{
-      outline:none;
-      border-color:rgba(255,140,66,0.7);
+    select:focus{
+      border-color:rgba(255,140,66,0.8);
       box-shadow:0 0 0 4px rgba(255,140,66,0.12);
     }
 
-    .hint{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:8px;
-    }
+    /* Teacher notes textarea: wraps + auto height (no side-scroll) */
+    textarea{
+      width:100%;
+      border:2px solid #E2E8F0;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:15px;
+      font-family:'DM Sans',sans-serif;
+      color:var(--navy);
+      line-height:1.45;
 
-    /* Assessment type column */
-    .type-panel .label{margin-bottom:10px;}
+      resize:none;            /* you said auto-height is better */
+      overflow:hidden;        /* no scrollbars; height grows */
+      white-space:pre-wrap;   /* wraps lines */
+      word-break:break-word;  /* long words don’t force horizontal scroll */
+      min-height:84px;
+      outline:none;
+    }
+    textarea:focus{
+      border-color:rgba(255,140,66,0.8);
+      box-shadow:0 0 0 4px rgba(255,140,66,0.12);
+    }
+    .tip{font-size:12px;color:#718096;margin-top:8px;}
+
+    /* Right side assessment type */
+    .type-title{
+      font-size:12px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;
+      color:#718096;margin-top:2px;margin-bottom:10px;text-align:right;
+    }
     .type-btn{
       width:100%;
-      text-align:center;
-      padding:12px 10px;
+      border:2px solid #E2E8F0;
       border-radius:999px;
-      border:2px solid var(--border);
-      background:#fff;
-      color:var(--navy);
-      font-weight:800;
+      padding:10px 10px;
       font-size:14px;
+      font-weight:800;
+      background:white;
+      color:var(--navy);
       cursor:pointer;
-      transition:all 0.18s ease;
+      transition:all .18s;
       margin-bottom:10px;
     }
-    .type-btn:hover{border-color:rgba(255,140,66,0.45);}
+    .type-btn:hover{border-color:rgba(255,140,66,0.55);}
     .type-btn.active{
-      border-color:rgba(255,140,66,0.8);
+      border-color:rgba(255,140,66,0.9);
       background:rgba(255,140,66,0.12);
-      color:var(--navy);
     }
 
-    /* Buttons row */
-    .row{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin-top:12px;
+    /* Bottom buttons: Clear left, Generate right */
+    .card-actions{
+      display:flex;align-items:center;gap:12px;margin-top:16px;
     }
     .btn{
-      padding:12px 18px;
-      border-radius:14px;
-      font-size:14px;
-      font-weight:900;
-      cursor:pointer;
-      border:none;
-      transition:all 0.2s ease;
-      font-family:'DM Sans',sans-serif;
+      padding:12px 18px;border-radius:12px;font-size:14px;font-weight:900;
+      cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;border:none;
     }
+    .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+    .btn-secondary:hover{border-color:rgba(255,140,66,0.55);}
     .btn-primary{
       background:linear-gradient(135deg,var(--orange),#FFB380);
-      color:#fff;
-      box-shadow:0 10px 20px rgba(255,140,66,0.22);
+      color:white;
+      box-shadow:0 10px 20px rgba(255,140,66,0.20);
     }
     .btn-primary:hover{transform:translateY(-1px);}
-    .btn-secondary{
-      background:#fff;
-      border:2px solid var(--border);
-      color:var(--navy);
-    }
-    .btn-secondary:hover{border-color:rgba(255,140,66,0.55);}
     .spacer{flex:1;}
 
-    /* Output */
-    .output{
-      margin-top:16px;
-      max-width:900px;
-    }
-    .output-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
-    }
-    .output pre{
-      background:#0B1F36;
-      color:#EAF2FF;
-      border-radius:14px;
-      padding:14px;
-      overflow:auto;
-      max-height:420px;
-      font-size:12.5px;
-      line-height:1.45;
-      border:1px solid rgba(255,255,255,0.08);
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:2px solid var(--border);
-      background:#fff;
-      font-weight:800;
-      font-size:12px;
-      color:var(--text);
-    }
-    .pill strong{color:var(--navy);}
-    .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
-
-    /* Upload section */
-    .upload-row{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-      margin-top:10px;
-    }
-    .file{
+    /* Upload section card (kept but hidden until tab is clicked) */
+    .upload-card{margin-top:14px;max-width:860px;}
+    .file-box{
       border:2px dashed rgba(13,40,71,0.18);
-      border-radius:14px;
-      padding:12px;
-      background:rgba(13,40,71,0.02);
-      width:100%;
+      border-radius:12px;padding:12px;background:rgba(13,40,71,0.02);
     }
-    .file input{width:100%;}
-    .small-note{font-size:12px;color:var(--muted);margin-top:8px;}
+    input[type="file"]{width:100%;}
+    .small-note{font-size:12px;color:#718096;margin-top:8px;}
 
     /* Responsive */
     @media (max-width: 980px){
-      .top-nav{padding:12px 16px;gap:10px;flex-wrap:wrap;}
+      .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
       .nav-left{gap:16px;flex-wrap:wrap;}
-      .container{flex-direction:column;}
+      .container{flex-direction:column;max-width:100%;}
       .sidebar{
         width:100%;
-        border-right:none;
-        border-bottom:1px solid rgba(13,40,71,0.08);
-        display:flex;
-        gap:10px;
-        overflow-x:auto;
+        border-right:none;border-bottom:1px solid rgba(13,40,71,0.1);
         padding:14px 12px;
-        -webkit-overflow-scrolling:touch;
+        display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;
       }
       .sidebar-title{display:none;}
-      .side-item{flex:0 0 auto; margin-bottom:0;}
+      .side-item{flex:0 0 auto;margin-bottom:0;border-left:none;border-bottom:3px solid transparent;}
+      .side-item.active{border-bottom-color:var(--orange);border-left-color:transparent;}
       .main{padding:22px 16px;max-width:100%;}
-      .grid{grid-template-columns:1fr; max-width:100%;}
+      .card-grid{grid-template-columns:1fr;}
+      .type-title{text-align:left;margin-top:10px;}
     }
   </style>
 </head>
@@ -417,10 +225,7 @@
 <body>
   <nav class="top-nav">
     <div class="nav-left">
-      <a class="logo" href="index.html">
-        <div class="logo-mark">LB</div>
-        <div class="logo-text">LessonBuilders</div>
-      </a>
+      <a href="index.html" class="logo-text">LessonBuilders</a>
       <div class="nav-menu">
         <a href="library.html" class="nav-link">My Lessons</a>
         <a href="assessments.html" class="nav-link active">Assessments</a>
@@ -435,146 +240,89 @@
 
   <div class="container">
     <aside class="sidebar">
-      <div class="sidebar-title">Assessments</div>
+      <div class="sidebar-title">ASSESSMENTS</div>
 
       <div class="side-item active" id="tabCreate" onclick="showTab('create')">
         <div class="side-icon">A</div>
-        <div>
-          <div style="font-weight:900;">Create from Lesson</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Use a saved lesson</div>
-        </div>
+        <div style="font-weight:800;">Create from Lesson</div>
       </div>
 
       <div class="side-item" id="tabUpload" onclick="showTab('upload')">
         <div class="side-icon">↑</div>
-        <div>
-          <div style="font-weight:900;">Upload Existing</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Enhance what you have</div>
-        </div>
+        <div style="font-weight:800;">Upload Existing</div>
       </div>
     </aside>
 
     <main class="main">
       <h1 class="page-title">Assessments</h1>
-      <p class="page-subtitle">
-        Create classroom-ready assessments from your lessons — or upload what you already have and enhance it.
-      </p>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <p class="page-subtitle">Create classroom-ready assessments from your lessons — or upload what you already have and enhance it.</p>
+      <div class="progress-line"><div></div></div>
 
-      <!-- CREATE TAB -->
+      <!-- CREATE -->
       <section id="createSection">
-        <div class="grid">
-          <div class="card">
-            <div class="card-title">Create from a lesson</div>
-            <div class="card-subtitle">Choose a saved lesson (or your current build) and generate an assessment draft.</div>
+        <div class="card">
+          <div class="card-grid">
+            <div>
+              <div class="card-title">Create from a lesson</div>
+              <div class="card-sub">Choose a saved lesson (or your current build) and generate an assessment draft.</div>
 
-            <div class="field">
-              <label class="label" for="lessonSelect">Select lesson</label>
+              <div class="field-label">Select lesson</div>
               <div class="select-wrap">
-                <select id="lessonSelect" class="select"></select>
+                <select id="lessonSelect"></select>
               </div>
+
+              <div class="field-label" style="margin-top:16px;">Teacher notes (optional)</div>
+              <textarea id="teacherNotes" placeholder="Ex: focus on vocabulary + guided practice outcomes"></textarea>
+              <div class="tip">Tip: Use this to steer difficulty, format, or focus.</div>
             </div>
 
-            <div class="field">
-              <label class="label" for="teacherNotes">Teacher notes (optional)</label>
-              <textarea
-                id="teacherNotes"
-                placeholder="Ex: focus on vocabulary + guided practice outcomes"></textarea>
-              <div class="hint">Tip: Use this to steer difficulty, format, or focus.</div>
-            </div>
+            <div>
+              <div class="type-title">ASSESSMENT TYPE</div>
 
-            <div class="row">
-              <button class="btn btn-secondary" onclick="clearCreate()">Clear</button>
-              <div class="spacer"></div>
-              <button class="btn btn-primary" id="generateBtn" onclick="generateDraft()">Generate Draft</button>
+              <button class="type-btn active" data-type="Quiz" onclick="setType('Quiz')">Quiz</button>
+              <button class="type-btn" data-type="Exit Ticket" onclick="setType('Exit Ticket')">Exit Ticket</button>
+              <button class="type-btn" data-type="In-Class Activity" onclick="setType('In-Class Activity')">In-Class Activity</button>
+              <button class="type-btn" data-type="Homework Assignment" onclick="setType('Homework Assignment')">Homework Assignment</button>
             </div>
-
-            <div class="pills" id="contextPills" style="display:none;"></div>
           </div>
 
-          <div class="card type-panel">
-            <label class="label">Assessment type</label>
-
-            <button class="type-btn active" data-type="Quiz" onclick="setType('Quiz')">Quiz</button>
-            <button class="type-btn" data-type="Exit Ticket" onclick="setType('Exit Ticket')">Exit Ticket</button>
-            <button class="type-btn" data-type="In-Class Activity" onclick="setType('In-Class Activity')">In-Class Activity</button>
-            <button class="type-btn" data-type="Homework Assignment" onclick="setType('Homework Assignment')">Homework Assignment</button>
-          </div>
-        </div>
-
-        <div class="output" id="outputBlock" style="display:none;">
-          <div class="card">
-            <div class="card-title">Draft Output</div>
-            <div class="card-subtitle">
-              Format: <strong>studentCopy</strong>, <strong>answerKey</strong>, <strong>rubric</strong>, <strong>metadata</strong>.
-              (This is UI-ready now; connect your backend endpoint when you’re ready.)
-            </div>
-
-            <div class="output-grid">
-              <pre id="outputJson"></pre>
-            </div>
-
-            <div class="row">
-              <button class="btn btn-secondary" onclick="copyOutput()">Copy JSON</button>
-              <div class="spacer"></div>
-              <button class="btn btn-primary" onclick="downloadOutput()">Download .json</button>
-            </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="clearCreate()">Clear</button>
+            <div class="spacer"></div>
+            <button class="btn btn-primary" onclick="generateDraft()">Generate Draft</button>
           </div>
         </div>
       </section>
 
-      <!-- UPLOAD TAB -->
+      <!-- UPLOAD -->
       <section id="uploadSection" style="display:none;">
-        <div class="grid" style="grid-template-columns: 1fr;">
-          <div class="card">
-            <div class="card-title">Upload an existing assessment</div>
-            <div class="card-subtitle">Upload a file or paste text. (Next step: send to backend to enhance + produce studentCopy/answerKey/rubric.)</div>
+        <div class="card upload-card">
+          <div class="card-title">Upload existing</div>
+          <div class="card-sub">Upload an assessment you already have and enhance it.</div>
 
-            <div class="field">
-              <label class="label">Upload file (PDF/DOC/TXT)</label>
-              <div class="file">
-                <input type="file" id="assessmentFile" />
-                <div class="small-note">For now, this UI stores file metadata only (no OCR). When you connect backend, you can process files.</div>
-              </div>
-            </div>
+          <div class="field-label">Upload file (PDF/DOC/TXT)</div>
+          <div class="file-box">
+            <input type="file" id="uploadFile" />
+            <div class="small-note">For now, this page can store the file selection. When you connect backend processing, you can extract text and generate studentCopy/answerKey/rubric.</div>
+          </div>
 
-            <div class="field">
-              <label class="label" for="assessmentPaste">Or paste assessment text</label>
-              <textarea id="assessmentPaste" placeholder="Paste your assessment here..."></textarea>
-            </div>
+          <div class="field-label" style="margin-top:16px;">Or paste assessment text</div>
+          <textarea id="uploadText" placeholder="Paste your assessment here..."></textarea>
 
-            <div class="field">
-              <label class="label" for="uploadNotes">Teacher notes (optional)</label>
-              <textarea id="uploadNotes" placeholder="Ex: make it shorter, add rubric, align to the lesson objectives"></textarea>
-            </div>
-
-            <div class="row">
-              <button class="btn btn-secondary" onclick="clearUpload()">Clear</button>
-              <div class="spacer"></div>
-              <button class="btn btn-primary" onclick="mockEnhance()">Enhance Draft</button>
-            </div>
-
-            <div class="output" id="uploadOutputBlock" style="display:none;margin-top:14px;">
-              <pre id="uploadOutputJson"></pre>
-            </div>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="clearUpload()">Clear</button>
+            <div class="spacer"></div>
+            <button class="btn btn-primary" onclick="enhanceUpload()">Enhance</button>
           </div>
         </div>
       </section>
-
     </main>
   </div>
 
   <script>
-    /* =========================
-       Assessments (UI-only MVP)
-       - Pull lessons from localStorage:
-         - savedLessons[] (from Step 6 saveToLibrary())
-         - lessonData (current build) if present
-       - Assessment type buttons
-       - Auto-height textarea
-       ========================= */
+    /* ===== UI behavior only (keeps your layout exact) ===== */
 
-    // ---- User bubble initials (optional)
+    // ---- user bubble initials (optional)
     (function(){
       function initialsFromEmail(email) {
         if (!email) return "LB";
@@ -594,7 +342,7 @@
       } catch {}
     })();
 
-    // ---- Auto-height textarea
+    // ---- auto-height textarea (wrap + grow down)
     function autoGrow(el){
       el.style.height = "auto";
       el.style.height = el.scrollHeight + "px";
@@ -606,7 +354,7 @@
       document.querySelectorAll("textarea").forEach(autoGrow);
     });
 
-    // ---- Tabs
+    // ---- tabs
     function showTab(which){
       const create = document.getElementById("createSection");
       const upload = document.getElementById("uploadSection");
@@ -627,111 +375,46 @@
     }
     window.showTab = showTab;
 
-    // ---- Lesson loading
-    function safeParse(s){ try{ return JSON.parse(s); } catch { return null; } }
+    // ---- lesson dropdown (uses your savedLessons + current lessonData if present)
+    function safeParse(s){ try{return JSON.parse(s);}catch{return null;} }
 
-    function summarizeLesson(lesson){
-      const title = lesson?.title || lesson?.step1?.topic || "Untitled Lesson";
-      const grade = lesson?.grade || lesson?.step1?.grade || "";
-      const subject = lesson?.subject || lesson?.step1?.subject || "";
-      const bits = [];
-      if (grade) bits.push(String(grade));
-      if (subject) bits.push(String(subject));
-      const meta = bits.length ? ` (${bits.join(" • ")})` : "";
-      return `${title}${meta}`;
+    function summarizeLesson(obj){
+      const title = obj?.title || obj?.step1?.topic || "Untitled Lesson";
+      const grade = obj?.grade || obj?.step1?.grade || "";
+      const subject = obj?.subject || obj?.step1?.subject || "";
+      const parts = [];
+      if (grade) parts.push(grade);
+      if (subject) parts.push(subject);
+      return parts.length ? `${title} (${parts.join(" • ")})` : title;
     }
 
-    function getLessonsForDropdown(){
+    function loadLessons(){
       const results = [];
 
-      // current build (lessonData)
       const ldRaw = localStorage.getItem("lessonData");
       const lessonData = ldRaw ? (safeParse(ldRaw) || null) : null;
       if (lessonData?.step1?.topic){
-        results.push({
-          id: "current-build",
-          source: "current",
-          display: summarizeLesson(lessonData),
-          data: lessonData
-        });
+        results.push({ id:"current-build", label: summarizeLesson(lessonData) + " — Current Build" });
       }
 
-      // saved lessons
       const savedRaw = localStorage.getItem("savedLessons");
       const saved = savedRaw ? (safeParse(savedRaw) || []) : [];
       if (Array.isArray(saved)){
-        saved.forEach((item) => {
-          results.push({
-            id: String(item.id || ("saved-" + Math.random().toString(16).slice(2))),
-            source: "saved",
-            display: summarizeLesson(item),
-            data: item.fullLesson || item
-          });
+        saved.forEach(s => {
+          results.push({ id: String(s.id || Date.now()), label: summarizeLesson(s) });
         });
       }
 
       if (!results.length){
-        results.push({
-          id: "none",
-          source: "none",
-          display: "No saved lessons yet — build a lesson first",
-          data: null
-        });
+        results.push({ id:"none", label:"No saved lessons yet — build a lesson first" });
       }
 
-      return results;
+      const sel = document.getElementById("lessonSelect");
+      sel.innerHTML = results.map(r => `<option value="${r.id}">${r.label}</option>`).join("");
     }
 
-    const lessonSelect = document.getElementById("lessonSelect");
-    const contextPills = document.getElementById("contextPills");
-    const teacherNotes = document.getElementById("teacherNotes");
-
+    // ---- assessment type selection
     let selectedType = "Quiz";
-    let lessons = [];
-
-    function renderDropdown(){
-      lessons = getLessonsForDropdown();
-      lessonSelect.innerHTML = lessons.map(l => `
-        <option value="${l.id}" ${l.id==="current-build" ? "selected" : ""}>${l.display}${l.source==="current" ? " — Current Build" : ""}</option>
-      `).join("");
-      updateContextPills();
-    }
-
-    function getSelectedLesson(){
-      const id = lessonSelect.value;
-      return lessons.find(l => l.id === id) || lessons[0];
-    }
-
-    function updateContextPills(){
-      const sel = getSelectedLesson();
-      const data = sel?.data || {};
-      const step1 = data.step1 || {};
-      const step3 = data.step3 || {};
-      const standards = Array.isArray(data.verifiedStandards) ? data.verifiedStandards : [];
-
-      const pills = [];
-      if (step1.grade) pills.push({ k:"Grade", v: step1.grade });
-      if (step1.subject) pills.push({ k:"Subject", v: step1.subject });
-      if (step3.framework) pills.push({ k:"Framework", v: step3.framework });
-      if (standards.length) pills.push({ k:"Standards", v: standards.map(s => s.code || s.id).filter(Boolean).slice(0,3).join(", ") + (standards.length>3 ? "…" : "") });
-
-      if (!pills.length){
-        contextPills.style.display = "none";
-        contextPills.innerHTML = "";
-        return;
-      }
-
-      contextPills.style.display = "flex";
-      contextPills.innerHTML = pills.map(p => `
-        <span class="pill"><strong>${p.k}:</strong> ${escapeHtml(String(p.v))}</span>
-      `).join("");
-    }
-
-    lessonSelect.addEventListener("change", () => {
-      updateContextPills();
-    });
-
-    // ---- Type selection
     function setType(type){
       selectedType = type;
       document.querySelectorAll(".type-btn").forEach(btn => {
@@ -740,152 +423,36 @@
     }
     window.setType = setType;
 
-    // ---- Output helpers
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    const outputBlock = document.getElementById("outputBlock");
-    const outputJson = document.getElementById("outputJson");
-
-    function buildMockAssessmentDraft(lessonData, type, notes){
-      // This is a UI stub so you can see the final contract.
-      // When you wire backend: POST /api/generate-assessment and replace this output.
-      const step1 = lessonData?.step1 || {};
-      const lesson = lessonData?.generatedLesson || lessonData?.fullLesson?.generatedLesson || null;
-      const standards = Array.isArray(lessonData?.verifiedStandards) ? lessonData.verifiedStandards : [];
-
-      const alignedTo = {
-        topic: step1.topic || "Untitled Lesson",
-        grade: step1.grade || "",
-        subject: step1.subject || "",
-        standards: standards.map(s => s.code || s.id).filter(Boolean)
-      };
-
-      const promptHints = [
-        "Is the student demonstrating the objective in their own words?",
-        "Can the student apply key vocabulary correctly?",
-        "What misconception might appear and how will you detect it?",
-        "What does mastery look like in one sentence?"
-      ];
-
-      return {
-        studentCopy: `(${type})\n\nTitle: ${alignedTo.topic}\n\nInstructions:\n- Answer using complete sentences.\n- Show your thinking.\n\n(Placeholder) Questions will be generated from your lesson plan when backend is connected.\n\nTeacher Notes Applied:\n${notes || "None"}`,
-        answerKey: `(Placeholder) Answer key will appear here.\n\nGuidance:\n- Include ideal responses.\n- Include partial-credit notes.`,
-        rubric: `Rubric (0–4)\n4 = Exceeds\n3 = Meets\n2 = Approaching\n1 = Beginning\n0 = No evidence\n\nCriteria:\n- Accuracy\n- Use of vocabulary\n- Explanation/Reasoning\n- Completeness`,
-        metadata: {
-          assessmentType: type,
-          alignedTo,
-          guidingQuestions: promptHints,
-          createdAt: new Date().toISOString()
-        }
-      };
-    }
-
-    // ---- Actions
+    // ---- actions (placeholders; you’ll wire to backend later)
     function clearCreate(){
-      teacherNotes.value = "";
-      autoGrow(teacherNotes);
-      outputBlock.style.display = "none";
-      outputJson.textContent = "";
+      const t = document.getElementById("teacherNotes");
+      t.value = "";
+      autoGrow(t);
     }
     window.clearCreate = clearCreate;
 
-    async function generateDraft(){
-      const sel = getSelectedLesson();
-      if (!sel?.data){
-        alert("No lesson selected. Create a lesson first.");
-        return;
-      }
-
-      const notes = teacherNotes.value.trim();
-      const draft = buildMockAssessmentDraft(sel.data, selectedType, notes);
-
-      outputJson.textContent = JSON.stringify(draft, null, 2);
-      outputBlock.style.display = "block";
-      outputBlock.scrollIntoView({ behavior:"smooth", block:"start" });
+    function generateDraft(){
+      // UI-only stub: keep layout; replace later with backend call
+      alert("Generate Draft clicked (" + selectedType + ").\n\nNext step: connect this to your assessment-generation endpoint.");
     }
     window.generateDraft = generateDraft;
 
-    function copyOutput(){
-      const txt = outputJson.textContent || "";
-      if (!txt) return;
-      navigator.clipboard.writeText(txt).then(() => {
-        alert("Copied assessment JSON.");
-      }).catch(() => {
-        alert("Copy failed. Select the text and copy manually.");
-      });
-    }
-    window.copyOutput = copyOutput;
-
-    function downloadOutput(){
-      const txt = outputJson.textContent || "";
-      if (!txt) return;
-
-      const blob = new Blob([txt], { type:"application/json;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `assessment_${selectedType.replace(/\s+/g,"_").toLowerCase()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-    window.downloadOutput = downloadOutput;
-
-    // ---- Upload tab actions (UI stub)
-    const assessmentPaste = document.getElementById("assessmentPaste");
-    const uploadNotes = document.getElementById("uploadNotes");
-    const assessmentFile = document.getElementById("assessmentFile");
-    const uploadOutputBlock = document.getElementById("uploadOutputBlock");
-    const uploadOutputJson = document.getElementById("uploadOutputJson");
-
     function clearUpload(){
-      assessmentPaste.value = "";
-      uploadNotes.value = "";
-      assessmentFile.value = "";
-      autoGrow(assessmentPaste);
-      autoGrow(uploadNotes);
-      uploadOutputBlock.style.display = "none";
-      uploadOutputJson.textContent = "";
+      const u = document.getElementById("uploadText");
+      const f = document.getElementById("uploadFile");
+      u.value = "";
+      if (f) f.value = "";
+      autoGrow(u);
     }
     window.clearUpload = clearUpload;
 
-    function mockEnhance(){
-      const pasted = assessmentPaste.value.trim();
-      const notes = uploadNotes.value.trim();
-      const file = assessmentFile.files && assessmentFile.files[0] ? assessmentFile.files[0] : null;
-
-      if (!pasted && !file){
-        alert("Upload a file or paste assessment text.");
-        return;
-      }
-
-      const out = {
-        studentCopy: pasted ? pasted : `(File uploaded: ${file.name})\n(Placeholder) File text will be extracted when backend is connected.`,
-        answerKey: "(Placeholder) Answer key will be generated here.",
-        rubric: "(Placeholder) Rubric will be generated here.",
-        metadata: {
-          source: file ? { name:file.name, type:file.type, size:file.size } : { pasted:true },
-          teacherNotes: notes || null,
-          createdAt: new Date().toISOString()
-        }
-      };
-
-      uploadOutputJson.textContent = JSON.stringify(out, null, 2);
-      uploadOutputBlock.style.display = "block";
-      uploadOutputBlock.scrollIntoView({ behavior:"smooth", block:"start" });
+    function enhanceUpload(){
+      alert("Enhance clicked.\n\nNext step: connect upload processing to backend.");
     }
-    window.mockEnhance = mockEnhance;
+    window.enhanceUpload = enhanceUpload;
 
-    // Init
-    renderDropdown();
+    // init
+    window.addEventListener("DOMContentLoaded", loadLessons);
   </script>
 </body>
 </html>
