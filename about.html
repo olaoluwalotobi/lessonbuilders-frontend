@@ -1,186 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Help - LessonBuilders</title>
 
-  
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Help - LessonBuilders</title>
-<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#0D2847;--orange:#FF8C42;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
-.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-.nav-left{display:flex;align-items:center;gap:40px;}
-.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
-.nav-menu{display:flex;gap:32px;align-items:center;}
-.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
-.nav-link:hover{color:var(--navy);}
-.nav-link.active{color:var(--navy);font-weight:600;}
-.nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
-.container{max-width:800px;margin:60px auto;padding:0 40px;}
-.help-card{background:white;padding:60px 40px;border-radius:16px;border:2px solid #E2E8F0;text-align:center;}
-.help-title{font-family:'Crimson Pro',serif;font-size:42px;color:var(--navy);margin-bottom:16px;font-weight:700;}
-.help-text{font-size:16px;color:#4A5568;line-height:1.6;margin-bottom:16px;}
-.back-link{display:inline-block;margin-top:32px;padding:14px 28px;background:var(--orange);color:white;text-decoration:none;border-radius:10px;font-weight:600;font-size:15px;transition:all 0.3s;}
-.back-link:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
-.quick-links{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px;text-align:left;}
-.quick-link-card{background:#F7FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:20px;transition:all 0.2s;cursor:pointer;}
-.quick-link-card:hover{border-color:var(--orange);background:rgba(255,140,66,0.05);}
-.quick-link-title{font-weight:700;color:var(--navy);margin-bottom:8px;font-size:16px;}
-.quick-link-text{font-size:14px;color:#718096;line-height:1.5;}
-/* ================================
-   Mobile / Tablet responsiveness
-   (added by LessonBuilders)
-   ================================ */
-@media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;}
-  .nav-menu{gap:16px;flex-wrap:wrap;}
-  .container{flex-direction:column;max-width:100%;}
-  .sidebar{
-    width:100%;
-    border-right:none;
-    border-bottom:1px solid rgba(13,40,71,0.1);
-    padding:14px 12px;
-    display:flex;
-    gap:10px;
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-  }
-  .sidebar > div:first-child{display:none;} /* hide "BUILD LESSON" label on mobile */
-  .nav-step{
-    flex:0 0 auto;
-    margin-bottom:0;
-    padding:10px 12px;
-    border-left:none;
-    border-bottom:3px solid transparent;
-    border-radius:10px;
-    background:#fff;
-    white-space:nowrap;
-  }
-  .nav-step.active{
-    border-bottom-color:var(--orange);
-    background:rgba(255,140,66,0.08);
-  }
-  .nav-step.completed{
-    color:var(--green);
-  }
-  .step-number{flex:0 0 auto;}
-  .main-content{padding:22px 16px;max-width:100%;}
-  .btn-row{flex-wrap:wrap;gap:10px;}
-  .export-group{width:100%;}
-  .btn{width:auto;}
-}
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-@media (max-width: 520px){
-  .logo-text{font-size:20px;}
-  .page-title{font-size:32px;}
-  .page-subtitle{font-size:15px;}
-  .lesson-title{font-size:22px;}
-  .btn-row{flex-direction:column;align-items:stretch;}
-  .btn-row .btn{width:100%;}
-  .export-group{justify-content:space-between;}
-}
+  <style>
+    :root{--navy:#0D2847;--orange:#FF8C42;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
 
+    /* ===== Top nav ===== */
+    .top-nav{
+      background:white;
+      border-bottom:2px solid rgba(13,40,71,0.1);
+      padding:16px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .nav-left{display:flex;align-items:center;gap:40px;}
+    .logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+    .nav-menu{display:flex;gap:32px;align-items:center;}
+    .nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+    .nav-link:hover{color:var(--navy);}
+    .nav-link.active{color:var(--navy);font-weight:600;}
+    .nav-right{display:flex;align-items:center;gap:16px;}
+    .user-profile{
+      width:36px;height:36px;border-radius:50%;
+      background:linear-gradient(135deg,var(--orange),#FFB380);
+      display:flex;align-items:center;justify-content:center;
+      color:white;font-weight:600;font-size:14px;cursor:pointer;
+    }
 
+    /* ===== Page content ===== */
+    .container{max-width:800px;margin:60px auto;padding:0 40px;}
+    .help-card{background:white;padding:60px 40px;border-radius:16px;border:2px solid #E2E8F0;text-align:center;}
+    .help-title{font-family:'Crimson Pro',serif;font-size:42px;color:var(--navy);margin-bottom:16px;font-weight:700;}
+    .help-text{font-size:16px;color:#4A5568;line-height:1.6;margin-bottom:16px;}
+    .back-link{display:inline-block;margin-top:32px;padding:14px 28px;background:var(--orange);color:white;text-decoration:none;border-radius:10px;font-weight:600;font-size:15px;transition:all 0.3s;}
+    .back-link:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+    .quick-links{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px;text-align:left;}
+    .quick-link-card{background:#F7FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:20px;transition:all 0.2s;cursor:pointer;}
+    .quick-link-card:hover{border-color:var(--orange);background:rgba(255,140,66,0.05);}
+    .quick-link-title{font-weight:700;color:var(--navy);margin-bottom:8px;font-size:16px;}
+    .quick-link-text{font-size:14px;color:#718096;line-height:1.5;}
 
-/* =========================
-   MOBILE FIX (ONLY)
-   - Matches About/Help behavior
-   - Keeps initials bubble top-right
-   - Prevents nav overflow + keeps nav items on one line
-   ========================= */
-@media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;width:100%;align-items:flex-start;}
-  .nav-menu{gap:16px;flex-wrap:wrap;width:100%;}
-  .nav-link{white-space:nowrap;}
-  .nav-right{justify-self:end;align-self:flex-start;margin-top:2px;}
-}
-@media (max-width: 520px){
-  .logo-text{font-size:20px;}
-  .nav-link{font-size:14px;}
-}
+    /* ===== Mobile fix (ONLY) — match Assessments/Discover behavior ===== */
+    @media (max-width: 900px){
+      .top-nav{
+        padding:12px 16px;
+        flex-wrap:wrap;
+        gap:10px;
+        align-items:flex-start;
+        position:relative; /* anchor bubble */
+      }
+      .nav-left{
+        width:100%;
+        gap:16px;
+        flex-wrap:wrap;
+        align-items:flex-start;
+      }
+      .nav-menu{
+        width:100%;
+        gap:16px;
+        flex-wrap:wrap;
+      }
+      .nav-link{white-space:nowrap;}
+      .nav-right{
+        position:absolute;
+        top:12px;
+        right:16px;
+      }
 
-</style>
+      /* Help page spacing on phones */
+      .container{margin:28px auto;padding:0 16px;}
+      .help-card{padding:34px 18px;}
+      .quick-links{grid-template-columns:1fr;gap:12px;margin-top:22px;}
+      .help-title{font-size:36px;}
+      .help-text{font-size:15px;margin-bottom:12px;}
+      .back-link{width:100%;text-align:center;padding:14px 18px;}
+    }
+
+    @media (max-width: 520px){
+      .logo-text{font-size:20px;}
+      .nav-link{font-size:14px;}
+      .help-title{font-size:32px;}
+    }
+  </style>
 </head>
+
 <body>
-<nav class="top-nav">
-  <div class="nav-left">
-    <a href="index.html" class="logo-text">LessonBuilders</a>
-    <div class="nav-menu">
-      <a href="library.html" class="nav-link">My Lessons</a>
-      <a href="assessments.html" class="nav-link">Assessments</a>
-      <a href="discover.html" class="nav-link">Discover</a>
-      <a href="about.html" class="nav-link active">Help</a>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="logo-text">LessonBuilders</a>
+      <div class="nav-menu">
+        <a href="library.html" class="nav-link">My Lessons</a>
+        <a href="assessments.html" class="nav-link">Assessments</a>
+        <a href="discover.html" class="nav-link">Discover</a>
+        <a href="about.html" class="nav-link active">Help</a>
+      </div>
     </div>
-</div>
-<div class="nav-right">
-<div class="user-profile" id="userProfile">LB</div>
-</div>
-</nav>
-<div class="container">
-<div class="help-card">
-<h1 class="help-title">Help Center</h1>
-<p class="help-text">Welcome to LessonBuilders Help!</p>
-<p class="help-text">This page is coming soon. For now, explore the lesson builder and library features.</p>
+    <div class="nav-right">
+      <div class="user-profile" id="userProfile">LB</div>
+    </div>
+  </nav>
 
-<div class="quick-links">
-<div class="quick-link-card" onclick="window.location.href='build-step1.html'">
-<div class="quick-link-title">&#128295; Build a Lesson</div>
-<div class="quick-link-text">Create a new standards-aligned lesson plan in minutes</div>
-</div>
-<div class="quick-link-card" onclick="window.location.href='library.html'">
-<div class="quick-link-title">&#128218; My Lessons</div>
-<div class="quick-link-text">View and organize your saved lesson plans</div>
-</div>
-<div class="quick-link-card" onclick="window.location.href='discover.html'">
-<div class="quick-link-title">&#128269; Discover</div>
-<div class="quick-link-text">Browse community-shared lessons</div>
-</div>
-<div class="quick-link-card" onclick="window.location.href='index.html'">
-<div class="quick-link-title">&#127968; Home</div>
-<div class="quick-link-text">Return to the homepage</div>
-</div>
-</div>
+  <div class="container">
+    <div class="help-card">
+      <h1 class="help-title">Help Center</h1>
+      <p class="help-text">Welcome to LessonBuilders Help!</p>
+      <p class="help-text">This page is coming soon. For now, explore the lesson builder and library features.</p>
 
-<a href="index.html" class="back-link">&larr; Back to Home</a>
-</div>
-</div>
-<script type="module">
-  // Update the top-right bubble to show initials when logged in.
-  // Falls back to "LB" when logged out or if auth isn't available.
-  function initialsFromEmail(email) {
-    if (!email) return "LB";
-    const namePart = String(email).split("@")[0] || "";
-    const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-    const a = tokens[0]?.[0] || "";
-    const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-    const ini = (a + b).toUpperCase();
-    return ini || "LB";
-  }
+      <div class="quick-links">
+        <div class="quick-link-card" onclick="window.location.href='build-step1.html'">
+          <div class="quick-link-title">&#128295; Build a Lesson</div>
+          <div class="quick-link-text">Create a new standards-aligned lesson plan in minutes</div>
+        </div>
+        <div class="quick-link-card" onclick="window.location.href='library.html'">
+          <div class="quick-link-title">&#128218; My Lessons</div>
+          <div class="quick-link-text">View and organize your saved lesson plans</div>
+        </div>
+        <div class="quick-link-card" onclick="window.location.href='discover.html'">
+          <div class="quick-link-title">&#128269; Discover</div>
+          <div class="quick-link-text">Browse community-shared lessons</div>
+        </div>
+        <div class="quick-link-card" onclick="window.location.href='index.html'">
+          <div class="quick-link-title">&#127968; Home</div>
+          <div class="quick-link-text">Return to the homepage</div>
+        </div>
+      </div>
 
-  const el = document.getElementById("userProfile");
-  if (!el) return;
+      <a href="index.html" class="back-link">&larr; Back to Home</a>
+    </div>
+  </div>
 
-  try {
-    // If you store auth in localStorage (common for MVP)
-    const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-    if (raw) {
-      const u = JSON.parse(raw);
-      const email = u?.email || u?.user?.email;
-      el.textContent = initialsFromEmail(email);
-    } else {
+  <script type="module">
+    function initialsFromEmail(email) {
+      if (!email) return "LB";
+      const namePart = String(email).split("@")[0] || "";
+      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+      const a = tokens[0]?.[0] || "";
+      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+      const ini = (a + b).toUpperCase();
+      return ini || "LB";
+    }
+
+    const el = document.getElementById("userProfile");
+    if (!el) throw new Error("userProfile element not found");
+
+    try {
+      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+      if (raw) {
+        const u = JSON.parse(raw);
+        const email = u?.email || u?.user?.email;
+        el.textContent = initialsFromEmail(email);
+      } else {
+        el.textContent = "LB";
+      }
+    } catch {
       el.textContent = "LB";
     }
-  } catch {
-    el.textContent = "LB";
-  }
-</script>
-  
+  </script>
 </body>
 </html>
