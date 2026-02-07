@@ -19,7 +19,6 @@
       --gray-500:#718096;
       --gray-600:#4A5568;
       --green:#10B981;
-      --blue:#3B82F6;
     }
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
@@ -43,6 +42,7 @@
     }
     .nav-left{display:flex;align-items:center;gap:40px;}
     .logo-text{
+      font-family:'Crimson+Pro',serif;
       font-family:'Crimson Pro',serif;
       font-size:24px;font-weight:700;
       color:var(--navy);
@@ -184,9 +184,6 @@
     .search{
       flex:1;
       min-width:260px;
-      display:flex;
-      gap:10px;
-      align-items:center;
     }
     .input{
       width:100%;
@@ -222,6 +219,7 @@
       border-radius:16px;
       padding:16px;
       transition:all .2s;
+      position:relative;
     }
     .card:hover{
       border-color:rgba(255,140,66,.55);
@@ -241,7 +239,7 @@
       line-height:1.45;
       margin-bottom:10px;
     }
-    .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+    .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
     .pill{
       font-size:12px;
       font-weight:900;
@@ -257,12 +255,37 @@
       border-color:rgba(13,40,71,0.12);
       color:var(--navy);
     }
+    .pill.shared{
+      background:rgba(16,185,129,0.10);
+      border-color:rgba(16,185,129,0.22);
+      color:var(--green);
+    }
+
+    /* Actions like your screenshot: Share + Open on bottom right */
     .card-actions{
       display:flex;
       gap:10px;
       align-items:center;
       justify-content:flex-end;
-      margin-top:8px;
+    }
+    .btn-small{
+      padding:10px 14px;
+      border-radius:12px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      border:none;
+      transition:all .2s;
+    }
+    .btn-small.secondary{
+      background:#fff;
+      border:2px solid var(--gray-200);
+      color:var(--navy);
+    }
+    .btn-small.secondary:hover{border-color:var(--orange);}
+    .btn-small.primary{
+      background:linear-gradient(135deg,var(--orange),var(--orange-light));
+      color:#fff;
     }
 
     .empty{
@@ -362,8 +385,7 @@
       const tokens = namePart.split(/[.\-_]/).filter(Boolean);
       const a = tokens[0]?.[0] || "";
       const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-      const ini = (a + b).toUpperCase();
-      return ini || "LB";
+      return (a + b).toUpperCase() || "LB";
     }
     const el = document.getElementById("userProfile");
     if (el) {
@@ -379,12 +401,34 @@
   </script>
 
   <script>
-    // --- data helpers ---
+    // -----------------------------
+    // Storage keys
+    // -----------------------------
+    const KEY_SAVED = "savedLessons";
+    const KEY_DISCOVER = "discoverShared";
+
+    // -----------------------------
+    // Helpers
+    // -----------------------------
     function safeParse(str){ try { return JSON.parse(str); } catch { return null; } }
+    function nowISO(){ return new Date().toISOString(); }
+
     function getSavedLessons(){
-      const raw = localStorage.getItem("savedLessons");
+      const raw = localStorage.getItem(KEY_SAVED);
       const arr = raw ? (safeParse(raw) || []) : [];
       return Array.isArray(arr) ? arr : [];
+    }
+    function setSavedLessons(arr){
+      localStorage.setItem(KEY_SAVED, JSON.stringify(arr || []));
+    }
+
+    function getDiscover(){
+      const raw = localStorage.getItem(KEY_DISCOVER);
+      const arr = raw ? (safeParse(raw) || []) : [];
+      return Array.isArray(arr) ? arr : [];
+    }
+    function setDiscover(arr){
+      localStorage.setItem(KEY_DISCOVER, JSON.stringify(arr || []));
     }
 
     function normalizeSubject(s){
@@ -394,21 +438,16 @@
       if (t.includes("math")) return "Math";
       if (t.includes("ela") || t.includes("english")) return "ELA";
       if (t.includes("pe") || t.includes("physical")) return "PE";
-      if (t.includes("art") || t.includes("vapa")) return "Arts";
       return s ? String(s) : "Unknown";
     }
-
     function normalizeGrade(g){
       const s = String(g||"").trim();
       if (!s) return "Unknown";
       const m = s.match(/\b(\d{1,2})\b/);
       if (m) return m[1];
       if (s.toLowerCase().includes("k")) return "K";
-      if (s.toLowerCase().includes("ms")) return "MS";
-      if (s.toLowerCase().includes("hs")) return "HS";
       return s;
     }
-
     function frameworkName(key){
       const k = String(key||"").toLowerCase();
       if (k.includes("madeline")) return "Madeline Hunter";
@@ -417,24 +456,93 @@
       if (k.includes("gradual")) return "Gradual Release";
       return key ? String(key) : "Template";
     }
-
     function standardsCodes(lesson){
       const a = Array.isArray(lesson?.verifiedStandards) ? lesson.verifiedStandards : [];
       const b = Array.isArray(lesson?.fullLesson?.verifiedStandards) ? lesson.fullLesson.verifiedStandards : [];
       const s = (a.length ? a : b);
       return s.map(x => String(x.code || x.standardCode || x.id || "").trim()).filter(Boolean);
     }
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+    function uniqueSorted(arr){
+      return Array.from(new Set(arr.filter(Boolean))).sort((a,b)=>String(a).localeCompare(String(b)));
+    }
 
-    // --- state ---
-    const state = {
-      subject: null,
-      template: null,
-      grade: null,
-      search: "",
-      sort: "newest",
-    };
+    // -----------------------------
+    // Share / version logic
+    // -----------------------------
+    function buildVersionPayload(lesson){
+      // What we share to Discover (keep it useful but not huge)
+      // For MVP: share fullLesson so others can "Use" it.
+      return lesson.fullLesson || lesson;
+    }
 
-    // --- UI refs ---
+    function upsertDiscoverShare(lesson){
+      const discover = getDiscover();
+
+      const id = lesson.id || lesson.lessonId || Date.now();
+      const payload = buildVersionPayload(lesson);
+
+      const meta = {
+        discoverId: String(id),
+        title: lesson.title || lesson.fullLesson?.step1?.topic || "Untitled Lesson",
+        subject: normalizeSubject(lesson.subject || lesson.fullLesson?.step1?.subject || ""),
+        grade: normalizeGrade(lesson.grade || lesson.fullLesson?.step1?.grade || ""),
+        framework: frameworkName(lesson.framework || lesson.fullLesson?.step3?.framework || ""),
+      };
+
+      const version = {
+        versionId: String(Date.now()),
+        createdAt: nowISO(),
+        payload
+      };
+
+      const idx = discover.findIndex(d => String(d.discoverId) === String(meta.discoverId));
+      if (idx === -1){
+        discover.unshift({ ...meta, versions: [version] });
+      } else {
+        const existing = discover[idx];
+        const versions = Array.isArray(existing.versions) ? existing.versions.slice() : [];
+        versions.unshift(version);
+
+        // keep only 2 versions
+        const trimmed = versions.slice(0,2);
+        discover[idx] = { ...existing, ...meta, versions: trimmed };
+      }
+
+      setDiscover(discover);
+    }
+
+    // Share button goes away once shared; returns if updated after open
+    function isShareEligible(lesson){
+      const shared = !!lesson?.shareState?.shared;
+      if (!shared) return true;
+
+      const lastSharedAt = Date.parse(lesson.shareState.lastSharedAt || "") || 0;
+      const lastEditedAt = Date.parse(lesson.shareState.lastEditedAt || "") || 0;
+
+      // If edited after it was shared, allow re-share (new version)
+      return lastEditedAt > lastSharedAt;
+    }
+
+    function markShared(lesson){
+      lesson.shareState = lesson.shareState || {};
+      lesson.shareState.shared = true;
+      lesson.shareState.lastSharedAt = nowISO();
+      return lesson;
+    }
+
+    // -----------------------------
+    // UI state
+    // -----------------------------
+    const state = { subject:null, template:null, grade:null, search:"", sort:"newest" };
+
     const subjectChips = document.getElementById("subjectChips");
     const templateChips = document.getElementById("templateChips");
     const gradeChips = document.getElementById("gradeChips");
@@ -444,7 +552,6 @@
     const searchInput = document.getElementById("searchInput");
     const sortSelect = document.getElementById("sortSelect");
 
-    // --- chips builder ---
     function buildChips(container, values, activeValue, onPick){
       container.innerHTML = "";
       const all = document.createElement("div");
@@ -462,11 +569,6 @@
       });
     }
 
-    function uniqueSorted(arr){
-      return Array.from(new Set(arr.filter(Boolean))).sort((a,b)=>String(a).localeCompare(String(b)));
-    }
-
-    // --- render ---
     function applyFilters(allLessons){
       let list = allLessons.slice();
 
@@ -490,23 +592,12 @@
         });
       }
 
-      // sorting
       const dateVal = (x) => Date.parse(x.savedAt || x.generatedAt || "") || 0;
       if (state.sort === "newest") list.sort((a,b)=>dateVal(b)-dateVal(a));
       if (state.sort === "oldest") list.sort((a,b)=>dateVal(a)-dateVal(b));
       if (state.sort === "titleAZ") list.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||"")));
       if (state.sort === "titleZA") list.sort((a,b)=>String(b.title||"").localeCompare(String(a.title||"")));
-
       return list;
-    }
-
-    function escapeHtml(str) {
-      return String(str ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
     }
 
     function renderCards(list){
@@ -516,13 +607,13 @@
         empty.style.display = "block";
         empty.innerHTML = `
           <div style="font-weight:900;color:var(--navy);margin-bottom:6px;">No lessons found</div>
-          <div>Try clearing filters or saving a lesson from Step 6 (Preview & Export).</div>
+          <div>Save a lesson from Step 6 (Preview & Export) to see it here.</div>
         `;
         return;
       }
       empty.style.display = "none";
 
-      list.forEach(l => {
+      list.forEach((l) => {
         const title = l.title || l.fullLesson?.step1?.topic || "Untitled Lesson";
         const grade = l.grade || l.fullLesson?.step1?.grade || "";
         const subject = normalizeSubject(l.subject || l.fullLesson?.step1?.subject || "");
@@ -530,6 +621,8 @@
         const dur = l.duration || l.fullLesson?.step1?.duration || "";
         const codes = standardsCodes(l);
         const date = l.savedAt ? new Date(l.savedAt).toLocaleDateString() : "";
+
+        const eligibleToShare = isShareEligible(l);
 
         const card = document.createElement("div");
         card.className = "card";
@@ -539,27 +632,54 @@
             <div><b>Grade:</b> ${escapeHtml(String(grade))} &nbsp; | &nbsp; <b>Subject:</b> ${escapeHtml(subject)} &nbsp; | &nbsp; <b>Duration:</b> ${escapeHtml(String(dur))} min</div>
             <div style="margin-top:4px;"><b>Template:</b> ${escapeHtml(framework)} ${date ? `&nbsp; | &nbsp; <b>Saved:</b> ${escapeHtml(date)}` : ""}</div>
           </div>
+
           <div class="pill-row">
             <span class="pill">${escapeHtml(subject)}</span>
             <span class="pill gray">${escapeHtml(framework)}</span>
             ${codes.slice(0,3).map(c=>`<span class="pill gray">${escapeHtml(c)}</span>`).join("")}
             ${codes.length > 3 ? `<span class="pill gray">+${codes.length-3} more</span>` : ""}
+            ${(!eligibleToShare && l?.shareState?.shared) ? `<span class="pill shared">Shared</span>` : ``}
           </div>
+
           <div class="card-actions">
-            <button class="btn btn-secondary" data-action="copy" style="padding:10px 12px;">Copy JSON</button>
-            <button class="btn btn-primary" data-action="open" style="padding:10px 12px;">Open</button>
+            ${eligibleToShare ? `<button class="btn-small secondary" data-action="share">Share</button>` : ``}
+            <button class="btn-small primary" data-action="open">Open</button>
           </div>
         `;
 
-        card.querySelector('[data-action="copy"]').addEventListener("click", () => {
-          const payload = l.fullLesson || l;
-          navigator.clipboard?.writeText(JSON.stringify(payload, null, 2))
-            .then(()=>alert("Copied lesson JSON."))
-            .catch(()=>alert("Could not copy (clipboard blocked)."));
-        });
+        // Share
+        const shareBtn = card.querySelector('[data-action="share"]');
+        if (shareBtn){
+          shareBtn.addEventListener("click", () => {
+            const lessons = getSavedLessons();
+            const idx = lessons.findIndex(x => String(x.id) === String(l.id));
+            if (idx === -1){ alert("Could not find lesson to share."); return; }
 
+            // 1) push a version to Discover (max 2)
+            upsertDiscoverShare(lessons[idx]);
+
+            // 2) mark shared
+            lessons[idx] = markShared(lessons[idx]);
+            setSavedLessons(lessons);
+
+            // 3) rerender
+            refresh();
+            alert("Shared to Discover.");
+          });
+        }
+
+        // Open
         card.querySelector('[data-action="open"]').addEventListener("click", () => {
-          // Minimal “open”: store selected lesson and jump to Step 6 preview
+          // Mark "lastEditedAt" when opening, so when user regenerates/saves later it can be used.
+          // (Actual update happens when Step 6 saves again; but we seed here too.)
+          const lessons = getSavedLessons();
+          const idx = lessons.findIndex(x => String(x.id) === String(l.id));
+          if (idx !== -1){
+            lessons[idx].shareState = lessons[idx].shareState || {};
+            lessons[idx].shareState.lastEditedAt = nowISO();
+            setSavedLessons(lessons);
+          }
+
           localStorage.setItem("lessonData", JSON.stringify(l.fullLesson || l));
           window.location.href = "build-step6.html";
         });
@@ -571,7 +691,6 @@
     function refresh(){
       const lessons = getSavedLessons();
 
-      // build chip options from existing lessons
       const subjects = uniqueSorted(lessons.map(l => normalizeSubject(l.subject || l.fullLesson?.step1?.subject)));
       const templates = uniqueSorted(lessons.map(l => frameworkName(l.framework || l.fullLesson?.step3?.framework)));
       const grades = uniqueSorted(lessons.map(l => normalizeGrade(l.grade || l.fullLesson?.step1?.grade)));
@@ -586,7 +705,7 @@
       renderCards(filtered);
     }
 
-    // events
+    // Events
     searchInput.addEventListener("input", (e)=>{ state.search = e.target.value.trim(); refresh(); });
     sortSelect.addEventListener("change", (e)=>{ state.sort = e.target.value; refresh(); });
 
@@ -597,7 +716,6 @@
       refresh();
     });
 
-    // init
     refresh();
   </script>
 </body>
