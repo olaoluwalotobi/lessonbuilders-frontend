@@ -9,215 +9,325 @@
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--blue:#3B82F6;}
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
+    :root{
+      --navy:#0D2847;
+      --orange:#FF8C42;
+      --orange-light:#FFB380;
+      --green:#10B981;
+      --gray-50:#F7FAFC;
+      --gray-100:#EDF2F7;
+      --gray-200:#E2E8F0;
+      --gray-500:#718096;
+      --gray-600:#4A5568;
+      --blue:#3B82F6;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
 
-    /* Top nav (match Step 6 vibe) */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:'DM Sans',sans-serif;
+      background: linear-gradient(135deg, #F7FAFC 0%, #FFF 100%);
+      color: var(--navy);
+    }
+
+    /* Top nav (matches your Step pages vibe) */
     .top-nav{
-      background:white;border-bottom:2px solid rgba(13,40,71,0.1);
-      padding:16px 40px;display:flex;justify-content:space-between;align-items:center;
-      position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);
+      background:#fff;
+      border-bottom:2px solid rgba(13,40,71,0.08);
+      padding:16px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
     }
     .nav-left{display:flex;align-items:center;gap:40px;}
-    .logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
+    .logo-text{
+      font-family:'Crimson Pro',serif;
+      font-size:24px;
+      font-weight:700;
+      color:var(--navy);
+      text-decoration:none;
+    }
     .nav-menu{display:flex;gap:32px;align-items:center;}
-    .nav-link{text-decoration:none;color:#4A5568;font-weight:600;font-size:15px;transition:color 0.2s;}
+    .nav-link{
+      text-decoration:none;
+      color:var(--gray-600);
+      font-weight:500;
+      font-size:15px;
+      transition:color 0.2s;
+    }
     .nav-link:hover{color:var(--navy);}
-    .nav-link.active{color:var(--navy);}
+    .nav-link.active{
+      color:var(--navy);
+      font-weight:700;
+      position:relative;
+    }
+    .nav-link.active::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-18px;
+      height:3px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--orange),var(--orange-light));
+    }
 
     .nav-right{display:flex;align-items:center;gap:16px;}
     .user-profile{
       width:36px;height:36px;border-radius:50%;
-      background:linear-gradient(135deg,var(--orange),#FFB380);
-      display:flex;align-items:center;justify-content:center;color:white;
-      font-weight:700;font-size:14px;cursor:default;
+      background:linear-gradient(135deg,var(--orange),var(--orange-light));
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:700;font-size:14px;
+      cursor:default;
     }
 
     /* Layout */
     .container{display:flex;max-width:1400px;margin:0 auto;}
     .sidebar{
-      width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);
+      width:280px;
+      background:#fff;
+      border-right:1px solid rgba(13,40,71,0.08);
       padding:30px 20px;
     }
-    .sidebar-title{
-      font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;
+
+    .side-title{
+      font-size:13px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      color:#999;
+      margin-bottom:16px;
     }
 
-    /* Sidebar items (closer to Step 1–7 vibe, but “Assessments” only) */
-    .side-item{
-      display:flex;align-items:center;gap:12px;
-      padding:12px;margin-bottom:10px;border-left:3px solid transparent;
-      border-radius:12px;color:#4A5568;cursor:pointer;user-select:none;
+    /* Left menu (Step 1–7 look) */
+    .side-step{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px;
+      margin-bottom:8px;
+      border-left:3px solid transparent;
+      border-radius:10px;
+      text-decoration:none;
+      color:var(--gray-600);
+      cursor:pointer;
       transition:all 0.2s;
+      user-select:none;
     }
-    .side-item:hover{background:rgba(13,40,71,0.03);color:var(--navy);}
-    .side-item.active{
-      background:rgba(255,140,66,0.10);
+    .side-step:hover{
+      background:rgba(255,140,66,0.08);
+      color:var(--navy);
+    }
+    .side-step.active{
+      background:rgba(255,140,66,0.12);
       border-left-color:var(--orange);
       color:var(--navy);
-      font-weight:800;
+      font-weight:700;
     }
-    .side-icon{
+    .step-number{
       width:28px;height:28px;border-radius:50%;
-      background:#F7FAFC;border:2px solid #E2E8F0;
+      background:var(--gray-50);
+      border:2px solid var(--gray-200);
       display:flex;align-items:center;justify-content:center;
       font-size:13px;font-weight:800;color:#999;
       flex:0 0 auto;
     }
-    .side-item.active .side-icon{
-      background:var(--orange);border-color:var(--orange);color:#fff;
+    .side-step.active .step-number{
+      background:var(--orange);
+      border-color:var(--orange);
+      color:#fff;
     }
 
-    /* Main */
-    .main{flex:1;padding:40px 60px;max-width:980px;}
-    .page-title{font-family:'Crimson Pro',serif;font-size:44px;font-weight:700;margin-bottom:10px;color:var(--navy);}
-    .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:14px;max-width:760px;line-height:1.5;}
-
-    /* Thin orange line like your reference */
-    .progress-line{
-      height:4px;background:#E2E8F0;border-radius:3px;margin-bottom:22px;overflow:hidden;max-width:860px;
+    .main-content{flex:1;padding:40px 60px;max-width:980px;}
+    .page-title{
+      font-family:'Crimson Pro',serif;
+      font-size:42px;font-weight:700;
+      margin-bottom:10px;color:var(--navy);
     }
-    .progress-line > div{
-      height:100%;width:54%;
-      background:linear-gradient(90deg,var(--orange),#FFB380);
-      border-radius:3px;
+    .page-subtitle{
+      font-size:16px;
+      color:var(--gray-600);
+      margin-bottom:18px;
+      line-height:1.5;
     }
+    .progress-bar{height:6px;background:var(--gray-200);border-radius:3px;margin-bottom:18px;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:3px;width:60%;}
 
-    /* Main card */
+    /* Card */
     .card{
-      background:white;border:2px solid #E2E8F0;border-radius:16px;
-      padding:18px;max-width:860px;
+      background:#fff;
+      border:2px solid var(--gray-200);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:none;
     }
-    .card-grid{
+    .card + .card{margin-top:16px;}
+
+    .card-title{
+      font-size:18px;font-weight:800;color:var(--navy);
+      margin-bottom:6px;
+    }
+    .card-subtitle{
+      font-size:14px;color:var(--gray-500);
+      margin-bottom:14px;
+      line-height:1.5;
+    }
+
+    .grid{
       display:grid;
-      grid-template-columns: 1fr 200px; /* left form + right type buttons */
-      gap:18px;
-      align-items:start;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
     }
-    .card-title{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:4px;}
-    .card-sub{font-size:13px;color:#718096;margin-bottom:14px;}
-
-    .field-label{
-      font-size:12px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;
-      color:#718096;margin:10px 0 8px;
+    .grid-1{grid-template-columns: 1fr;}
+    .field label{
+      display:block;
+      font-size:12px;
+      font-weight:800;
+      color:#6B7280;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      margin-bottom:6px;
     }
-
-    /* Dropdown */
-    .select-wrap{position:relative;}
-    select{
+    .input, .select, .textarea{
       width:100%;
-      border:2px solid #E2E8F0;
+      border:2px solid var(--gray-200);
       border-radius:12px;
-      padding:12px 40px 12px 14px;
-      font-size:15px;font-weight:600;color:var(--navy);
-      background:white;outline:none;
-      appearance:none;
-    }
-    .select-wrap:after{
-      content:"▾";
-      position:absolute;right:14px;top:50%;
-      transform:translateY(-50%);
-      color:#8A95A5;font-weight:900;
-      pointer-events:none;
-    }
-    select:focus{
-      border-color:rgba(255,140,66,0.8);
-      box-shadow:0 0 0 4px rgba(255,140,66,0.12);
-    }
-
-    /* Teacher notes textarea: wraps + auto height (no side-scroll) */
-    textarea{
-      width:100%;
-      border:2px solid #E2E8F0;
-      border-radius:12px;
-      padding:12px 14px;
+      padding:12px 12px;
       font-size:15px;
       font-family:'DM Sans',sans-serif;
       color:var(--navy);
-      line-height:1.45;
-
-      resize:none;            /* you said auto-height is better */
-      overflow:hidden;        /* no scrollbars; height grows */
-      white-space:pre-wrap;   /* wraps lines */
-      word-break:break-word;  /* long words don’t force horizontal scroll */
-      min-height:84px;
+      background:#fff;
       outline:none;
+      transition:border-color .15s;
     }
-    textarea:focus{
-      border-color:rgba(255,140,66,0.8);
-      box-shadow:0 0 0 4px rgba(255,140,66,0.12);
+    .input:focus, .select:focus, .textarea:focus{
+      border-color:var(--orange);
     }
-    .tip{font-size:12px;color:#718096;margin-top:8px;}
 
-    /* Right side assessment type */
-    .type-title{
-      font-size:12px;font-weight:900;letter-spacing:.2px;text-transform:uppercase;
-      color:#718096;margin-top:2px;margin-bottom:10px;text-align:right;
+    /* Teacher notes: auto-height + wrap + resizer handle */
+    .textarea{
+      min-height:110px;
+      resize: vertical;               /* keep the resize handle */
+      overflow:hidden;                /* JS will auto-size; no horizontal scrolling */
+      white-space:pre-wrap;           /* wraps lines */
+      overflow-wrap:anywhere;         /* prevents long strings from pushing right */
+      word-break:break-word;
     }
-    .type-btn{
-      width:100%;
-      border:2px solid #E2E8F0;
-      border-radius:999px;
-      padding:10px 10px;
-      font-size:14px;
-      font-weight:800;
-      background:white;
-      color:var(--navy);
+
+    .hint{
+      margin-top:8px;
+      font-size:13px;
+      color:var(--gray-500);
+      line-height:1.45;
+    }
+
+    /* Buttons (outside the card like Steps 1–7) */
+    .btn-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top:14px;
+      max-width: 980px;
+    }
+    .btn-spacer{flex:1;}
+
+    .btn{
+      padding:14px 22px;
+      border-radius:10px;
+      font-size:15px;
+      font-weight:700;
       cursor:pointer;
-      transition:all .18s;
+      transition:all .2s;
+      border:none;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--orange),var(--orange-light));
+      color:#fff;
+    }
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 6px 20px rgba(255,140,66,0.30);
+    }
+    .btn-secondary{
+      background:#fff;
+      border:2px solid var(--gray-200);
+      color:var(--navy);
+    }
+    .btn-secondary:hover{border-color:var(--orange);}
+
+    /* Output: keep EXACT keys you wanted */
+    .output-card{
+      background:#fff;
+      border:2px solid var(--gray-200);
+      border-radius:16px;
+      padding:18px;
+      margin-top:16px;
+    }
+    .output-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
       margin-bottom:10px;
     }
-    .type-btn:hover{border-color:rgba(255,140,66,0.55);}
-    .type-btn.active{
-      border-color:rgba(255,140,66,0.9);
+    .pill{
+      font-size:12px;
+      font-weight:800;
+      color:var(--navy);
       background:rgba(255,140,66,0.12);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,140,66,0.22);
+      white-space:nowrap;
+    }
+    pre{
+      width:100%;
+      background: #0b1220;
+      color: #e2e8f0;
+      border-radius:14px;
+      padding:14px;
+      overflow:auto;
+      font-size:13px;
+      line-height:1.45;
+      border:1px solid rgba(148,163,184,.25);
     }
 
-    /* Bottom buttons: Clear left, Generate right */
-    .card-actions{
-      display:flex;align-items:center;gap:12px;margin-top:16px;
-    }
-    .btn{
-      padding:12px 18px;border-radius:12px;font-size:14px;font-weight:900;
-      cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;border:none;
-    }
-    .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
-    .btn-secondary:hover{border-color:rgba(255,140,66,0.55);}
-    .btn-primary{
-      background:linear-gradient(135deg,var(--orange),#FFB380);
-      color:white;
-      box-shadow:0 10px 20px rgba(255,140,66,0.20);
-    }
-    .btn-primary:hover{transform:translateY(-1px);}
-    .spacer{flex:1;}
+    .hidden{display:none !important;}
 
-    /* Upload section card (kept but hidden until tab is clicked) */
-    .upload-card{margin-top:14px;max-width:860px;}
-    .file-box{
-      border:2px dashed rgba(13,40,71,0.18);
-      border-radius:12px;padding:12px;background:rgba(13,40,71,0.02);
-    }
-    input[type="file"]{width:100%;}
-    .small-note{font-size:12px;color:#718096;margin-top:8px;}
-
-    /* Responsive */
-    @media (max-width: 980px){
+    /* Mobile */
+    @media (max-width: 900px){
       .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
       .nav-left{gap:16px;flex-wrap:wrap;}
+      .nav-menu{gap:16px;flex-wrap:wrap;}
       .container{flex-direction:column;max-width:100%;}
       .sidebar{
         width:100%;
-        border-right:none;border-bottom:1px solid rgba(13,40,71,0.1);
+        border-right:none;
+        border-bottom:1px solid rgba(13,40,71,0.08);
         padding:14px 12px;
-        display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+        display:flex;
+        gap:10px;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
       }
-      .sidebar-title{display:none;}
-      .side-item{flex:0 0 auto;margin-bottom:0;border-left:none;border-bottom:3px solid transparent;}
-      .side-item.active{border-bottom-color:var(--orange);border-left-color:transparent;}
-      .main{padding:22px 16px;max-width:100%;}
-      .card-grid{grid-template-columns:1fr;}
-      .type-title{text-align:left;margin-top:10px;}
+      .side-title{display:none;}
+      .side-step{
+        flex:0 0 auto;
+        margin-bottom:0;
+        border-left:none;
+        border-bottom:3px solid transparent;
+      }
+      .side-step.active{
+        border-bottom-color:var(--orange);
+        border-left:none;
+      }
+      .main-content{padding:22px 16px;max-width:100%;}
+      .grid{grid-template-columns:1fr;}
+      .page-title{font-size:34px;}
     }
   </style>
 </head>
@@ -240,219 +350,455 @@
 
   <div class="container">
     <aside class="sidebar">
-      <div class="sidebar-title">ASSESSMENTS</div>
+      <div class="side-title">ASSESSMENTS</div>
 
-      <div class="side-item active" id="tabCreate" onclick="showTab('create')">
-        <div class="side-icon">A</div>
-        <div style="font-weight:800;">Create from Lesson</div>
+      <div class="side-step active" id="tabCreate">
+        <div class="step-number">1</div>
+        <div>Create</div>
       </div>
 
-      <div class="side-item" id="tabUpload" onclick="showTab('upload')">
-        <div class="side-icon">↑</div>
-        <div style="font-weight:800;">Upload Existing</div>
+      <div class="side-step" id="tabUpload">
+        <div class="step-number">2</div>
+        <div>Upload</div>
       </div>
     </aside>
 
-    <main class="main">
+    <main class="main-content">
       <h1 class="page-title">Assessments</h1>
-      <p class="page-subtitle">Create classroom-ready assessments from your lessons — or upload what you already have and enhance it.</p>
-      <div class="progress-line"><div></div></div>
+      <p class="page-subtitle">
+        Create assessments from a LessonBuilders lesson, or upload your own lesson and generate aligned assessments.
+      </p>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
 
-      <!-- CREATE -->
+      <!-- =========================
+           CREATE SECTION
+           ========================= -->
       <section id="createSection">
         <div class="card">
-          <div class="card-grid">
-            <div>
-              <div class="card-title">Create from a lesson</div>
-              <div class="card-sub">Choose a saved lesson (or your current build) and generate an assessment draft.</div>
+          <div class="card-title">Create from a lesson</div>
+          <div class="card-subtitle">
+            Pick a lesson, choose an assessment type, and add optional teacher notes.
+          </div>
 
-              <div class="field-label">Select lesson</div>
-              <div class="select-wrap">
-                <select id="lessonSelect"></select>
-              </div>
-
-              <div class="field-label" style="margin-top:16px;">Teacher notes (optional)</div>
-              <textarea id="teacherNotes" placeholder="Ex: focus on vocabulary + guided practice outcomes"></textarea>
-              <div class="tip">Tip: Use this to steer difficulty, format, or focus.</div>
+          <div class="grid">
+            <div class="field">
+              <label for="lessonPicker">Lesson</label>
+              <select id="lessonPicker" class="select"></select>
+              <div class="hint">Pulls from your local “savedLessons” library (Step 6 Save).</div>
             </div>
 
-            <div>
-              <div class="type-title">ASSESSMENT TYPE</div>
-
-              <button class="type-btn active" data-type="Quiz" onclick="setType('Quiz')">Quiz</button>
-              <button class="type-btn" data-type="Exit Ticket" onclick="setType('Exit Ticket')">Exit Ticket</button>
-              <button class="type-btn" data-type="In-Class Activity" onclick="setType('In-Class Activity')">In-Class Activity</button>
-              <button class="type-btn" data-type="Homework Assignment" onclick="setType('Homework Assignment')">Homework Assignment</button>
+            <div class="field">
+              <label for="assessmentType">Assessment type</label>
+              <select id="assessmentType" class="select">
+                <option value="Exit tickets">Exit tickets</option>
+                <option value="In class activity">In class activity</option>
+                <option value="Homework assignment">Homework assignment</option>
+                <option value="Quiz">Quiz</option>
+              </select>
+              <div class="hint">We’ll generate the draft in the format you requested.</div>
             </div>
           </div>
 
-          <div class="card-actions">
-            <button class="btn btn-secondary" onclick="clearCreate()">Clear</button>
-            <div class="spacer"></div>
-            <button class="btn btn-primary" onclick="generateDraft()">Generate Draft</button>
+          <div class="grid grid-1" style="margin-top:14px;">
+            <div class="field">
+              <label for="teacherNotes">Teacher notes (optional)</label>
+              <textarea
+                id="teacherNotes"
+                class="textarea"
+                placeholder="Optional: constraints, reading level, number of questions, accommodations, etc."></textarea>
+              <div class="hint">
+                Tip: Example notes — “Make it 10 minutes.” “Include sentence frames.” “Use the selected standards explicitly.”
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons OUTSIDE the card (like Steps 1–7) -->
+        <div class="btn-row">
+          <button class="btn btn-secondary" id="btnClearCreate" type="button">Clear</button>
+          <div class="btn-spacer"></div>
+          <button class="btn btn-primary" id="btnGenerateDraft" type="button">Generate Draft</button>
+        </div>
+
+        <div class="output-card hidden" id="draftOutputCard">
+          <div class="output-head">
+            <div class="card-title" style="margin:0;">Draft output</div>
+            <div class="pill" id="draftPill">Ready</div>
+          </div>
+
+          <!-- EXACT keys you wanted: studentCopy, answerKey, rubric, metadata -->
+          <pre id="draftJson">{}</pre>
+
+          <!-- Buttons OUTSIDE output box too -->
+          <div class="btn-row">
+            <button class="btn btn-secondary" id="btnCopyJson" type="button">Copy JSON</button>
+            <div class="btn-spacer"></div>
+            <button class="btn btn-secondary" id="btnDownloadJson" type="button">Download .json</button>
           </div>
         </div>
       </section>
 
-      <!-- UPLOAD -->
-      <section id="uploadSection" style="display:none;">
-        <div class="card upload-card">
-          <div class="card-title">Upload existing</div>
-          <div class="card-sub">Upload an assessment you already have and enhance it.</div>
-
-          <div class="field-label">Upload file (PDF/DOC/TXT)</div>
-          <div class="file-box">
-            <input type="file" id="uploadFile" />
-            <div class="small-note">For now, this page can store the file selection. When you connect backend processing, you can extract text and generate studentCopy/answerKey/rubric.</div>
+      <!-- =========================
+           UPLOAD SECTION
+           ========================= -->
+      <section id="uploadSection" class="hidden">
+        <div class="card">
+          <div class="card-title">Upload a lesson</div>
+          <div class="card-subtitle">
+            Paste a lesson plan (or notes) and we’ll generate assessment drafts in your required output format.
           </div>
 
-          <div class="field-label" style="margin-top:16px;">Or paste assessment text</div>
-          <textarea id="uploadText" placeholder="Paste your assessment here..."></textarea>
+          <div class="grid grid-1">
+            <div class="field">
+              <label for="uploadedLessonText">Lesson text</label>
+              <textarea
+                id="uploadedLessonText"
+                class="textarea"
+                placeholder="Paste your lesson plan here..."></textarea>
+              <div class="hint">If you include standards codes, we’ll reference them in metadata.</div>
+            </div>
+          </div>
 
-          <div class="card-actions">
-            <button class="btn btn-secondary" onclick="clearUpload()">Clear</button>
-            <div class="spacer"></div>
-            <button class="btn btn-primary" onclick="enhanceUpload()">Enhance</button>
+          <div class="grid" style="margin-top:14px;">
+            <div class="field">
+              <label for="uploadAssessmentType">Assessment type</label>
+              <select id="uploadAssessmentType" class="select">
+                <option value="Exit tickets">Exit tickets</option>
+                <option value="In class activity">In class activity</option>
+                <option value="Homework assignment">Homework assignment</option>
+                <option value="Quiz">Quiz</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="uploadTeacherNotes">Teacher notes (optional)</label>
+              <input id="uploadTeacherNotes" class="input" placeholder="e.g., 8 questions, include rubric, 15 minutes" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons OUTSIDE the card (like Steps 1–7) -->
+        <div class="btn-row">
+          <button class="btn btn-secondary" id="btnClearUpload" type="button">Clear</button>
+          <div class="btn-spacer"></div>
+          <button class="btn btn-primary" id="btnGenerateUpload" type="button">Generate Draft</button>
+        </div>
+
+        <div class="output-card hidden" id="uploadOutputCard">
+          <div class="output-head">
+            <div class="card-title" style="margin:0;">Draft output</div>
+            <div class="pill" id="uploadPill">Ready</div>
+          </div>
+          <pre id="uploadJson">{}</pre>
+
+          <div class="btn-row">
+            <button class="btn btn-secondary" id="btnCopyUploadJson" type="button">Copy JSON</button>
+            <div class="btn-spacer"></div>
+            <button class="btn btn-secondary" id="btnDownloadUploadJson" type="button">Download .json</button>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <script>
-    /* ===== UI behavior only (keeps your layout exact) ===== */
-
-    // ---- user bubble initials (optional)
-    (function(){
-      function initialsFromEmail(email) {
-        if (!email) return "LB";
-        const namePart = String(email).split("@")[0] || "";
-        const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-        const a = tokens[0]?.[0] || "";
-        const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-        return (a + b).toUpperCase() || "LB";
-      }
-      const el = document.getElementById("userProfile");
-      if (!el) return;
-      try{
+  <!-- initials bubble -->
+  <script type="module">
+    function initialsFromEmail(email) {
+      if (!email) return "LB";
+      const namePart = String(email).split("@")[0] || "";
+      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+      const a = tokens[0]?.[0] || "";
+      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+      const ini = (a + b).toUpperCase();
+      return ini || "LB";
+    }
+    const el = document.getElementById("userProfile");
+    if (el) {
+      try {
         const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-        if (!raw) return;
-        const u = JSON.parse(raw);
-        el.textContent = initialsFromEmail(u?.email || u?.user?.email);
-      } catch {}
-    })();
+        if (raw) {
+          const u = JSON.parse(raw);
+          const email = u?.email || u?.user?.email;
+          el.textContent = initialsFromEmail(email);
+        } else {
+          el.textContent = "LB";
+        }
+      } catch {
+        el.textContent = "LB";
+      }
+    }
+  </script>
 
-    // ---- auto-height textarea (wrap + grow down)
-    function autoGrow(el){
+  <script>
+    // =========
+    // Tabs
+    // =========
+    const tabCreate = document.getElementById("tabCreate");
+    const tabUpload = document.getElementById("tabUpload");
+    const createSection = document.getElementById("createSection");
+    const uploadSection = document.getElementById("uploadSection");
+
+    function setActiveTab(which){
+      const isCreate = which === "create";
+      tabCreate.classList.toggle("active", isCreate);
+      tabUpload.classList.toggle("active", !isCreate);
+      createSection.classList.toggle("hidden", !isCreate);
+      uploadSection.classList.toggle("hidden", isCreate);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    tabCreate.addEventListener("click", () => setActiveTab("create"));
+    tabUpload.addEventListener("click", () => setActiveTab("upload"));
+
+    // =========
+    // Auto-height textarea (keeps resize handle, wraps, no horizontal scroll)
+    // =========
+    function autoSizeTextarea(el){
+      if (!el) return;
       el.style.height = "auto";
-      el.style.height = el.scrollHeight + "px";
+      el.style.height = (el.scrollHeight + 2) + "px";
     }
-    document.addEventListener("input", (e) => {
-      if (e.target && e.target.tagName === "TEXTAREA") autoGrow(e.target);
+
+    const teacherNotes = document.getElementById("teacherNotes");
+    const uploadedLessonText = document.getElementById("uploadedLessonText");
+    [teacherNotes, uploadedLessonText].forEach(t => {
+      if (!t) return;
+      autoSizeTextarea(t);
+      t.addEventListener("input", () => autoSizeTextarea(t));
     });
-    window.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll("textarea").forEach(autoGrow);
-    });
 
-    // ---- tabs
-    function showTab(which){
-      const create = document.getElementById("createSection");
-      const upload = document.getElementById("uploadSection");
-      const tabCreate = document.getElementById("tabCreate");
-      const tabUpload = document.getElementById("tabUpload");
+    // =========
+    // Lesson dropdown (from localStorage savedLessons)
+    // =========
+    function safeParse(str){ try { return JSON.parse(str); } catch { return null; } }
 
-      if (which === "upload"){
-        create.style.display = "none";
-        upload.style.display = "block";
-        tabCreate.classList.remove("active");
-        tabUpload.classList.add("active");
-      } else {
-        create.style.display = "block";
-        upload.style.display = "none";
-        tabUpload.classList.remove("active");
-        tabCreate.classList.add("active");
-      }
-    }
-    window.showTab = showTab;
-
-    // ---- lesson dropdown (uses your savedLessons + current lessonData if present)
-    function safeParse(s){ try{return JSON.parse(s);}catch{return null;} }
-
-    function summarizeLesson(obj){
-      const title = obj?.title || obj?.step1?.topic || "Untitled Lesson";
-      const grade = obj?.grade || obj?.step1?.grade || "";
-      const subject = obj?.subject || obj?.step1?.subject || "";
-      const parts = [];
-      if (grade) parts.push(grade);
-      if (subject) parts.push(subject);
-      return parts.length ? `${title} (${parts.join(" • ")})` : title;
+    function getSavedLessons(){
+      const raw = localStorage.getItem("savedLessons");
+      const arr = raw ? (safeParse(raw) || []) : [];
+      return Array.isArray(arr) ? arr : [];
     }
 
-    function loadLessons(){
-      const results = [];
+    function populateLessonPicker(){
+      const picker = document.getElementById("lessonPicker");
+      const lessons = getSavedLessons();
 
-      const ldRaw = localStorage.getItem("lessonData");
-      const lessonData = ldRaw ? (safeParse(ldRaw) || null) : null;
-      if (lessonData?.step1?.topic){
-        results.push({ id:"current-build", label: summarizeLesson(lessonData) + " — Current Build" });
+      picker.innerHTML = "";
+
+      if (!lessons.length){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No saved lessons found (save one in Step 6 first)";
+        picker.appendChild(opt);
+        picker.disabled = true;
+        return;
       }
 
-      const savedRaw = localStorage.getItem("savedLessons");
-      const saved = savedRaw ? (safeParse(savedRaw) || []) : [];
-      if (Array.isArray(saved)){
-        saved.forEach(s => {
-          results.push({ id: String(s.id || Date.now()), label: summarizeLesson(s) });
+      picker.disabled = false;
+
+      // newest first
+      lessons
+        .slice()
+        .sort((a,b) => String(b.savedAt || "").localeCompare(String(a.savedAt || "")))
+        .forEach((l, idx) => {
+          const title = l.title || l.fullLesson?.step1?.topic || `Lesson ${idx+1}`;
+          const meta = `${l.grade || l.fullLesson?.step1?.grade || ""} • ${l.subject || l.fullLesson?.step1?.subject || ""}`;
+          const opt = document.createElement("option");
+          opt.value = String(l.id ?? idx);
+          opt.textContent = `${title} — ${meta}`;
+          picker.appendChild(opt);
         });
-      }
-
-      if (!results.length){
-        results.push({ id:"none", label:"No saved lessons yet — build a lesson first" });
-      }
-
-      const sel = document.getElementById("lessonSelect");
-      sel.innerHTML = results.map(r => `<option value="${r.id}">${r.label}</option>`).join("");
     }
 
-    // ---- assessment type selection
-    let selectedType = "Quiz";
-    function setType(type){
-      selectedType = type;
-      document.querySelectorAll(".type-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.getAttribute("data-type") === type);
+    populateLessonPicker();
+
+    // =========
+    // Draft generation (MVP: local-only demo output shape)
+    // Later: wire to backend endpoint /api/generate-assessment
+    // =========
+    function buildDraft({ type, lessonTitle, standardsCodes, teacherNotes }){
+      // IMPORTANT: keys EXACTLY as you requested
+      return {
+        studentCopy: {
+          title: `${type}: ${lessonTitle || "Untitled Lesson"}`,
+          directions: "Follow the directions for each part. Answer in complete sentences when asked.",
+          items: [
+            { id: 1, prompt: "Guiding Question 1 (auto-generated placeholder)", responseType: "short-answer" },
+            { id: 2, prompt: "Guiding Question 2 (auto-generated placeholder)", responseType: "short-answer" },
+            { id: 3, prompt: "Guiding Question 3 (auto-generated placeholder)", responseType: "short-answer" }
+          ],
+          notesToStudents: "If you are unsure, refer back to today’s lesson notes and examples."
+        },
+        answerKey: {
+          answers: [
+            { id: 1, exemplar: "Example answer key placeholder." },
+            { id: 2, exemplar: "Example answer key placeholder." },
+            { id: 3, exemplar: "Example answer key placeholder." }
+          ]
+        },
+        rubric: {
+          scale: [
+            { level: 4, label: "Exceeds", description: "Accurate, complete, uses evidence/examples." },
+            { level: 3, label: "Meets", description: "Mostly accurate, complete, minor errors." },
+            { level: 2, label: "Developing", description: "Some accuracy, missing key elements." },
+            { level: 1, label: "Beginning", description: "Limited understanding, major gaps." }
+          ],
+          criteria: [
+            { name: "Accuracy", levels: { 4:"", 3:"", 2:"", 1:"" } },
+            { name: "Use of evidence/examples", levels: { 4:"", 3:"", 2:"", 1:"" } },
+            { name: "Clarity", levels: { 4:"", 3:"", 2:"", 1:"" } }
+          ]
+        },
+        metadata: {
+          type,
+          alignedTo: {
+            lessonTitle: lessonTitle || "Untitled Lesson",
+            standardsCodes: standardsCodes || []
+          },
+          teacherNotes: teacherNotes || "",
+          generatedAt: new Date().toISOString()
+        }
+      };
+    }
+
+    function copyToClipboard(text){
+      navigator.clipboard?.writeText(text).then(
+        () => alert("Copied."),
+        () => alert("Could not copy. (Clipboard blocked by browser)")
+      );
+    }
+
+    function downloadJson(filename, obj){
+      const blob = new Blob([JSON.stringify(obj, null, 2)], { type:"application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // =========
+    // Create actions
+    // =========
+    const btnClearCreate = document.getElementById("btnClearCreate");
+    const btnGenerateDraft = document.getElementById("btnGenerateDraft");
+    const draftOutputCard = document.getElementById("draftOutputCard");
+    const draftJson = document.getElementById("draftJson");
+    const draftPill = document.getElementById("draftPill");
+    const btnCopyJson = document.getElementById("btnCopyJson");
+    const btnDownloadJson = document.getElementById("btnDownloadJson");
+
+    btnClearCreate.addEventListener("click", () => {
+      document.getElementById("assessmentType").value = "Exit tickets";
+      teacherNotes.value = "";
+      autoSizeTextarea(teacherNotes);
+      draftOutputCard.classList.add("hidden");
+      draftJson.textContent = "{}";
+      draftPill.textContent = "Ready";
+      populateLessonPicker();
+    });
+
+    btnGenerateDraft.addEventListener("click", () => {
+      const lessons = getSavedLessons();
+      if (!lessons.length){
+        alert("No saved lessons found. Save a lesson in Step 6 first.");
+        return;
+      }
+
+      const picker = document.getElementById("lessonPicker");
+      const pickId = picker.value;
+      const lesson = lessons.find(l => String(l.id) === String(pickId)) || lessons[0];
+
+      const type = document.getElementById("assessmentType").value;
+      const title = lesson.title || lesson.fullLesson?.step1?.topic || "Untitled Lesson";
+
+      const standards = Array.isArray(lesson.verifiedStandards)
+        ? lesson.verifiedStandards
+        : (Array.isArray(lesson.fullLesson?.verifiedStandards) ? lesson.fullLesson.verifiedStandards : []);
+
+      const codes = standards
+        .map(s => String(s.code || s.standardCode || s.id || "").trim())
+        .filter(Boolean);
+
+      const notes = teacherNotes.value.trim();
+
+      draftPill.textContent = "Generated";
+      const out = buildDraft({ type, lessonTitle: title, standardsCodes: codes, teacherNotes: notes });
+
+      draftJson.textContent = JSON.stringify(out, null, 2);
+      draftOutputCard.classList.remove("hidden");
+      draftOutputCard.scrollIntoView({ behavior:"smooth", block:"start" });
+    });
+
+    btnCopyJson.addEventListener("click", () => copyToClipboard(draftJson.textContent));
+    btnDownloadJson.addEventListener("click", () => {
+      const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,"-");
+      downloadJson(`assessment-draft-${ts}.json`, safeParse(draftJson.textContent) || {});
+    });
+
+    // =========
+    // Upload actions
+    // =========
+    const btnClearUpload = document.getElementById("btnClearUpload");
+    const btnGenerateUpload = document.getElementById("btnGenerateUpload");
+    const uploadOutputCard = document.getElementById("uploadOutputCard");
+    const uploadJson = document.getElementById("uploadJson");
+    const uploadPill = document.getElementById("uploadPill");
+    const btnCopyUploadJson = document.getElementById("btnCopyUploadJson");
+    const btnDownloadUploadJson = document.getElementById("btnDownloadUploadJson");
+
+    btnClearUpload.addEventListener("click", () => {
+      uploadedLessonText.value = "";
+      autoSizeTextarea(uploadedLessonText);
+      document.getElementById("uploadAssessmentType").value = "Exit tickets";
+      document.getElementById("uploadTeacherNotes").value = "";
+      uploadOutputCard.classList.add("hidden");
+      uploadJson.textContent = "{}";
+      uploadPill.textContent = "Ready";
+    });
+
+    btnGenerateUpload.addEventListener("click", () => {
+      const lessonText = uploadedLessonText.value.trim();
+      if (!lessonText){
+        alert("Paste a lesson first.");
+        return;
+      }
+
+      const type = document.getElementById("uploadAssessmentType").value;
+      const notes = String(document.getElementById("uploadTeacherNotes").value || "").trim();
+
+      // naive standards detection (codes-like tokens) for metadata only
+      const codes = Array.from(new Set(
+        (lessonText.match(/\b[A-Z]{2,5}[-.]?\d{1,2}(?:\.\d+){0,3}\b/g) || [])
+          .map(x => x.trim())
+      ));
+
+      uploadPill.textContent = "Generated";
+      const out = buildDraft({
+        type,
+        lessonTitle: "Uploaded Lesson",
+        standardsCodes: codes,
+        teacherNotes: notes
       });
-    }
-    window.setType = setType;
 
-    // ---- actions (placeholders; you’ll wire to backend later)
-    function clearCreate(){
-      const t = document.getElementById("teacherNotes");
-      t.value = "";
-      autoGrow(t);
-    }
-    window.clearCreate = clearCreate;
+      uploadJson.textContent = JSON.stringify(out, null, 2);
+      uploadOutputCard.classList.remove("hidden");
+      uploadOutputCard.scrollIntoView({ behavior:"smooth", block:"start" });
+    });
 
-    function generateDraft(){
-      // UI-only stub: keep layout; replace later with backend call
-      alert("Generate Draft clicked (" + selectedType + ").\n\nNext step: connect this to your assessment-generation endpoint.");
-    }
-    window.generateDraft = generateDraft;
+    btnCopyUploadJson.addEventListener("click", () => copyToClipboard(uploadJson.textContent));
+    btnDownloadUploadJson.addEventListener("click", () => {
+      const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,"-");
+      downloadJson(`assessment-draft-upload-${ts}.json`, safeParse(uploadJson.textContent) || {});
+    });
 
-    function clearUpload(){
-      const u = document.getElementById("uploadText");
-      const f = document.getElementById("uploadFile");
-      u.value = "";
-      if (f) f.value = "";
-      autoGrow(u);
-    }
-    window.clearUpload = clearUpload;
-
-    function enhanceUpload(){
-      alert("Enhance clicked.\n\nNext step: connect upload processing to backend.");
-    }
-    window.enhanceUpload = enhanceUpload;
-
-    // init
-    window.addEventListener("DOMContentLoaded", loadLessons);
+    // Initial autosize pass (so it never scrolls right)
+    window.addEventListener("DOMContentLoaded", () => {
+      autoSizeTextarea(teacherNotes);
+      autoSizeTextarea(uploadedLessonText);
+    });
   </script>
 </body>
 </html>
