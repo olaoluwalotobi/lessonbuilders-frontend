@@ -325,25 +325,33 @@
        - Prevents nav overflow + makes nav wrap cleanly
        ========================= */
     @media (max-width: 900px){
-      .top-nav{
-        padding:12px 16px;
-        display:grid;
-        grid-template-columns: 1fr auto;
-        align-item:center;
-      }
+  .top-nav{
+    padding:12px 16px;
+    display:grid;
+    grid-template-columns: 1fr auto;
+    align-items:start;          /* <-- change from center to start */
+    row-gap:8px;
+  }
 
-      /* Make left area wrap like About, and allow menu to occupy full row if needed */
-      .nav-left{
-        display:flex;
-        gap:16px;
-        flex-wrap:wrap;
-      }
+  .nav-right{
+    justify-self:end;
+    align-self:start;           /* <-- keeps LB at the top-right */
+    margin-top:2px;             /* <-- tiny nudge to match About */
+  }
 
-      /* Keep the profile bubble from causing horizontal overflow */
-      .nav-right{
-        justify-self:end;
-      }
+  .nav-left{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    align-items:flex-start;     /* <-- prevents vertical centering weirdness */
+  }
 
+  .nav-menu{
+    width:100%;                 /* <-- ensures menu drops cleanly under logo */
+    flex-wrap:wrap;
+    gap:16px;
+  }
+}
       .container{flex-direction:column;max-width:100%;}
 
       .sidebar{
