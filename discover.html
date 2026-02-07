@@ -60,8 +60,6 @@
     .main-content{flex:1;padding:40px 60px;max-width:1000px;}
     .page-title{font-family:'Crimson Pro',serif;font-size:44px;font-weight:700;margin-bottom:8px;color:var(--navy);}
     .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:16px;}
-    .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:18px;}
-    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;width:55%;}
 
     .controls-row{
       display:flex;gap:14px;align-items:center;justify-content:space-between;
@@ -138,8 +136,6 @@
     }
     .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
     .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,140,66,0.25);}
-    .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
-    .btn-secondary:hover{border-color:var(--orange);}
 
     .empty{
       background:white;border:2px dashed #E2E8F0;border-radius:16px;
@@ -193,8 +189,7 @@
 
   <main class="main-content">
     <h1 class="page-title">Discover</h1>
-    <p class="page-subtitle">Shared lessons from your community (MVP: stored locally). Filter by subject, template, or grade.</p>
-    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <p class="page-subtitle">Shared lessons (MVP: local). Choose a version when available.</p>
 
     <div class="controls-row">
       <div class="search-wrap">
@@ -309,35 +304,18 @@
     const stdCodes = Array.isArray(item.verifiedStandards)
       ? item.verifiedStandards.map(x => String(x.code || x.id || "")).join(" ").toLowerCase()
       : "";
-
-    // look into latest version snapshot too (optional)
     const v0 = item.versions?.[0]?.snapshot || {};
     const gl = v0.generatedLesson || {};
     const summary = String(gl.summary || "").toLowerCase();
     const objectives = Array.isArray(gl.objectives) ? gl.objectives.join(" ").toLowerCase() : "";
-
-    return (
-      title.includes(s) ||
-      subject.includes(s) ||
-      grade.includes(s) ||
-      template.includes(s) ||
-      stdCodes.includes(s) ||
-      summary.includes(s) ||
-      objectives.includes(s)
-    );
+    return title.includes(s) || subject.includes(s) || grade.includes(s) || template.includes(s) || stdCodes.includes(s) || summary.includes(s) || objectives.includes(s);
   }
 
   function sortItems(arr){
     const v = document.getElementById("sortSelect").value;
     const copy = [...arr];
-    if (v === "title"){
-      copy.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||"")));
-      return copy;
-    }
-    if (v === "oldest"){
-      copy.sort((a,b)=>new Date(a.sharedAt||0) - new Date(b.sharedAt||0));
-      return copy;
-    }
+    if (v === "title"){ copy.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||""))); return copy; }
+    if (v === "oldest"){ copy.sort((a,b)=>new Date(a.sharedAt||0) - new Date(b.sharedAt||0)); return copy; }
     copy.sort((a,b)=>new Date(b.sharedAt||0) - new Date(a.sharedAt||0));
     return copy;
   }
@@ -361,12 +339,7 @@
     const versions = Array.isArray(entry.versions) ? entry.versions : [];
     const v = versions[versionIndex] || versions[0];
     if (!v?.snapshot) return alert("No version snapshot found.");
-
-    try{
-      // load into builder flow (Step 6 preview)
-      localStorage.setItem("lessonData", JSON.stringify(v.snapshot));
-    } catch {}
-
+    try{ localStorage.setItem("lessonData", JSON.stringify(v.snapshot)); } catch {}
     window.location.href = "build-step6.html";
   }
 
@@ -375,10 +348,7 @@
     renderFilterStrip(all);
 
     const q = (document.getElementById("searchInput").value || "").trim();
-    let list = all
-      .filter(matchesModeFilter)
-      .filter(x => searchMatch(x, q));
-
+    let list = all.filter(matchesModeFilter).filter(x => searchMatch(x, q));
     list = sortItems(list);
 
     const grid = document.getElementById("grid");
@@ -386,7 +356,7 @@
       grid.innerHTML = `
         <div class="empty" style="grid-column:1/-1;">
           <b>No shared lessons yet.</b><br>
-          Go to <b>My Lessons</b> and click <b>Share</b> to publish one to Discover.
+          Go to <b>My Lessons</b> and click <b>Share</b>.
         </div>
       `;
       return;
@@ -397,21 +367,6 @@
       const tpl = frameworkNames[item.framework] || item.framework || "Template";
       const std = Array.isArray(item.verifiedStandards) ? item.verifiedStandards.map(x=>x.code||x.id).filter(Boolean).slice(0,4) : [];
       const versions = Array.isArray(item.versions) ? item.versions : [];
-      const vCount = versions.length;
-
-      const versionSelect = (vCount > 1) ? `
-        <div class="version-wrap">
-          <label>Version</label>
-          <select id="ver_${item.shareId}">
-            ${versions.map((v,i)=>`<option value="${i}">${i===0 ? "Latest" : "Previous"}</option>`).join("")}
-          </select>
-        </div>
-      ` : `
-        <div class="version-wrap">
-          <label>Version</label>
-          <div style="font-weight:900;color:var(--navy);">Latest</div>
-        </div>
-      `;
 
       return `
         <div class="card">
@@ -429,7 +384,12 @@
             ${std.map(code=>`<div class="tag">${escapeHtml(code)}</div>`).join("")}
           </div>
           <div class="card-actions">
-            ${versionSelect}
+            <div class="version-wrap">
+              <label>Version</label>
+              <select id="ver_${item.shareId}">
+                ${versions.map((v,i)=>`<option value="${i}">${i===0 ? "Latest" : "Previous"}</option>`).join("")}
+              </select>
+            </div>
             <button class="btn btn-primary" onclick="openFromUI(${item.shareId})">Open</button>
           </div>
         </div>
