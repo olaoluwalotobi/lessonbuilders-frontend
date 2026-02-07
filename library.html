@@ -6,31 +6,26 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>My Lessons - LessonBuilders</title>
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --navy:#0D2847;
       --orange:#FF8C42;
-      --green:#10B981;
-      --yellow:#F59E0B;
-      --red:#EF4444;
-      --blue:#3B82F6;
       --bg:#F7FAFC;
-      --card:#FFFFFF;
       --line:rgba(13,40,71,0.10);
       --muted:#718096;
-      --text:#0D2847;
     }
     *{margin:0;padding:0;box-sizing:border-box;}
-    html, body { height: 100%; }
-
+    html, body{height:100%;}
     body{
       font-family:'DM Sans',sans-serif;
       background:linear-gradient(135deg,var(--bg) 0%,#FFF 100%);
-      color:var(--text);
+      color:var(--navy);
       display:flex;
       flex-direction:column;
     }
 
+    /* Top Nav */
     .top-nav{
       background:#fff;
       border-bottom:2px solid var(--line);
@@ -72,21 +67,21 @@
       cursor:default;
     }
 
+    /* Layout */
     .container{
       display:flex;
       max-width:1400px;
       margin:0 auto;
       width:100%;
-      flex:1;                /* ✅ full height layout */
-      align-items:stretch;   /* ✅ stretch sidebar */
+      flex:1;
+      align-items:stretch;
     }
-
     .sidebar{
       width:280px;
       background:#fff;
       border-right:1px solid var(--line);
       padding:26px 18px;
-      min-height:100%;       /* ✅ full height white panel */
+      min-height:100%;
     }
 
     .side-title{
@@ -98,39 +93,99 @@
       margin-bottom:14px;
     }
 
-    .side-item{
+    .filter-block{
+      border:2px solid #E2E8F0;
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:10px;
+      transition:.2s;
+      background:#fff;
+    }
+    .filter-block.active{
+      border-color:rgba(255,140,66,0.55);
+      background:rgba(255,140,66,0.06);
+    }
+    .filter-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .filter-left{
       display:flex;
       align-items:center;
       gap:10px;
-      padding:12px 12px;
-      border-radius:12px;
+      font-weight:900;
       color:#4A5568;
-      font-weight:700;
-      cursor:pointer;
-      transition:.2s;
-      margin-bottom:8px;
-      border:1px solid transparent;
     }
-    .side-item:hover{background:rgba(255,140,66,0.08); border-color:rgba(255,140,66,0.12); color:var(--navy);}
-    .side-item.active{background:rgba(255,140,66,0.12); color:var(--navy); border-color:rgba(255,140,66,0.25);}
-    .side-dot{
+    .filter-block.active .filter-left{ color:var(--navy); }
+    .filter-dot{
       width:26px;height:26px;border-radius:50%;
       display:flex;align-items:center;justify-content:center;
-      background:#F7FAFC;
-      border:2px solid #E2E8F0;
-      font-size:12px;
-      color:#888;
-      flex:0 0 auto;
+      background:#F7FAFC;border:2px solid #E2E8F0;
+      font-size:12px;color:#888;flex:0 0 auto;
     }
-    .side-item.active .side-dot{background:var(--orange);border-color:var(--orange);color:#fff;}
+    .filter-block.active .filter-dot{
+      background:var(--orange);
+      border-color:var(--orange);
+      color:#fff;
+    }
+    .chev{
+      font-weight:900;
+      color:#A0AEC0;
+      transition:transform .18s;
+    }
+    .filter-block.open .chev{ transform:rotate(180deg); }
 
+    .filter-body{
+      display:none;
+      margin-top:10px;
+    }
+    .filter-block.open .filter-body{ display:block; }
+
+    .filter-select{
+      width:100%;
+      background:#fff;
+      border:2px solid #E2E8F0;
+      border-radius:12px;
+      padding:12px 12px;
+      font-size:14px;
+      font-weight:800;
+      color:var(--navy);
+      outline:none;
+    }
+    .filter-select:focus{ border-color:rgba(255,140,66,0.7); }
+
+    .filter-hint{
+      margin-top:8px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+    }
+
+    .reset-btn{
+      width:100%;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+      background:#fff;
+      border:2px solid #E2E8F0;
+      color:var(--navy);
+      transition:.2s;
+    }
+    .reset-btn:hover{ border-color:rgba(255,140,66,0.55); }
+
+    /* Main */
     .main{
       flex:1;
       padding:36px 54px;
       max-width:1040px;
       width:100%;
     }
-
     .page-title{
       font-family:'Crimson Pro',serif;
       font-size:44px;
@@ -168,17 +223,34 @@
       outline:none;
     }
     .search:focus{border-color:rgba(255,140,66,0.7);}
-
-    .select{
+    .sort{
       background:#fff;
       border:2px solid #E2E8F0;
       border-radius:12px;
       padding:12px 12px;
       font-size:14px;
-      font-weight:700;
+      font-weight:800;
       color:var(--navy);
       outline:none;
       min-width:170px;
+    }
+
+    .active-filter-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#fff;
+      border:2px solid #E2E8F0;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:13px;
+      font-weight:900;
+      color:#2D3748;
+      margin-top:8px;
+    }
+    .badge-dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--orange);
     }
 
     .grid{
@@ -187,7 +259,6 @@
       gap:16px;
       margin-top:10px;
     }
-
     .card{
       background:#fff;
       border:2px solid #E2E8F0;
@@ -197,7 +268,7 @@
     }
     .card h3{
       font-size:18px;
-      font-weight:800;
+      font-weight:900;
       color:var(--navy);
       margin-bottom:6px;
     }
@@ -207,21 +278,17 @@
       margin-bottom:10px;
       line-height:1.4;
     }
-    .pills{
-      display:flex;flex-wrap:wrap;gap:8px;
-      margin-bottom:12px;
-    }
+    .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
     .pill{
       background:#F7FAFC;
       border:1px solid #E2E8F0;
       color:#2D3748;
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       padding:7px 10px;
       border-radius:999px;
       white-space:nowrap;
     }
-
     .btn-row{
       display:flex;
       align-items:center;
@@ -231,7 +298,7 @@
     .btn{
       padding:10px 14px;
       border-radius:12px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       border:none;
       transition:.2s;
@@ -249,12 +316,6 @@
       color:var(--navy);
     }
     .btn-secondary:hover{border-color:rgba(255,140,66,0.55);}
-    .btn-ghost{
-      background:#fff;
-      border:2px dashed #E2E8F0;
-      color:#4A5568;
-    }
-    .btn-ghost:hover{border-color:rgba(255,140,66,0.55); color:var(--navy);}
 
     .empty{
       background:#fff;
@@ -275,15 +336,11 @@
         border-right:none;
         border-bottom:1px solid var(--line);
         padding:14px 12px;
-        display:flex;
-        gap:10px;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
       }
-      .side-title{display:none;}
-      .side-item{flex:0 0 auto; margin-bottom:0;}
       .main{padding:22px 16px;max-width:100%;}
       .grid{grid-template-columns:1fr;}
+      .toolbar{flex-direction:column;align-items:stretch;}
+      .sort{min-width:unset;}
     }
   </style>
 </head>
@@ -294,6 +351,7 @@
       <a href="index.html" class="logo-text">LessonBuilders</a>
       <div class="nav-menu">
         <a href="library.html" class="nav-link active">My Lessons</a>
+        <!-- If your file is not named assessments.html, rename this link accordingly -->
         <a href="assessments.html" class="nav-link">Assessments</a>
         <a href="discover.html" class="nav-link">Discover</a>
         <a href="about.html" class="nav-link">Help</a>
@@ -308,20 +366,52 @@
     <aside class="sidebar">
       <div class="side-title">MY LESSONS</div>
 
-      <div class="side-item active" data-filter="subject">
-        <div class="side-dot">S</div>
-        <div>By Subject</div>
+      <!-- By Subject -->
+      <div class="filter-block active open" id="fbSubject" data-type="subject">
+        <div class="filter-head" role="button" aria-label="Filter by subject">
+          <div class="filter-left">
+            <div class="filter-dot">S</div>
+            <div>By Subject</div>
+          </div>
+          <div class="chev">▼</div>
+        </div>
+        <div class="filter-body">
+          <select id="selSubject" class="filter-select"></select>
+          <div class="filter-hint">Pick a subject to filter your saved lessons.</div>
+        </div>
       </div>
 
-      <div class="side-item" data-filter="template">
-        <div class="side-dot">T</div>
-        <div>By Template</div>
+      <!-- By Template -->
+      <div class="filter-block" id="fbTemplate" data-type="template">
+        <div class="filter-head" role="button" aria-label="Filter by template">
+          <div class="filter-left">
+            <div class="filter-dot">T</div>
+            <div>By Template</div>
+          </div>
+          <div class="chev">▼</div>
+        </div>
+        <div class="filter-body">
+          <select id="selTemplate" class="filter-select"></select>
+          <div class="filter-hint">Pick a template (framework) to filter.</div>
+        </div>
       </div>
 
-      <div class="side-item" data-filter="grade">
-        <div class="side-dot">G</div>
-        <div>By Grade</div>
+      <!-- By Grade -->
+      <div class="filter-block" id="fbGrade" data-type="grade">
+        <div class="filter-head" role="button" aria-label="Filter by grade">
+          <div class="filter-left">
+            <div class="filter-dot">G</div>
+            <div>By Grade</div>
+          </div>
+          <div class="chev">▼</div>
+        </div>
+        <div class="filter-body">
+          <select id="selGrade" class="filter-select"></select>
+          <div class="filter-hint">Pick a grade to filter your library.</div>
+        </div>
       </div>
+
+      <button class="reset-btn" id="btnReset">Show All</button>
     </aside>
 
     <main class="main">
@@ -329,9 +419,14 @@
       <p class="page-subtitle">Your saved lesson library. Filter by subject, template, or grade.</p>
       <div class="rule"><div></div></div>
 
+      <div id="activeFilterBadge" class="active-filter-badge" style="display:none;">
+        <span class="badge-dot"></span>
+        <span id="activeFilterText"></span>
+      </div>
+
       <div class="toolbar">
         <input id="search" class="search" placeholder="Search lesson titles, standards codes, or keywords..." />
-        <select id="sort" class="select">
+        <select id="sort" class="sort">
           <option value="newest" selected>Sort: Newest</option>
           <option value="oldest">Sort: Oldest</option>
           <option value="title">Sort: Title (A–Z)</option>
@@ -346,261 +441,300 @@
   </div>
 
   <script>
-    // ---------------------------
-    // Helpers / Storage contracts
-    // ---------------------------
-    const LS = {
-      savedLessons: "savedLessons",
-      discoverLessons: "discoverLessons",
-      user: "lb_user"
-    };
-
-    function safeParse(s){ try{return JSON.parse(s);}catch{return null;} }
-    function fmtDate(iso){
-      if(!iso) return "";
-      try{
-        const d = new Date(iso);
-        return d.toLocaleDateString("en-US",{month:"numeric",day:"numeric",year:"numeric"});
-      }catch{return "";}
-    }
-    function initialsFromEmail(email){
-      if(!email) return "LB";
-      const namePart = String(email).split("@")[0] || "";
-      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-      const a = tokens[0]?.[0] || "";
-      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-      const ini = (a + b).toUpperCase();
-      return ini || "LB";
-    }
-    function getUserEmail(){
-      try{
-        const raw = localStorage.getItem(LS.user) || localStorage.getItem("user") || "";
-        if(!raw) return "";
-        const u = JSON.parse(raw);
-        return u?.email || u?.user?.email || "";
-      }catch{return "";}
-    }
-    document.getElementById("userProfile").textContent = initialsFromEmail(getUserEmail());
-
-    function loadSavedLessons(){
-      return safeParse(localStorage.getItem(LS.savedLessons)) || [];
-    }
-    function saveSavedLessons(arr){
-      localStorage.setItem(LS.savedLessons, JSON.stringify(arr || []));
-    }
-    function loadDiscover(){
-      return safeParse(localStorage.getItem(LS.discoverLessons)) || [];
-    }
-    function saveDiscover(arr){
-      localStorage.setItem(LS.discoverLessons, JSON.stringify(arr || []));
-    }
-
-    // ---------------------------
-    // Share logic (2 versions max)
-    // ---------------------------
-    function publishToDiscover(lesson){
-      const discover = loadDiscover();
-
-      const now = new Date().toISOString();
-      const shareSnapshot = {
-        versionAt: now,
-        title: lesson.title,
-        grade: lesson.grade,
-        subject: lesson.subject,
-        duration: lesson.duration,
-        framework: lesson.framework,
-        standards: Array.isArray(lesson.verifiedStandards) ? lesson.verifiedStandards : [],
-        // Keep a lightweight snapshot that can reproduce/preview later:
-        generatedLesson: lesson.generatedLesson || null,
-        fullLesson: lesson.fullLesson || null
+    (function(){
+      const LS = {
+        savedLessons: "savedLessons",
+        user: "lb_user"
       };
 
-      const existingIdx = discover.findIndex(x => x.lessonId === lesson.id);
-      if(existingIdx === -1){
-        discover.unshift({
-          lessonId: lesson.id,
-          author: lesson.author || "",
-          sharedAt: now,
-          lastSharedAt: now,
-          versions: [shareSnapshot] // start
-        });
-      }else{
-        const item = discover[existingIdx];
-        const versions = Array.isArray(item.versions) ? item.versions : [];
+      function safeParse(s){ try { return JSON.parse(s); } catch { return null; } }
+      function escapeHtml(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#039;");
+      }
+      function initialsFromEmail(email){
+        if(!email) return "LB";
+        const namePart = String(email).split("@")[0] || "";
+        const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+        const a = tokens[0]?.[0] || "";
+        const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+        const ini = (a + b).toUpperCase();
+        return ini || "LB";
+      }
+      function getUserEmail(){
+        try{
+          const raw = localStorage.getItem(LS.user) || localStorage.getItem("user") || "";
+          if(!raw) return "";
+          const u = JSON.parse(raw);
+          return u?.email || u?.user?.email || "";
+        }catch{return "";}
+      }
+      document.getElementById("userProfile").textContent = initialsFromEmail(getUserEmail());
 
-        // Add new version to front, keep only 2
-        versions.unshift(shareSnapshot);
-        item.versions = versions.slice(0, 2);
-        item.lastSharedAt = now;
-
-        // keep top-level display
-        item.author = lesson.author || item.author || "";
-        item.sharedAt = item.sharedAt || now;
-
-        discover[existingIdx] = item;
+      function loadSavedLessons(){
+        return safeParse(localStorage.getItem(LS.savedLessons)) || [];
       }
 
-      saveDiscover(discover);
-      return now;
-    }
+      function fmtDate(iso){
+        if(!iso) return "";
+        try{
+          const d = new Date(iso);
+          return d.toLocaleDateString("en-US",{month:"numeric",day:"numeric",year:"numeric"});
+        }catch{return "";}
+      }
 
-    // Share button visibility rule:
-    // - show if not shared yet
-    // - OR lesson.updatedAt is newer than lesson.lastSharedAt
-    function shouldShowShare(lesson){
-      const lastShared = lesson.lastSharedAt ? new Date(lesson.lastSharedAt).getTime() : 0;
-      const updated = lesson.updatedAt ? new Date(lesson.updatedAt).getTime() : 0;
-      return !lesson.isShared || (updated > lastShared);
-    }
+      function pill(text){ return `<span class="pill">${escapeHtml(text)}</span>`; }
 
-    // ---------------------------
-    // UI state (filters)
-    // ---------------------------
-    let activeFilter = "subject";
+      // Filter State
+      let filterType = "subject";  // subject | template | grade
+      let filterValue = "ALL";     // selected value
+      let searchValue = "";
+      let sortMode = "newest";
 
-    document.querySelectorAll(".side-item").forEach(item=>{
-      item.addEventListener("click", ()=>{
-        document.querySelectorAll(".side-item").forEach(x=>x.classList.remove("active"));
-        item.classList.add("active");
-        activeFilter = item.getAttribute("data-filter") || "subject";
-        render();
-      });
-    });
-
-    document.getElementById("search").addEventListener("input", render);
-    document.getElementById("sort").addEventListener("change", render);
-
-    function matchesSearch(lesson, q){
-      if(!q) return true;
-      const s = q.toLowerCase().trim();
-      const fields = [
-        lesson.title,
-        lesson.subject,
-        lesson.grade,
-        lesson.framework,
-        ...(Array.isArray(lesson.verifiedStandards) ? lesson.verifiedStandards : [])
-      ].join(" ").toLowerCase();
-      return fields.includes(s);
-    }
-
-    function sortLessons(arr, mode){
-      const a = [...arr];
-      if(mode === "oldest") a.sort((x,y)=> new Date(x.savedAt||0) - new Date(y.savedAt||0));
-      if(mode === "newest") a.sort((x,y)=> new Date(y.savedAt||0) - new Date(x.savedAt||0));
-      if(mode === "title") a.sort((x,y)=> String(x.title||"").localeCompare(String(y.title||"")));
-      return a;
-    }
-
-    function pill(text){
-      return `<span class="pill">${escapeHtml(text)}</span>`;
-    }
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function render(){
+      // Elements
       const grid = document.getElementById("grid");
       const empty = document.getElementById("empty");
-      const q = document.getElementById("search").value || "";
-      const sortMode = document.getElementById("sort").value || "newest";
 
-      const lessons = loadSavedLessons();
-      const filtered = sortLessons(
-        lessons.filter(l => matchesSearch(l, q)),
-        sortMode
-      );
+      const badge = document.getElementById("activeFilterBadge");
+      const badgeText = document.getElementById("activeFilterText");
 
-      if(!filtered.length){
-        grid.innerHTML = "";
-        empty.style.display = "block";
-        return;
+      const selSubject = document.getElementById("selSubject");
+      const selTemplate = document.getElementById("selTemplate");
+      const selGrade = document.getElementById("selGrade");
+
+      const fbSubject = document.getElementById("fbSubject");
+      const fbTemplate = document.getElementById("fbTemplate");
+      const fbGrade = document.getElementById("fbGrade");
+
+      // Build dropdown options from saved lessons
+      function uniqueSorted(arr){
+        return Array.from(new Set(arr.filter(Boolean).map(x=>String(x).trim()).filter(Boolean)))
+          .sort((a,b)=>a.localeCompare(b));
       }
-      empty.style.display = "none";
 
-      grid.innerHTML = filtered.map(l=>{
-        const standards = Array.isArray(l.verifiedStandards) ? l.verifiedStandards : [];
-        const topStandards = standards.slice(0, 3);
-        const moreCount = Math.max(0, standards.length - topStandards.length);
+      function populateFilters(){
+        const lessons = loadSavedLessons();
 
-        const shareVisible = shouldShowShare(l);
-        const shareLabel = (!l.isShared) ? "Share" : "Share Update";
+        const subjects = uniqueSorted(lessons.map(l => l.subject || l?.step1?.subject));
+        const templates = uniqueSorted(lessons.map(l => l.framework || l?.step3?.framework));
+        const grades = uniqueSorted(lessons.map(l => l.grade || l?.step1?.grade));
 
-        return `
-          <div class="card" data-id="${l.id}">
-            <h3>${escapeHtml(l.title || "Untitled Lesson")}</h3>
-            <div class="meta">
-              Grade: <b>${escapeHtml(l.grade || "")}</b>
-              &nbsp;|&nbsp; Subject: <b>${escapeHtml(l.subject || "")}</b>
-              &nbsp;|&nbsp; Duration: <b>${escapeHtml(String(l.duration || ""))} min</b><br>
-              Template: <b>${escapeHtml(l.framework || "")}</b>
-              &nbsp;|&nbsp; Saved: <b>${escapeHtml(fmtDate(l.savedAt))}</b>
-            </div>
+        selSubject.innerHTML = [`<option value="ALL">All Subjects</option>`]
+          .concat(subjects.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`)).join("");
 
-            <div class="pills">
-              ${pill(l.subject || "Subject")}
-              ${pill(l.framework || "Template")}
-              ${topStandards.map(s=>pill(s)).join("")}
-              ${moreCount ? pill("+"+moreCount+" more") : ""}
-            </div>
+        selTemplate.innerHTML = [`<option value="ALL">All Templates</option>`]
+          .concat(templates.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`)).join("");
 
-            <div class="btn-row">
-              ${shareVisible ? `<button class="btn btn-secondary" data-action="share">${shareLabel}</button>` : ``}
-              <button class="btn btn-primary" data-action="open">Open</button>
-            </div>
-          </div>
-        `;
-      }).join("");
+        selGrade.innerHTML = [`<option value="ALL">All Grades</option>`]
+          .concat(grades.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`)).join("");
 
-      grid.querySelectorAll("button[data-action]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
-          const card = e.target.closest(".card");
-          const id = Number(card?.getAttribute("data-id"));
-          const action = e.target.getAttribute("data-action");
-          if(!id) return;
+        // keep selections consistent if possible
+        if(filterType === "subject") selSubject.value = filterValue;
+        if(filterType === "template") selTemplate.value = filterValue;
+        if(filterType === "grade") selGrade.value = filterValue;
+      }
 
-          if(action === "open") openLesson(id);
-          if(action === "share") shareLesson(id);
+      function setActiveBlock(type){
+        const blocks = [
+          { type:"subject", el: fbSubject },
+          { type:"template", el: fbTemplate },
+          { type:"grade", el: fbGrade },
+        ];
+
+        blocks.forEach(b=>{
+          const isActive = b.type === type;
+          b.el.classList.toggle("active", isActive);
+          b.el.classList.toggle("open", isActive);
         });
+
+        filterType = type;
+
+        // sync filterValue from the right dropdown
+        if(type === "subject") filterValue = selSubject.value || "ALL";
+        if(type === "template") filterValue = selTemplate.value || "ALL";
+        if(type === "grade") filterValue = selGrade.value || "ALL";
+
+        render();
+      }
+
+      // Toggle open/close blocks (clicking header)
+      function attachBlockToggle(blockEl, type){
+        const head = blockEl.querySelector(".filter-head");
+        head.addEventListener("click", ()=>{
+          const isActive = blockEl.classList.contains("active");
+          if(!isActive){
+            setActiveBlock(type);
+            return;
+          }
+          // If active, just toggle open state
+          blockEl.classList.toggle("open");
+        });
+      }
+      attachBlockToggle(fbSubject, "subject");
+      attachBlockToggle(fbTemplate, "template");
+      attachBlockToggle(fbGrade, "grade");
+
+      // Dropdown change
+      selSubject.addEventListener("change", ()=>{
+        filterType = "subject";
+        filterValue = selSubject.value || "ALL";
+        setActiveBlock("subject");
       });
-    }
-
-    function openLesson(id){
-      // Minimal MVP behavior: store selection; you can wire this to any view page you want later.
-      localStorage.setItem("lb_open_lesson_id", String(id));
-      // If you have a dedicated preview page later, route there. For now, go to step6 (preview/export) or keep on page.
-      window.location.href = "build-step6.html";
-    }
-
-    function shareLesson(id){
-      const lessons = loadSavedLessons();
-      const idx = lessons.findIndex(l=>Number(l.id) === Number(id));
-      if(idx === -1) return;
-
-      const lesson = lessons[idx];
-
-      // publish snapshot to discover, returns lastSharedAt
-      const lastSharedAt = publishToDiscover({
-        ...lesson,
-        author: getUserEmail() || "LessonBuilders Teacher"
+      selTemplate.addEventListener("change", ()=>{
+        filterType = "template";
+        filterValue = selTemplate.value || "ALL";
+        setActiveBlock("template");
+      });
+      selGrade.addEventListener("change", ()=>{
+        filterType = "grade";
+        filterValue = selGrade.value || "ALL";
+        setActiveBlock("grade");
       });
 
-      lesson.isShared = true;
-      lesson.lastSharedAt = lastSharedAt;
+      document.getElementById("btnReset").addEventListener("click", ()=>{
+        filterValue = "ALL";
+        selSubject.value = "ALL";
+        selTemplate.value = "ALL";
+        selGrade.value = "ALL";
+        badge.style.display = "none";
+        render();
+      });
 
-      lessons[idx] = lesson;
-      saveSavedLessons(lessons);
+      document.getElementById("search").addEventListener("input", (e)=>{
+        searchValue = (e.target.value || "");
+        render();
+      });
 
-      alert("Shared to Discover ✅");
+      document.getElementById("sort").addEventListener("change", (e)=>{
+        sortMode = e.target.value || "newest";
+        render();
+      });
+
+      function matchesSearch(lesson, q){
+        if(!q) return true;
+        const s = q.toLowerCase().trim();
+        const standards = Array.isArray(lesson.verifiedStandards) ? lesson.verifiedStandards : [];
+        const fields = [
+          lesson.title,
+          lesson.subject,
+          lesson.grade,
+          lesson.framework,
+          standards.join(" ")
+        ].join(" ").toLowerCase();
+        return fields.includes(s);
+      }
+
+      function matchesFilter(lesson){
+        if(!filterValue || filterValue === "ALL") return true;
+
+        const subject = String(lesson.subject || "");
+        const grade = String(lesson.grade || "");
+        const framework = String(lesson.framework || "");
+
+        if(filterType === "subject") return subject.toLowerCase() === String(filterValue).toLowerCase();
+        if(filterType === "grade") return grade.toLowerCase() === String(filterValue).toLowerCase();
+        if(filterType === "template") return framework.toLowerCase() === String(filterValue).toLowerCase();
+        return true;
+      }
+
+      function sortLessons(arr){
+        const a = [...arr];
+        if(sortMode === "oldest") a.sort((x,y)=> new Date(x.savedAt||0) - new Date(y.savedAt||0));
+        if(sortMode === "newest") a.sort((x,y)=> new Date(y.savedAt||0) - new Date(x.savedAt||0));
+        if(sortMode === "title") a.sort((x,y)=> String(x.title||"").localeCompare(String(y.title||"")));
+        return a;
+      }
+
+      function updateBadge(){
+        if(!filterValue || filterValue === "ALL"){
+          badge.style.display = "none";
+          return;
+        }
+        const label =
+          filterType === "subject" ? "Subject" :
+          filterType === "template" ? "Template" :
+          "Grade";
+
+        badgeText.textContent = `${label}: ${filterValue}`;
+        badge.style.display = "inline-flex";
+      }
+
+      function render(){
+        populateFilters();
+        updateBadge();
+
+        const lessons = loadSavedLessons();
+        const filtered = sortLessons(
+          lessons
+            .filter(matchesFilter)
+            .filter(l => matchesSearch(l, searchValue))
+        );
+
+        if(!lessons.length){
+          grid.innerHTML = "";
+          empty.style.display = "block";
+          empty.textContent = "No saved lessons yet. Generate a lesson in Steps 1–7, then click Continue to save it here.";
+          return;
+        }
+
+        if(!filtered.length){
+          grid.innerHTML = "";
+          empty.style.display = "block";
+          empty.textContent = "No lessons match your current filter/search.";
+          return;
+        }
+
+        empty.style.display = "none";
+
+        grid.innerHTML = filtered.map(l=>{
+          const standards = Array.isArray(l.verifiedStandards) ? l.verifiedStandards : [];
+          const topStandards = standards.slice(0, 3);
+          const moreCount = Math.max(0, standards.length - topStandards.length);
+
+          return `
+            <div class="card" data-id="${l.id}">
+              <h3>${escapeHtml(l.title || "Untitled Lesson")}</h3>
+              <div class="meta">
+                Grade: <b>${escapeHtml(l.grade || "")}</b>
+                &nbsp;|&nbsp; Subject: <b>${escapeHtml(l.subject || "")}</b>
+                &nbsp;|&nbsp; Duration: <b>${escapeHtml(String(l.duration || ""))} min</b><br>
+                Template: <b>${escapeHtml(l.framework || "")}</b>
+                &nbsp;|&nbsp; Saved: <b>${escapeHtml(fmtDate(l.savedAt))}</b>
+              </div>
+
+              <div class="pills">
+                ${pill(l.subject || "Subject")}
+                ${pill(l.framework || "Template")}
+                ${topStandards.map(s=>pill(s)).join("")}
+                ${moreCount ? pill("+"+moreCount+" more") : ""}
+              </div>
+
+              <div class="btn-row">
+                <button class="btn btn-primary" data-action="open">Open</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        grid.querySelectorAll("button[data-action='open']").forEach(btn=>{
+          btn.addEventListener("click", (e)=>{
+            const card = e.target.closest(".card");
+            const id = card?.getAttribute("data-id");
+            if(!id) return;
+            localStorage.setItem("lb_open_lesson_id", String(id));
+            // If you have a dedicated lesson view page, route there. Otherwise Step 6 preview.
+            window.location.href = "build-step6.html";
+          });
+        });
+      }
+
+      // Initial render
       render();
-    }
-
-    // Boot
-    render();
+    })();
   </script>
 </body>
 </html>
