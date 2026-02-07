@@ -71,8 +71,6 @@
     .main-content{flex:1;padding:40px 60px;max-width:1000px;}
     .page-title{font-family:'Crimson Pro',serif;font-size:44px;font-weight:700;margin-bottom:8px;color:var(--navy);}
     .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:16px;}
-    .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:18px;}
-    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;width:55%;}
 
     .controls-row{
       display:flex;gap:14px;align-items:center;justify-content:space-between;
@@ -156,10 +154,33 @@
     .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,140,66,0.25);}
     .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
     .btn-secondary:hover{border-color:var(--orange);}
+    .btn-disabled{
+      background:#F7FAFC;border:2px solid #E2E8F0;color:#718096;
+      cursor:default;
+    }
+
     .empty{
       background:white;border:2px dashed #E2E8F0;border-radius:16px;
       padding:18px;color:#718096;line-height:1.5;
     }
+
+    /* Toast */
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:22px;
+      background:white;
+      border:2px solid rgba(16,185,129,0.25);
+      box-shadow:0 10px 28px rgba(0,0,0,0.10);
+      color:var(--navy);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      display:none;
+      z-index:9999;
+    }
+    .toast.show{display:block;}
 
     @media (max-width: 1000px){
       .main-content{padding:22px 16px;max-width:100%;}
@@ -209,7 +230,6 @@
   <main class="main-content">
     <h1 class="page-title">My Lessons</h1>
     <p class="page-subtitle">Your saved lesson library. Filter by subject, template, or grade — then share to Discover.</p>
-    <div class="progress-bar"><div class="progress-fill"></div></div>
 
     <div class="controls-row">
       <div class="search-wrap">
@@ -233,8 +253,10 @@
   </main>
 </div>
 
+<div class="toast" id="toast">Shared to Discover ✓</div>
+
 <script>
-  /* ---------- Profile initials (same behavior as Step 6) ---------- */
+  /* ---------- Profile initials ---------- */
   function initialsFromEmail(email) {
     if (!email) return "LB";
     const namePart = String(email).split("@")[0] || "";
@@ -281,7 +303,7 @@
     localStorage.setItem(KEY_DISCOVER, JSON.stringify(arr || []));
   }
 
-  /* ---------- Stable-ish hashing (detect changes) ---------- */
+  /* ---------- Hash (detect change) ---------- */
   function stableStringify(obj){
     const seen = new WeakSet();
     const sorter = (k, v) => {
@@ -297,7 +319,6 @@
     };
     return JSON.stringify(obj, sorter);
   }
-
   function simpleHash(str){
     let h = 2166136261;
     for (let i=0;i<str.length;i++){
@@ -306,9 +327,7 @@
     }
     return (h >>> 0).toString(16);
   }
-
   function computeLessonVersionHash(lesson){
-    // hash what matters for "updated after open"
     const payload = {
       title: lesson?.title,
       grade: lesson?.grade,
@@ -317,7 +336,6 @@
       framework: lesson?.framework,
       verifiedStandards: lesson?.verifiedStandards || [],
       generatedLesson: lesson?.generatedLesson || null,
-      // include a little more if available
       fullLesson: lesson?.fullLesson ? {
         step1: lesson.fullLesson.step1 || {},
         step2: lesson.fullLesson.step2 || {},
@@ -325,13 +343,12 @@
         step5: lesson.fullLesson.step5 || {},
       } : null
     };
-    const s = stableStringify(payload);
-    return simpleHash(s);
+    return simpleHash(stableStringify(payload));
   }
 
-  /* ---------- Mode / filters ---------- */
-  let mode = "subject";          // subject | template | grade
-  let activeFilter = "All";      // label
+  /* ---------- Modes / labels ---------- */
+  let mode = "subject";
+  let activeFilter = "All";
   const frameworkNames = {
     "madeline-hunter": "Madeline Hunter",
     "5e-model": "5E Model",
@@ -359,7 +376,6 @@
     }
     if (mode === "grade"){
       const set = new Set(lessons.map(l => (l.grade || "").trim()).filter(Boolean));
-      // sort grades: try numeric first
       const arr = Array.from(set);
       arr.sort((a,b)=>{
         const na = parseInt(a.match(/\d+/)?.[0] || "",10);
@@ -392,7 +408,6 @@
       ? lesson.verifiedStandards.map(x => String(x.code || x.id || "")).join(" ").toLowerCase()
       : "";
 
-    // Optional: keywords from summary/objectives
     const gl = lesson.generatedLesson || {};
     const summary = String(gl.summary || "").toLowerCase();
     const objectives = Array.isArray(gl.objectives) ? gl.objectives.join(" ").toLowerCase() : "";
@@ -419,15 +434,14 @@
       copy.sort((a,b)=>new Date(a.savedAt||0) - new Date(b.savedAt||0));
       return copy;
     }
-    // newest
     copy.sort((a,b)=>new Date(b.savedAt||0) - new Date(a.savedAt||0));
     return copy;
   }
 
-  /* ---------- Share → Discover logic (with 2-version cap) ---------- */
+  /* ---------- Share → Discover (2 versions max) ---------- */
   function upsertDiscoverFromLesson(lesson){
     const discover = getDiscoverLessons();
-    const shareId = lesson.id; // keep stable based on saved lesson id
+    const shareId = lesson.id;
     const versionHash = computeLessonVersionHash(lesson);
 
     let entry = discover.find(x => x.shareId === shareId);
@@ -436,7 +450,6 @@
       versionId: Date.now(),
       versionHash,
       savedAt: lesson.savedAt || new Date().toISOString(),
-      // store minimal snapshot for opening
       snapshot: lesson.fullLesson || {
         step1: { topic: lesson.title, grade: lesson.grade, subject: lesson.subject, duration: lesson.duration },
         step3: { framework: lesson.framework },
@@ -459,14 +472,12 @@
       };
       discover.unshift(entry);
     } else {
-      // if same hash already exists, do nothing
       const exists = entry.versions?.some(v => v.versionHash === versionHash);
       if (!exists){
         entry.versions = Array.isArray(entry.versions) ? entry.versions : [];
         entry.versions.unshift(versionPayload);
-        entry.versions = entry.versions.slice(0, 2); // cap 2 versions
+        entry.versions = entry.versions.slice(0, 2);
       }
-      // keep latest metadata current
       entry.title = lesson.title;
       entry.grade = lesson.grade;
       entry.subject = lesson.subject;
@@ -476,16 +487,29 @@
     }
 
     setDiscoverLessons(discover);
+
+    // sanity check so “share” can’t silently fail
+    const check = getDiscoverLessons().some(x => x.shareId === shareId);
+    if (!check) throw new Error("Share failed: could not write to Discover storage.");
+
     return versionHash;
   }
 
   function isLessonSharedAndCurrent(lesson){
     const discover = getDiscoverLessons();
     const entry = discover.find(x => x.shareId === lesson.id);
-    if (!entry) return { shared:false, current:false, currentHash:null };
+    if (!entry) return { shared:false, current:false };
     const versionHash = computeLessonVersionHash(lesson);
     const has = entry.versions?.some(v => v.versionHash === versionHash);
-    return { shared:true, current:!!has, currentHash:versionHash };
+    return { shared:true, current:!!has };
+  }
+
+  function toast(msg){
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(()=>el.classList.remove("show"), 1800);
   }
 
   /* ---------- Actions ---------- */
@@ -494,7 +518,6 @@
     const l = lessons.find(x => x.id === lessonId);
     if (!l) return alert("Could not find lesson.");
 
-    // Put it back into lessonData so Step 6 can render, or Step 1 can rebuild
     try{
       if (l.fullLesson){
         localStorage.setItem("lessonData", JSON.stringify(l.fullLesson));
@@ -509,38 +532,36 @@
       }
     } catch {}
 
-    // Go to Step 6 preview (your current flow)
     window.location.href = "build-step6.html";
   }
 
   function shareLesson(lessonId){
-    const lessons = getSavedLessons();
-    const idx = lessons.findIndex(x => x.id === lessonId);
-    if (idx === -1) return alert("Could not find lesson.");
+    try{
+      const lessons = getSavedLessons();
+      const idx = lessons.findIndex(x => x.id === lessonId);
+      if (idx === -1) return alert("Could not find lesson.");
 
-    const lesson = lessons[idx];
-    const vhash = computeLessonVersionHash(lesson);
+      const lesson = lessons[idx];
 
-    // Write/share to Discover
-    upsertDiscoverFromLesson(lesson);
+      // write to Discover
+      upsertDiscoverFromLesson(lesson);
 
-    // Mark share state on lesson (used for hiding Share until changed)
-    lesson._shared = true;
-    lesson._lastSharedHash = vhash;
-    lessons[idx] = lesson;
-    setSavedLessons(lessons);
+      toast("Shared to Discover ✓");
 
-    render();
+      // re-render so the button becomes “Shared ✓”
+      render();
+    } catch (e){
+      console.error(e);
+      alert("Share error:\n\n" + (e?.message || e));
+    }
   }
 
   /* ---------- Render ---------- */
   function renderFilterStrip(lessons){
     const strip = document.getElementById("filterStrip");
-    const label = (mode === "subject") ? "Filter:" : (mode === "template" ? "Filter:" : "Filter:");
     const opts = getFilterOptions(lessons);
-
     strip.innerHTML = `
-      <div class="filter-label">${label}</div>
+      <div class="filter-label">Filter:</div>
       ${opts.map(opt => `
         <div class="filter-item ${opt===activeFilter?'active':''}" onclick="setFilter('${escapeAttr(opt)}')">${escapeHtml(opt)}</div>
       `).join("")}
@@ -580,9 +601,10 @@
       const std = Array.isArray(l.verifiedStandards) ? l.verifiedStandards.map(x=>x.code||x.id).filter(Boolean).slice(0,4) : [];
       const shareState = isLessonSharedAndCurrent(l);
 
-      // Share button rule:
-      // - show if not shared yet OR shared but lesson changed since last shared
-      const shouldShowShare = !shareState.shared || !shareState.current;
+      // NEW behavior:
+      // - if not shared yet OR the current version is NOT in Discover => show Share
+      // - else show disabled Shared ✓ button
+      const needsShare = !shareState.shared || !shareState.current;
 
       return `
         <div class="card">
@@ -600,7 +622,11 @@
             ${std.map(code=>`<div class="tag">${escapeHtml(code)}</div>`).join("")}
           </div>
           <div class="card-actions">
-            ${shouldShowShare ? `<button class="btn btn-secondary" onclick="shareLesson(${l.id})">Share</button>` : ``}
+            ${
+              needsShare
+                ? `<button class="btn btn-secondary" onclick="shareLesson(${l.id})">Share</button>`
+                : `<button class="btn btn-disabled" disabled>Shared ✓</button>`
+            }
             <button class="btn btn-primary" onclick="openLesson(${l.id})">Open</button>
           </div>
         </div>
@@ -620,7 +646,6 @@
     return String(str ?? "").replaceAll("\\","\\\\").replaceAll("'","\\'");
   }
 
-  // init
   render();
 </script>
 </body>
