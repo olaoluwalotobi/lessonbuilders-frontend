@@ -12,7 +12,19 @@
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
 
-    .top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+    /* ===== Top Nav (desktop) ===== */
+    .top-nav{
+      background:white;
+      border-bottom:2px solid rgba(13,40,71,0.1);
+      padding:16px 40px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
     .nav-left{display:flex;align-items:center;gap:40px;}
     .logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
     .nav-menu{display:flex;gap:32px;align-items:center;}
@@ -20,8 +32,14 @@
     .nav-link:hover{color:var(--navy);}
     .nav-link.active{color:var(--navy);font-weight:700;}
     .nav-right{display:flex;align-items:center;gap:16px;}
-    .user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:default;}
+    .user-profile{
+      width:36px;height:36px;border-radius:50%;
+      background:linear-gradient(135deg,var(--orange),#FFB380);
+      display:flex;align-items:center;justify-content:center;
+      color:white;font-weight:600;font-size:14px;cursor:default;
+    }
 
+    /* ===== Page layout ===== */
     .container{
       display:flex;
       max-width:1400px;
@@ -41,6 +59,7 @@
       padding:12px 12px;margin-bottom:8px;
       border-left:3px solid transparent;border-radius:10px;
       color:#4A5568;cursor:pointer;transition:all .2s;user-select:none;
+      white-space:nowrap;
     }
     .side-item:hover{background:#F7FAFC;}
     .side-item.active{
@@ -54,12 +73,13 @@
       background:#F7FAFC;border:2px solid #E2E8F0;
       display:flex;align-items:center;justify-content:center;
       font-size:13px;font-weight:800;color:#999;
+      flex:0 0 auto;
     }
     .side-item.active .side-dot{background:var(--orange);border-color:var(--orange);color:white;}
 
     .main-content{flex:1;padding:40px 60px;max-width:1000px;}
     .page-title{font-family:'Crimson Pro',serif;font-size:44px;font-weight:700;margin-bottom:8px;color:var(--navy);}
-    .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:16px;}
+    .page-subtitle{font-size:16px;color:#4A5568;margin-bottom:16px;line-height:1.45;}
 
     .controls-row{
       display:flex;gap:14px;align-items:center;justify-content:space-between;
@@ -142,322 +162,352 @@
       padding:18px;color:#718096;line-height:1.5;
     }
 
+    /* ===== Layout mobile (sidebar becomes top strip) ===== */
     @media (max-width: 1000px){
       .main-content{padding:22px 16px;max-width:100%;}
       .grid{grid-template-columns:1fr;}
       .container{flex-direction:column;}
       .sidebar{
-        width:100%;min-height:auto;
-        border-right:none;border-bottom:1px solid rgba(13,40,71,0.1);
-        display:flex;gap:10px;overflow-x:auto;padding:14px 12px;
+        width:100%;
+        min-height:auto;
+        border-right:none;
+        border-bottom:1px solid rgba(13,40,71,0.1);
+        display:flex;
+        gap:10px;
+        overflow-x:auto;
+        padding:12px 12px;           /* tightened */
+        -webkit-overflow-scrolling:touch;
       }
       .side-title{display:none;}
-      .side-item{flex:0 0 auto;margin-bottom:0;}
+      .side-item{
+        flex:0 0 auto;
+        margin-bottom:0;
+        padding:10px 10px;           /* tightened */
+        border-left:none;
+        border-bottom:3px solid transparent;
+        border-radius:12px;
+      }
+      .side-item.active{
+        border-bottom-color:var(--orange);
+        border-left:none;
+      }
+      .side-dot{width:26px;height:26px;font-size:12px;} /* slightly smaller so it fits */
     }
 
     /* =========================
-       MOBILE FIX (ONLY) — matches Assessments behavior
-       - Keeps LB bubble pinned top-right
-       - Keeps nav links on one line (scrolls horizontally)
-       - Prevents wrapping / misalignment
+       NAV MOBILE FIX (matches Assessments behavior)
+       - LB stays top-right
+       - Menu wraps cleanly, no overflow
        ========================= */
     @media (max-width: 900px){
       .top-nav{
         padding:12px 16px;
-        flex-wrap:nowrap;             /* key: don’t wrap the whole nav */
-        align-items:flex-start;
+        flex-wrap:wrap;
         gap:10px;
+        align-items:flex-start;
+        position:relative;            /* anchor for absolute nav-right */
       }
       .nav-left{
-        flex:1;
-        min-width:0;                  /* key: allow flex children to shrink */
+        width:100%;
         gap:16px;
-        flex-wrap:wrap;               /* logo can sit above menu */
+        flex-wrap:wrap;
         align-items:flex-start;
       }
-      .logo-text{white-space:nowrap;}
       .nav-menu{
-        flex:1;
-        min-width:0;
-        flex-wrap:nowrap;             /* key: keep menu on one line */
-        overflow-x:auto;              /* key: scroll instead of wrap */
-        -webkit-overflow-scrolling:touch;
-        white-space:nowrap;
+        width:100%;
+        flex-wrap:wrap;
         gap:16px;
       }
-      .nav-link{flex:0 0 auto; white-space:nowrap;}
+      .nav-link{white-space:nowrap;}
       .nav-right{
-        margin-left:auto;
-        align-self:flex-start;        /* key: keep LB at the top-right */
-        flex:0 0 auto;
+        position:absolute;
+        top:12px;
+        right:16px;
       }
+
+      /* Reduce extra vertical space so content fits better on-screen */
+      .main-content{padding:18px 16px;}
+      .page-title{font-size:40px;margin-bottom:6px;}
+      .page-subtitle{margin-bottom:12px;font-size:15px;}
+      .filter-strip{padding:8px 0 10px;margin-bottom:12px;gap:14px;}
+      .filter-item{font-size:13.5px;}
+      .controls-row{margin-bottom:10px;}
+      .search-wrap{padding:9px 10px;}
+      .sort-wrap{padding:9px 10px;}
     }
+
     @media (max-width: 520px){
       .logo-text{font-size:20px;}
       .nav-link{font-size:14px;}
+      .page-title{font-size:36px;}
+      .card{padding:14px;}
+      .card-title{font-size:17px;}
+      .card-meta{font-size:12.5px;}
+      .btn{padding:10px 12px;font-size:13.5px;}
+      .version-wrap{padding:7px 9px;}
+      .version-wrap label{font-size:11px;}
     }
   </style>
 </head>
 
 <body>
-<nav class="top-nav">
-  <div class="nav-left">
-    <a href="index.html" class="logo-text">LessonBuilders</a>
-    <div class="nav-menu">
-      <a href="library.html" class="nav-link">My Lessons</a>
-      <a href="assessments.html" class="nav-link">Assessments</a>
-      <a href="discover.html" class="nav-link active">Discover</a>
-      <a href="about.html" class="nav-link">Help</a>
-    </div>
-  </div>
-  <div class="nav-right">
-    <div class="user-profile" id="userProfile">LB</div>
-  </div>
-</nav>
-
-<div class="container">
-  <aside class="sidebar">
-    <div class="side-title">DISCOVER</div>
-    <div class="side-item active" data-mode="subject" onclick="setMode('subject')">
-      <div class="side-dot">S</div><div>By Subject</div>
-    </div>
-    <div class="side-item" data-mode="template" onclick="setMode('template')">
-      <div class="side-dot">T</div><div>By Template</div>
-    </div>
-    <div class="side-item" data-mode="grade" onclick="setMode('grade')">
-      <div class="side-dot">G</div><div>By Grade</div>
-    </div>
-  </aside>
-
-  <main class="main-content">
-    <h1 class="page-title">Discover</h1>
-    <p class="page-subtitle">Shared lessons from others in the community.</p>
-
-    <div class="controls-row">
-      <div class="search-wrap">
-        <span style="font-weight:900;color:#A0AEC0;">⌕</span>
-        <input id="searchInput" type="text" placeholder="Search titles, standards codes, or keywords..." oninput="render()">
-      </div>
-
-      <div class="sort-wrap">
-        <label for="sortSelect">Sort:</label>
-        <select id="sortSelect" onchange="render()">
-          <option value="newest" selected>Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="title">Title</option>
-        </select>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="logo-text">LessonBuilders</a>
+      <div class="nav-menu">
+        <a href="library.html" class="nav-link">My Lessons</a>
+        <a href="assessments.html" class="nav-link">Assessments</a>
+        <a href="discover.html" class="nav-link active">Discover</a>
+        <a href="about.html" class="nav-link">Help</a>
       </div>
     </div>
+    <div class="nav-right">
+      <div class="user-profile" id="userProfile">LB</div>
+    </div>
+  </nav>
 
-    <div class="filter-strip" id="filterStrip"></div>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="side-title">DISCOVER</div>
+      <div class="side-item active" data-mode="subject" onclick="setMode('subject')">
+        <div class="side-dot">S</div><div>By Subject</div>
+      </div>
+      <div class="side-item" data-mode="template" onclick="setMode('template')">
+        <div class="side-dot">T</div><div>By Template</div>
+      </div>
+      <div class="side-item" data-mode="grade" onclick="setMode('grade')">
+        <div class="side-dot">G</div><div>By Grade</div>
+      </div>
+    </aside>
 
-    <div class="grid" id="grid"></div>
-  </main>
-</div>
+    <main class="main-content">
+      <h1 class="page-title">Discover</h1>
+      <p class="page-subtitle">Shared lessons from others in the community.</p>
 
-<script>
-  function initialsFromEmail(email) {
-    if (!email) return "LB";
-    const namePart = String(email).split("@")[0] || "";
-    const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-    const a = tokens[0]?.[0] || "";
-    const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-    const ini = (a + b).toUpperCase();
-    return ini || "LB";
-  }
-  (function(){
-    const el = document.getElementById("userProfile");
-    if (!el) return;
-    try{
-      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-      if (raw){
-        const u = JSON.parse(raw);
-        const email = u?.email || u?.user?.email;
-        el.textContent = initialsFromEmail(email);
-      }
-    } catch {}
-  })();
+      <div class="controls-row">
+        <div class="search-wrap">
+          <span style="font-weight:900;color:#A0AEC0;">⌕</span>
+          <input id="searchInput" type="text" placeholder="Search titles, standards codes, or keywords..." oninput="render()">
+        </div>
 
-  const KEY_DISCOVER = "discoverLessons";
-  function safeParse(x){ try{ return JSON.parse(x); }catch{ return null; } }
-  function getDiscoverLessons(){
-    const raw = localStorage.getItem(KEY_DISCOVER);
-    const arr = raw ? (safeParse(raw) || []) : [];
-    return Array.isArray(arr) ? arr : [];
-  }
+        <div class="sort-wrap">
+          <label for="sortSelect">Sort:</label>
+          <select id="sortSelect" onchange="render()">
+            <option value="newest" selected>Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="title">Title</option>
+          </select>
+        </div>
+      </div>
 
-  const frameworkNames = {
-    "madeline-hunter": "Madeline Hunter",
-    "5e-model": "5E Model",
-    "ubd": "Understanding by Design",
-    "gradual-release": "Gradual Release"
-  };
+      <div class="filter-strip" id="filterStrip"></div>
+      <div class="grid" id="grid"></div>
+    </main>
+  </div>
 
-  let mode = "subject";
-  let activeFilter = "All";
-
-  function setMode(next){
-    mode = next;
-    activeFilter = "All";
-    document.querySelectorAll(".side-item").forEach(el=>{
-      el.classList.toggle("active", el.dataset.mode === mode);
-    });
-    render();
-  }
-
-  function getFilterOptions(items){
-    if (mode === "subject"){
-      const set = new Set(items.map(x => (x.subject || "").trim()).filter(Boolean));
-      return ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
+  <script>
+    function initialsFromEmail(email) {
+      if (!email) return "LB";
+      const namePart = String(email).split("@")[0] || "";
+      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+      const a = tokens[0]?.[0] || "";
+      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+      const ini = (a + b).toUpperCase();
+      return ini || "LB";
     }
-    if (mode === "template"){
-      const set = new Set(items.map(x => frameworkNames[x.framework] || x.framework || "").filter(Boolean));
-      return ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
+    (function(){
+      const el = document.getElementById("userProfile");
+      if (!el) return;
+      try{
+        const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+        if (raw){
+          const u = JSON.parse(raw);
+          const email = u?.email || u?.user?.email;
+          el.textContent = initialsFromEmail(email);
+        }
+      } catch {}
+    })();
+
+    const KEY_DISCOVER = "discoverLessons";
+    function safeParse(x){ try{ return JSON.parse(x); }catch{ return null; } }
+    function getDiscoverLessons(){
+      const raw = localStorage.getItem(KEY_DISCOVER);
+      const arr = raw ? (safeParse(raw) || []) : [];
+      return Array.isArray(arr) ? arr : [];
     }
-    if (mode === "grade"){
-      const set = new Set(items.map(x => (x.grade || "").trim()).filter(Boolean));
-      const arr = Array.from(set);
-      arr.sort((a,b)=>{
-        const na = parseInt(a.match(/\d+/)?.[0] || "",10);
-        const nb = parseInt(b.match(/\d+/)?.[0] || "",10);
-        if (Number.isFinite(na) && Number.isFinite(nb)) return na-nb;
-        return a.localeCompare(b);
+
+    const frameworkNames = {
+      "madeline-hunter": "Madeline Hunter",
+      "5e-model": "5E Model",
+      "ubd": "Understanding by Design",
+      "gradual-release": "Gradual Release"
+    };
+
+    let mode = "subject";
+    let activeFilter = "All";
+
+    function setMode(next){
+      mode = next;
+      activeFilter = "All";
+      document.querySelectorAll(".side-item").forEach(el=>{
+        el.classList.toggle("active", el.dataset.mode === mode);
       });
-      return ["All", ...arr];
+      render();
     }
-    return ["All"];
-  }
 
-  function matchesModeFilter(item){
-    if (activeFilter === "All") return true;
-    if (mode === "subject") return (item.subject || "").trim() === activeFilter;
-    if (mode === "template") return (frameworkNames[item.framework] || item.framework || "") === activeFilter;
-    if (mode === "grade") return (item.grade || "").trim() === activeFilter;
-    return true;
-  }
+    function getFilterOptions(items){
+      if (mode === "subject"){
+        const set = new Set(items.map(x => (x.subject || "").trim()).filter(Boolean));
+        return ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
+      }
+      if (mode === "template"){
+        const set = new Set(items.map(x => frameworkNames[x.framework] || x.framework || "").filter(Boolean));
+        return ["All", ...Array.from(set).sort((a,b)=>a.localeCompare(b))];
+      }
+      if (mode === "grade"){
+        const set = new Set(items.map(x => (x.grade || "").trim()).filter(Boolean));
+        const arr = Array.from(set);
+        arr.sort((a,b)=>{
+          const na = parseInt(a.match(/\d+/)?.[0] || "",10);
+          const nb = parseInt(b.match(/\d+/)?.[0] || "",10);
+          if (Number.isFinite(na) && Number.isFinite(nb)) return na-nb;
+          return a.localeCompare(b);
+        });
+        return ["All", ...arr];
+      }
+      return ["All"];
+    }
 
-  function searchMatch(item, q){
-    if (!q) return true;
-    const s = q.toLowerCase();
-    const title = String(item.title || "").toLowerCase();
-    const subject = String(item.subject || "").toLowerCase();
-    const grade = String(item.grade || "").toLowerCase();
-    const template = String(frameworkNames[item.framework] || item.framework || "").toLowerCase();
-    const stdCodes = Array.isArray(item.verifiedStandards)
-      ? item.verifiedStandards.map(x => String(x.code || x.id || "")).join(" ").toLowerCase()
-      : "";
-    const v0 = item.versions?.[0]?.snapshot || {};
-    const gl = v0.generatedLesson || {};
-    const summary = String(gl.summary || "").toLowerCase();
-    const objectives = Array.isArray(gl.objectives) ? gl.objectives.join(" ").toLowerCase() : "";
-    return title.includes(s) || subject.includes(s) || grade.includes(s) || template.includes(s) || stdCodes.includes(s) || summary.includes(s) || objectives.includes(s);
-  }
+    function matchesModeFilter(item){
+      if (activeFilter === "All") return true;
+      if (mode === "subject") return (item.subject || "").trim() === activeFilter;
+      if (mode === "template") return (frameworkNames[item.framework] || item.framework || "") === activeFilter;
+      if (mode === "grade") return (item.grade || "").trim() === activeFilter;
+      return true;
+    }
 
-  function sortItems(arr){
-    const v = document.getElementById("sortSelect").value;
-    const copy = [...arr];
-    if (v === "title"){ copy.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||""))); return copy; }
-    if (v === "oldest"){ copy.sort((a,b)=>new Date(a.sharedAt||0) - new Date(b.sharedAt||0)); return copy; }
-    copy.sort((a,b)=>new Date(b.sharedAt||0) - new Date(a.sharedAt||0));
-    return copy;
-  }
+    function searchMatch(item, q){
+      if (!q) return true;
+      const s = q.toLowerCase();
+      const title = String(item.title || "").toLowerCase();
+      const subject = String(item.subject || "").toLowerCase();
+      const grade = String(item.grade || "").toLowerCase();
+      const template = String(frameworkNames[item.framework] || item.framework || "").toLowerCase();
+      const stdCodes = Array.isArray(item.verifiedStandards)
+        ? item.verifiedStandards.map(x => String(x.code || x.id || "")).join(" ").toLowerCase()
+        : "";
+      const v0 = item.versions?.[0]?.snapshot || {};
+      const gl = v0.generatedLesson || {};
+      const summary = String(gl.summary || "").toLowerCase();
+      const objectives = Array.isArray(gl.objectives) ? gl.objectives.join(" ").toLowerCase() : "";
+      return title.includes(s) || subject.includes(s) || grade.includes(s) || template.includes(s) || stdCodes.includes(s) || summary.includes(s) || objectives.includes(s);
+    }
 
-  function renderFilterStrip(items){
-    const strip = document.getElementById("filterStrip");
-    const opts = getFilterOptions(items);
-    strip.innerHTML = `
-      <div class="filter-label">Filter:</div>
-      ${opts.map(opt => `
-        <div class="filter-item ${opt===activeFilter?'active':''}" onclick="setFilter('${escapeAttr(opt)}')">${escapeHtml(opt)}</div>
-      `).join("")}
-    `;
-  }
-  function setFilter(v){ activeFilter = v; render(); }
+    function sortItems(arr){
+      const v = document.getElementById("sortSelect").value;
+      const copy = [...arr];
+      if (v === "title"){ copy.sort((a,b)=>String(a.title||"").localeCompare(String(b.title||""))); return copy; }
+      if (v === "oldest"){ copy.sort((a,b)=>new Date(a.sharedAt||0) - new Date(b.sharedAt||0)); return copy; }
+      copy.sort((a,b)=>new Date(b.sharedAt||0) - new Date(a.sharedAt||0));
+      return copy;
+    }
 
-  function openShared(shareId, versionIndex){
-    const items = getDiscoverLessons();
-    const entry = items.find(x => x.shareId === shareId);
-    if (!entry) return alert("Could not find shared lesson.");
-    const versions = Array.isArray(entry.versions) ? entry.versions : [];
-    const v = versions[versionIndex] || versions[0];
-    if (!v?.snapshot) return alert("No version snapshot found.");
-    try{ localStorage.setItem("lessonData", JSON.stringify(v.snapshot)); } catch {}
-    window.location.href = "build-step6.html";
-  }
-
-  function render(){
-    const all = getDiscoverLessons();
-    renderFilterStrip(all);
-
-    const q = (document.getElementById("searchInput").value || "").trim();
-    let list = all.filter(matchesModeFilter).filter(x => searchMatch(x, q));
-    list = sortItems(list);
-
-    const grid = document.getElementById("grid");
-    if (!list.length){
-      grid.innerHTML = `
-        <div class="empty" style="grid-column:1/-1;">
-          <b>No shared lessons yet.</b><br>
-          Go to <b>My Lessons</b> and click <b>Share</b>.
-        </div>
+    function renderFilterStrip(items){
+      const strip = document.getElementById("filterStrip");
+      const opts = getFilterOptions(items);
+      strip.innerHTML = `
+        <div class="filter-label">Filter:</div>
+        ${opts.map(opt => `
+          <div class="filter-item ${opt===activeFilter?'active':''}" onclick="setFilter('${escapeAttr(opt)}')">${escapeHtml(opt)}</div>
+        `).join("")}
       `;
-      return;
+    }
+    function setFilter(v){ activeFilter = v; render(); }
+
+    function openShared(shareId, versionIndex){
+      const items = getDiscoverLessons();
+      const entry = items.find(x => x.shareId === shareId);
+      if (!entry) return alert("Could not find shared lesson.");
+      const versions = Array.isArray(entry.versions) ? entry.versions : [];
+      const v = versions[versionIndex] || versions[0];
+      if (!v?.snapshot) return alert("No version snapshot found.");
+      try{ localStorage.setItem("lessonData", JSON.stringify(v.snapshot)); } catch {}
+      window.location.href = "build-step6.html";
     }
 
-    grid.innerHTML = list.map(item=>{
-      const shared = item.sharedAt ? new Date(item.sharedAt).toLocaleDateString() : "";
-      const tpl = frameworkNames[item.framework] || item.framework || "Template";
-      const std = Array.isArray(item.verifiedStandards) ? item.verifiedStandards.map(x=>x.code||x.id).filter(Boolean).slice(0,4) : [];
-      const versions = Array.isArray(item.versions) ? item.versions : [];
+    function render(){
+      const all = getDiscoverLessons();
+      renderFilterStrip(all);
 
-      return `
-        <div class="card">
-          <div class="card-title">${escapeHtml(item.title || "Untitled Lesson")}</div>
-          <div class="card-meta">
-            <b>Grade:</b> ${escapeHtml(item.grade || "")} &nbsp;|&nbsp;
-            <b>Subject:</b> ${escapeHtml(item.subject || "")} &nbsp;|&nbsp;
-            <b>Duration:</b> ${escapeHtml(String(item.duration || ""))} min<br>
-            <b>Template:</b> ${escapeHtml(tpl)} &nbsp;|&nbsp;
-            <b>Shared:</b> ${escapeHtml(shared)}
+      const q = (document.getElementById("searchInput").value || "").trim();
+      let list = all.filter(matchesModeFilter).filter(x => searchMatch(x, q));
+      list = sortItems(list);
+
+      const grid = document.getElementById("grid");
+      if (!list.length){
+        grid.innerHTML = `
+          <div class="empty" style="grid-column:1/-1;">
+            <b>No shared lessons yet.</b><br>
+            Go to <b>My Lessons</b> and click <b>Share</b>.
           </div>
-          <div class="tag-row">
-            ${item.subject ? `<div class="tag">${escapeHtml(item.subject)}</div>` : ``}
-            ${tpl ? `<div class="tag">${escapeHtml(tpl)}</div>` : ``}
-            ${std.map(code=>`<div class="tag">${escapeHtml(code)}</div>`).join("")}
-          </div>
-          <div class="card-actions">
-            <div class="version-wrap">
-              <label>Version</label>
-              <select id="ver_${item.shareId}">
-                ${versions.map((v,i)=>`<option value="${i}">${i===0 ? "Latest" : "Previous"}</option>`).join("")}
-              </select>
+        `;
+        return;
+      }
+
+      grid.innerHTML = list.map(item=>{
+        const shared = item.sharedAt ? new Date(item.sharedAt).toLocaleDateString() : "";
+        const tpl = frameworkNames[item.framework] || item.framework || "Template";
+        const std = Array.isArray(item.verifiedStandards) ? item.verifiedStandards.map(x=>x.code||x.id).filter(Boolean).slice(0,4) : [];
+        const versions = Array.isArray(item.versions) ? item.versions : [];
+
+        return `
+          <div class="card">
+            <div class="card-title">${escapeHtml(item.title || "Untitled Lesson")}</div>
+            <div class="card-meta">
+              <b>Grade:</b> ${escapeHtml(item.grade || "")} &nbsp;|&nbsp;
+              <b>Subject:</b> ${escapeHtml(item.subject || "")} &nbsp;|&nbsp;
+              <b>Duration:</b> ${escapeHtml(String(item.duration || ""))} min<br>
+              <b>Template:</b> ${escapeHtml(tpl)} &nbsp;|&nbsp;
+              <b>Shared:</b> ${escapeHtml(shared)}
             </div>
-            <button class="btn btn-primary" onclick="openFromUI(${item.shareId})">Open</button>
+            <div class="tag-row">
+              ${item.subject ? `<div class="tag">${escapeHtml(item.subject)}</div>` : ``}
+              ${tpl ? `<div class="tag">${escapeHtml(tpl)}</div>` : ``}
+              ${std.map(code=>`<div class="tag">${escapeHtml(code)}</div>`).join("")}
+            </div>
+            <div class="card-actions">
+              <div class="version-wrap">
+                <label>Version</label>
+                <select id="ver_${item.shareId}">
+                  ${versions.map((v,i)=>`<option value="${i}">${i===0 ? "Latest" : "Previous"}</option>`).join("")}
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="openFromUI(${item.shareId})">Open</button>
+            </div>
           </div>
-        </div>
-      `;
-    }).join("");
-  }
+        `;
+      }).join("");
+    }
 
-  function openFromUI(shareId){
-    const sel = document.getElementById("ver_"+shareId);
-    const idx = sel ? parseInt(sel.value,10) : 0;
-    openShared(shareId, Number.isFinite(idx) ? idx : 0);
-  }
+    function openFromUI(shareId){
+      const sel = document.getElementById("ver_"+shareId);
+      const idx = sel ? parseInt(sel.value,10) : 0;
+      openShared(shareId, Number.isFinite(idx) ? idx : 0);
+    }
 
-  function escapeHtml(str){
-    return String(str ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-  function escapeAttr(str){
-    return String(str ?? "").replaceAll("\\","\\\\").replaceAll("'","\\'");
-  }
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+    function escapeAttr(str){
+      return String(str ?? "").replaceAll("\\","\\\\").replaceAll("'","\\'");
+    }
 
-  render();
-</script>
+    render();
+  </script>
 </body>
 </html>
