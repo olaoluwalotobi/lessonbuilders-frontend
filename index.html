@@ -12,6 +12,7 @@
       --navy: #0D2847;
       --orange: #FF8C42;
       --orange-light: #FFB380;
+      --green:#10B981;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,7 +24,7 @@
     }
 
     /* =========================
-       TOP NAV (MATCHES OTHER PAGES)
+       TOP NAV (MATCHES STEP PAGES)
        ========================= */
     .top-nav{
       background:white;
@@ -61,9 +62,13 @@
       width:36px;height:36px;border-radius:50%;
       background:linear-gradient(135deg,var(--orange),var(--orange-light));
       display:flex;align-items:center;justify-content:center;
-      color:white;font-weight:600;font-size:14px;cursor:pointer;
+      color:white;font-weight:600;font-size:14px;
+      cursor:pointer;
     }
 
+    /* =========================
+       PAGE CONTENT
+       ========================= */
     .hero {
       max-width: 1200px;
       margin: 60px auto;
@@ -233,7 +238,6 @@
     }
 
     .footer-column ul { list-style: none; }
-
     .footer-column ul li { margin-bottom: 12px; }
 
     .footer-column a {
@@ -272,7 +276,10 @@
     }
 
     /* =========================
-       MOBILE NAV FIX (MATCHES OTHER PAGES)
+       MOBILE FIX (ONLY)
+       - Matches About/Help behavior (your step pages)
+       - Keeps initials bubble top-right
+       - Prevents nav overflow + keeps nav items on one line
        ========================= */
     @media (max-width: 900px){
       .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
@@ -370,22 +377,22 @@
     </div>
   </div>
 
-<!-- TOP NAV (UPDATED STRUCTURE) -->
-<nav class="top-nav">
-  <div class="nav-left">
-    <a href="index.html" class="logo-text">LessonBuilders</a>
-    <div class="nav-menu">
-      <a href="build-step1.html" class="nav-link">Build</a>
-      <a href="library.html" class="nav-link active">My Lessons</a>
-      <a href="assessments.html" class="nav-link">Assessments</a>
-      <a href="discover.html" class="nav-link">Discover</a>
-      <a href="about.html" class="nav-link">Help</a>
+  <!-- TOP NAV (now matches the other pages) -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="logo-text">LessonBuilders</a>
+      <div class="nav-menu">
+        <a href="build-step1.html" class="nav-link">Build</a>
+        <a href="library.html" class="nav-link">My Lessons</a>
+        <a href="assessments.html" class="nav-link">Assessments</a>
+        <a href="discover.html" class="nav-link">Discover</a>
+        <a href="about.html" class="nav-link">Help</a>
+      </div>
     </div>
-  </div>
-  <div class="nav-right">
-    <div class="user-profile" id="userProfile">LB</div>
-  </div>
-</nav>
+    <div class="nav-right">
+      <div class="user-profile" id="userProfile">LB</div>
+    </div>
+  </nav>
 
   <section class="hero">
     <h1 class="hero-title">Build Better Lessons</h1>
