@@ -315,51 +315,51 @@
        - Bubble stays top-right
        ========================= */
     @media (max-width: 900px){
-      .top-nav{
-        padding:12px 16px;
-        gap:12px;
-        align-items:center;
-        flex-wrap:nowrap; /* critical */
-      }
+  .top-nav{
+    padding:12px 16px;
+    display:flex;
+    flex-direction:column;     /* stack rows */
+    align-items:stretch;
+    gap:8px;
+  }
 
-      .nav-left{
-        gap:14px;
-        align-items:center;
-        flex:1;
-        min-width:0;
-        flex-wrap:nowrap; /* critical */
-      }
+  /* Row 1: logo + bubble */
+  .nav-left{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;  /* logo left, bubble right */
+    gap:12px;
+  }
 
-      .nav-menu{
-        gap:14px;
-        flex:1;
-        min-width:0;
-        flex-wrap:nowrap; /* critical */
-        overflow-x:auto;
-        overflow-y:hidden;
-        -webkit-overflow-scrolling:touch;
-        scrollbar-width:none;
-      }
-      .nav-menu::-webkit-scrollbar{ display:none; }
+  /* IMPORTANT: logo stays on row 1 only */
+  .logo-text{ white-space:nowrap; }
 
-      .nav-link{
-        font-size:14px;
-        white-space:nowrap;
-      }
+  /* Row 2: menu takes full width under row 1 */
+  .nav-menu{
+    width:100%;
+    display:flex;
+    flex-wrap:nowrap;           /* don't wrap into tall stacks */
+    gap:14px;
+    overflow-x:auto;            /* scroll instead */
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:2px;
+  }
+  .nav-menu::-webkit-scrollbar{ display:none; }
 
-      .nav-right{
-        flex:0 0 auto;
-        margin-left:12px;
-        align-self:center;
-      }
-    }
+  .nav-link{ font-size:14px; white-space:nowrap; }
 
-    @media (max-width: 520px){
-      .top-nav{ padding:10px 12px; }
-      .logo-text{ font-size:20px; }
-      .nav-link{ font-size:13.5px; }
-    }
+  /* bubble stays top-right */
+  .nav-right{
+    margin-left:auto;
+    align-self:flex-start; /* prevents it from dropping */
+  }
+}
 
+@media (max-width: 520px){
+  .logo-text{ font-size:20px; }
+  .nav-link{ font-size:13.5px; }
+}
     /* =========================
        Access Gate (Landing)
        ========================= */
