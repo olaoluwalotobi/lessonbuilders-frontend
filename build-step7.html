@@ -3,7 +3,6 @@
 <head>
 <link rel="icon" type="image/png" href="/favicon.png">
 
-  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Collaborate - LessonBuilders</title>
@@ -11,25 +10,62 @@
 <style>
 
   /* Sidebar is a progress indicator only */
-.sidebar .nav-step{
-  cursor: default;
-}
-.sidebar .nav-step.is-static{
-  pointer-events: none;     /* disables clicking */
-}
+.sidebar .nav-step{ cursor: default; }
+.sidebar .nav-step.is-static{ pointer-events: none; }
 
-  
-:root{--navy:#0D2847;--orange:#FF8C42;}
+:root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
-.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-.nav-left{display:flex;align-items:center;gap:40px;}
-.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
-.nav-menu{display:flex;gap:32px;align-items:center;}
-.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
+
+/* =========================================================
+   TOP NAV (UPDATED to match fixed Step 6 behavior)
+   - Title + initials bubble on SAME row
+   - Menu row underneath
+   ========================================================= */
+.top-nav{
+  background:white;border-bottom:2px solid rgba(13,40,71,0.1);
+  padding:16px 40px;
+  position:sticky;top:0;z-index:1000;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.nav-top-row{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.logo-text{
+  font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);
+  text-decoration:none;
+  white-space:nowrap;
+}
+.nav-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.user-profile{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--orange),#FFB380);
+  display:flex;align-items:center;justify-content:center;color:white;
+  font-weight:600;font-size:14px;
+  cursor:default;
+  flex:0 0 auto;
+}
+.nav-menu{
+  width:100%;
+  display:flex;
+  gap:32px;
+  align-items:center;
+}
+.nav-link{
+  text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;
+  white-space:nowrap;
+}
 .nav-link:hover{color:var(--navy);}
-.nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:default;}
+.nav-link.active{color:var(--navy);font-weight:700;}
+
 .container{display:flex;max-width:1400px;margin:0 auto;}
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
 .nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:default;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
@@ -38,50 +74,66 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
 .nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
+
 .main-content{flex:1;padding:40px 60px;max-width:900px;}
 .page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
 .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+
 .success-banner{background:rgba(16,185,129,0.1);border-left:4px solid #10B981;border-radius:8px;padding:16px 20px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;}
 .success-content{display:flex;align-items:center;gap:12px;}
 .success-text{color:#047857;font-weight:600;font-size:15px;}
+
 .collab-intro{background:rgba(255,140,66,0.05);border-left:4px solid var(--orange);padding:20px;border-radius:8px;margin-bottom:32px;}
 .collab-intro p{color:#4A5568;line-height:1.6;}
+
 .suggestion-card{background:white;border:2px solid #E2E8F0;border-radius:16px;padding:24px;margin-bottom:16px;transition:all 0.3s;}
 .suggestion-card:hover{border-color:var(--orange);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
-.suggestion-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;}
+.suggestion-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;gap:10px;}
 .suggestion-title{font-size:18px;font-weight:700;color:var(--navy);}
-.suggestion-badge{background:rgba(255,140,66,0.1);color:var(--orange);padding:4px 12px;border-radius:6px;font-size:13px;font-weight:600;}
+.suggestion-badge{background:rgba(255,140,66,0.1);color:var(--orange);padding:4px 12px;border-radius:6px;font-size:13px;font-weight:600;white-space:nowrap;}
 .suggestion-description{color:#4A5568;line-height:1.6;margin-bottom:12px;}
 .suggestion-contact{display:flex;align-items:center;margin-top:16px;}
+
 .btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:default;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
 .btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
 .btn-email{background:var(--orange);color:white;padding:10px 20px;font-size:14px;border-radius:8px;border:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-email:hover{background:#FF6B2C;}
+
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;}
 .modal.show{display:flex;}
 .modal-content{background:white;border-radius:20px;padding:40px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;}
 .modal-title{font-family:'Crimson Pro',serif;font-size:28px;font-weight:700;color:var(--navy);margin-bottom:8px;}
 .modal-subtitle{font-size:14px;color:#718096;margin-bottom:24px;}
+
 .email-template{background:#F7FAFC;border:2px solid #E2E8F0;border-radius:12px;padding:20px;margin-bottom:24px;}
 .email-field{margin-bottom:16px;}
 .email-field-label{font-size:13px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
 .email-field-content{font-size:15px;color:var(--navy);line-height:1.6;}
+
 .email-body{background:white;border:2px solid #E2E8F0;border-radius:8px;padding:16px;min-height:200px;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;resize:vertical;width:100%;}
 .modal-buttons{display:flex;gap:12px;justify-content:flex-end;}
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
 .btn-copy{background:var(--orange);color:white;}
 .btn-copy:hover{background:#FF6B2C;}
+
 /* ================================
    Mobile / Tablet responsiveness
-   (added by LessonBuilders)
    ================================ */
 @media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;}
-  .nav-menu{gap:16px;flex-wrap:wrap;}
+  .top-nav{padding:12px 16px;}
+  .nav-menu{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    gap:16px;
+    padding-bottom:2px;
+  }
+  .nav-menu::-webkit-scrollbar{display:none;}
+  .nav-link{font-size:14px;}
+
   .container{flex-direction:column;max-width:100%;}
   .sidebar{
     width:100%;
@@ -93,7 +145,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
   }
-  .sidebar > div:first-child{display:none;} /* hide "BUILD LESSON" label on mobile */
+  .sidebar > div:first-child{display:none;}
   .nav-step{
     flex:0 0 auto;
     margin-bottom:0;
@@ -108,122 +160,114 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     border-bottom-color:var(--orange);
     background:rgba(255,140,66,0.08);
   }
-  .nav-step.completed{
-    color:var(--green);
-  }
   .step-number{flex:0 0 auto;}
   .main-content{padding:22px 16px;max-width:100%;}
-  .btn-row{flex-wrap:nowrap;gap:10px;}
-  .export-group{width:100%;}
-  .btn{width:auto;}
 }
 
 @media (max-width: 520px){
   .logo-text{font-size:20px;}
   .page-title{font-size:32px;}
-  .page-subtitle{font-size:15px;}
-  .lesson-title{font-size:22px;}
-  .btn-row{flex-direction:column;align-items:stretch;}
-  .btn-row .btn{width:100%;}
-  .export-group{justify-content:space-between;}
 }
 
-
-/* Sidebar nav is visual only (locked) */
 .nav-step{cursor:default;}
-
 </style>
 </head>
+
 <body>
+
+<!-- TOP NAV (UPDATED STRUCTURE) -->
 <nav class="top-nav">
-  <div class="nav-left">
+  <div class="nav-top-row">
     <a href="index.html" class="logo-text">LessonBuilders</a>
-    <div class="nav-menu">
-      <a href="library.html" class="nav-link">My Lessons</a>
-      <a href="assessments.html" class="nav-link active">Assessments</a>
-      <a href="discover.html" class="nav-link">Discover</a>
-      <a href="about.html" class="nav-link">Help</a>
+    <div class="nav-right">
+      <div class="user-profile" id="userProfile">LB</div>
     </div>
-</div>
-<div class="nav-right">
-<div class="user-profile" id="userProfile">LB</div>
-</div>
+  </div>
+
+  <div class="nav-menu">
+    <a href="build-step1.html" class="nav-link">Build</a>
+    <a href="library.html" class="nav-link">My Lessons</a>
+    <a href="assessments.html" class="nav-link active">Assessments</a>
+    <a href="discover.html" class="nav-link">Discover</a>
+    <a href="about.html" class="nav-link">Help</a>
+  </div>
 </nav>
+
 <div class="container">
-<aside class="sidebar">
-<div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
-<div class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></div>
-<div class="nav-step completed"><div class="step-number">&#10003;</div><div>Teaching Style</div></div>
-<div class="nav-step completed"><div class="step-number">&#10003;</div><div>Choose Template</div></div>
-<div class="nav-step completed"><div class="step-number">&#10003;</div><div>Build Method</div></div>
-<div class="nav-step completed"><div class="step-number">&#10003;</div><div>Assessments</div></div>
-<div class="nav-step completed"><div class="step-number">&#10003;</div><div>Preview & Export</div></div>
-<div class="nav-step active"><div class="step-number">7</div><div>Collaborate</div></div>
-</aside>
-<main class="main-content">
-<div class="success-banner">
-<div class="success-content">
-<div style="font-size:24px;">&#10003;</div>
-<div class="success-text">Your lesson was successfully saved to My Lessons</div>
-</div>
-</div>
+  <aside class="sidebar">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Basics</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Style</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Template</div></div>
+    <!-- order + labels fixed: Assessments then Build then Preview -->
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Assessments</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Build</div></div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Preview</div></div>
+    <div class="nav-step active"><div class="step-number">7</div><div>Team Up</div></div>
+  </aside>
 
-<h1 class="page-title">Subjects that connect with your lesson</h1>
-<div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
+  <main class="main-content">
+    <div class="success-banner">
+      <div class="success-content">
+        <div style="font-size:24px;">&#10003;</div>
+        <div class="success-text">Your lesson was successfully saved to My Lessons</div>
+      </div>
+    </div>
 
-<div class="collab-intro">
-<p>Teaming up can create better learning experiences for students across subjects.</p>
-</div>
+    <h1 class="page-title">Subjects that connect with your lesson</h1>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
 
-<div style="margin-bottom:32px;" id="collaborationSuggestions">
-<!-- Suggestions populated by JavaScript -->
-</div>
+    <div class="collab-intro">
+      <p>Teaming up can create better learning experiences for students across subjects.</p>
+    </div>
 
-<div style="text-align:center;margin-top:48px;padding-top:32px;border-top:2px solid #E2E8F0;">
-<a href="build-step1.html" class="btn btn-primary">Build New Lesson &rarr;</a>
-<div style="font-size:14px;color:#718096;margin-top:16px;">Your current lesson has been saved to My Lessons</div>
-</div>
+    <div style="margin-bottom:32px;" id="collaborationSuggestions">
+      <!-- Suggestions populated by JavaScript -->
+    </div>
 
-</main>
+    <div style="text-align:center;margin-top:48px;padding-top:32px;border-top:2px solid #E2E8F0;">
+      <a href="build-step1.html" class="btn btn-primary">Build New Lesson &rarr;</a>
+      <div style="font-size:14px;color:#718096;margin-top:16px;">Your current lesson has been saved to My Lessons</div>
+    </div>
+  </main>
 </div>
 
 <!-- Email Modal -->
 <div class="modal" id="emailModal">
-<div class="modal-content">
-<div class="modal-title">Pre-Written Email</div>
-<div class="modal-subtitle">Review and edit before copying to your email</div>
+  <div class="modal-content">
+    <div class="modal-title">Pre-Written Email</div>
+    <div class="modal-subtitle">Review and edit before copying to your email</div>
 
-<div class="email-template">
-<div class="email-field">
-<div class="email-field-label">Subject</div>
-<div class="email-field-content" id="emailSubject">Collaboration Opportunity</div>
-</div>
-</div>
+    <div class="email-template">
+      <div class="email-field">
+        <div class="email-field-label">Subject</div>
+        <div class="email-field-content" id="emailSubject">Collaboration Opportunity</div>
+      </div>
+    </div>
 
-<textarea class="email-body" id="emailBody" rows="12"></textarea>
+    <textarea class="email-body" id="emailBody" rows="12"></textarea>
 
-<div class="modal-buttons">
-<button class="btn btn-secondary" onclick="closeEmailModal()">Close</button>
-<button class="btn btn-copy" onclick="copyEmail()">&#128203; Copy to Clipboard</button>
-</div>
-</div>
+    <div class="modal-buttons">
+      <button class="btn btn-secondary" onclick="closeEmailModal()">Close</button>
+      <button class="btn btn-copy" onclick="copyEmail(event)">&#128203; Copy to Clipboard</button>
+    </div>
+  </div>
 </div>
 
 <!-- Congratulations Modal -->
 <div class="modal" id="congratsModal">
-<div class="modal-content" style="text-align:center;max-width:500px;">
-<div style="font-size:64px;margin-bottom:16px;">📧</div>
-<div class="modal-title">Collaboration Outreach Sent!</div>
-<div style="font-size:16px;color:#4A5568;line-height:1.7;margin-bottom:24px;">
-<p style="margin-bottom:12px;">Great! Your lesson now has a "Pending..." badge. Once you've sent the email and collaborated, you can confirm it to earn the full "Collaborated" badge.</p>
-<p>Teaming up across subjects creates richer learning experiences and helps students make meaningful connections between different areas of knowledge.</p>
-</div>
-<button class="btn btn-primary" onclick="closeCongratsModal()" style="width:100%;">Continue</button>
-</div>
+  <div class="modal-content" style="text-align:center;max-width:500px;">
+    <div style="font-size:64px;margin-bottom:16px;">📧</div>
+    <div class="modal-title">Collaboration Outreach Sent!</div>
+    <div style="font-size:16px;color:#4A5568;line-height:1.7;margin-bottom:24px;">
+      <p style="margin-bottom:12px;">Great! Your lesson now has a "Pending..." badge. Once you've sent the email and collaborated, you can confirm it to earn the full "Collaborated" badge.</p>
+      <p>Teaming up across subjects creates richer learning experiences and helps students make meaningful connections between different areas of knowledge.</p>
+    </div>
+    <button class="btn btn-primary" onclick="closeCongratsModal()" style="width:100%;">Continue</button>
+  </div>
 </div>
 
 <script>
-
 function lockSidebarProgressNav(){
   // Sidebar steps are a progress indicator only (no navigation).
   document.querySelectorAll(".sidebar a.nav-step").forEach(a => {
@@ -231,7 +275,6 @@ function lockSidebarProgressNav(){
     a.setAttribute("aria-disabled","true");
     a.setAttribute("tabindex","-1");
 
-    // Make navigation impossible even if CSS is overridden.
     try {
       const href = a.getAttribute("href");
       if (href && href !== "#" && href !== "javascript:void(0)") a.setAttribute("data-href", href);
@@ -245,7 +288,6 @@ function lockSidebarProgressNav(){
   });
 }
 
-  
 const subjectCollaborations = {
   'Mathematics': [
     { subject: 'Science', teacher: 'Maria Chen', email: 'mchen@school.edu', description: 'Students can apply fraction concepts to real-world data collection and measurement activities.' },
@@ -275,17 +317,18 @@ const subjectCollaborations = {
 };
 
 let currentLessonData = {};
-let currentCollabPartner = null; // Store collaboration partner info for pending status
+let currentCollabPartner = null;
 
 window.addEventListener('DOMContentLoaded', function() {
-  lockSidebarProgressNav(); // 
+  lockSidebarProgressNav();
+
   const saved = localStorage.getItem('lessonData');
   if (saved) {
     currentLessonData = JSON.parse(saved);
-    
+
     const subject = currentLessonData.step1?.subject || 'Mathematics';
     const suggestions = subjectCollaborations[subject] || subjectCollaborations['default'];
-    
+
     const container = document.getElementById('collaborationSuggestions');
     container.innerHTML = suggestions.map(collab => `
       <div class="suggestion-card">
@@ -301,28 +344,25 @@ window.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
     `).join('');
-    
-    // CRITICAL: Set hasVisitedStep7 for THIS lesson to track per-lesson
+
     currentLessonData.hasVisitedStep7 = true;
     localStorage.setItem('lessonData', JSON.stringify(currentLessonData));
   }
 });
 
 function openEmailModal(collab) {
-  // Store collaboration partner for later use in badge system
   currentCollabPartner = collab;
-  
+
   const modal = document.getElementById('emailModal');
   const emailBody = document.getElementById('emailBody');
   const emailSubject = document.getElementById('emailSubject');
-  
+
   const lessonTitle = currentLessonData.step1?.topic || 'my lesson';
   const grade = currentLessonData.step1?.grade || '5th Grade';
   const subject = currentLessonData.step1?.subject || 'Mathematics';
-  
-  // Set dynamic subject line
+
   emailSubject.textContent = `Collaboration Opportunity: ${subject} + ${collab.subject}`;
-  
+
   const template = `Hi [Insert collaborator name here],
 
 I am going to be teaching a lesson on ${lessonTitle} in ${grade} ${subject}. My lesson could match well with ${collab.subject}. Would you be interested in collaborating?
@@ -330,7 +370,7 @@ I am going to be teaching a lesson on ${lessonTitle} in ${grade} ${subject}. My 
 Best,
 [Insert your name here]
 [Insert your email sign off here]`;
-  
+
   emailBody.value = template;
   modal.classList.add('show');
 }
@@ -339,41 +379,54 @@ function closeEmailModal() {
   document.getElementById('emailModal').classList.remove('show');
 }
 
-function copyEmail() {
+function copyEmail(evt) {
   const emailBody = document.getElementById('emailBody');
+  emailBody.focus();
   emailBody.select();
-  document.execCommand('copy');
-  
-  const btn = event.target;
-  const originalText = btn.innerHTML;
-  btn.innerHTML = '&#10003; Copied!';
-  btn.style.background = '#10B981';
-  
-  setTimeout(() => {
-    btn.innerHTML = originalText;
-    btn.style.background = '';
-    
-    // Close email modal
+
+  // Prefer modern clipboard API, fall back to execCommand
+  const textToCopy = emailBody.value;
+  const afterCopy = () => {
+    const btn = evt?.target;
+    if (btn) {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '&#10003; Copied!';
+      btn.style.background = '#10B981';
+
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+      }, 900);
+    }
+
     closeEmailModal();
-    
-    // Set collaboration as PENDING (not confirmed yet)
+
     currentLessonData.collaborationPending = true;
-    currentLessonData.hasCollaborations = false; // Not confirmed yet
-    
-    // Store collaboration details for later confirmation
+    currentLessonData.hasCollaborations = false;
+
     currentLessonData.collaborationStatus = {
-      teacher: currentCollabPartner.teacher,
-      subject: currentCollabPartner.subject,
-      email: currentCollabPartner.email,
+      teacher: currentCollabPartner?.teacher || "",
+      subject: currentCollabPartner?.subject || "",
+      email: currentCollabPartner?.email || "",
       timestamp: Date.now(),
-      confirmed: false // Will be set to true when user confirms later
+      confirmed: false
     };
-    
+
     localStorage.setItem('lessonData', JSON.stringify(currentLessonData));
-    
-    // Show congratulations modal
     document.getElementById('congratsModal').classList.add('show');
-  }, 1000);
+  };
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy).then(afterCopy).catch(() => {
+      const ok = document.execCommand('copy');
+      if (ok) afterCopy();
+      else alert("Copy failed. Please manually copy the email text.");
+    });
+  } else {
+    const ok = document.execCommand('copy');
+    if (ok) afterCopy();
+    else alert("Copy failed. Please manually copy the email text.");
+  }
 }
 
 function closeCongratsModal() {
@@ -381,17 +434,13 @@ function closeCongratsModal() {
 }
 
 document.getElementById('emailModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeEmailModal();
-  }
+  if (e.target === this) closeEmailModal();
 });
-
 document.getElementById('congratsModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeCongratsModal();
-  }
+  if (e.target === this) closeCongratsModal();
 });
 </script>
+
 <script type="module">
   // Update the top-right bubble to show initials when logged in.
   // Falls back to "LB" when logged out or if auth isn't available.
@@ -406,22 +455,21 @@ document.getElementById('congratsModal').addEventListener('click', function(e) {
   }
 
   const el = document.getElementById("userProfile");
-  if (!el) return;
-
-  try {
-    // If you store auth in localStorage (common for MVP)
-    const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-    if (raw) {
-      const u = JSON.parse(raw);
-      const email = u?.email || u?.user?.email;
-      el.textContent = initialsFromEmail(email);
-    } else {
+  if (el) {
+    try {
+      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+      if (raw) {
+        const u = JSON.parse(raw);
+        const email = u?.email || u?.user?.email;
+        el.textContent = initialsFromEmail(email);
+      } else {
+        el.textContent = "LB";
+      }
+    } catch {
       el.textContent = "LB";
     }
-  } catch {
-    el.textContent = "LB";
   }
 </script>
-  
+
 </body>
 </html>
