@@ -33,13 +33,17 @@
       top: 0;
       z-index: 1000;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      flex-wrap: nowrap; /* keep one line by default */
+      gap: 16px;
     }
 
     .nav-left {
       display: flex;
       align-items: center;
       gap: 40px;
-      min-width: 0; /* IMPORTANT for mobile overflow handling */
+      min-width: 0; /* IMPORTANT for overflow */
+      flex: 1;
+      flex-wrap: nowrap; /* keep one line */
     }
 
     .logo-text {
@@ -57,6 +61,8 @@
       gap: 32px;
       align-items: center;
       min-width: 0;
+      flex: 1;
+      flex-wrap: nowrap;
     }
 
     .nav-link {
@@ -69,9 +75,7 @@
       flex: 0 0 auto;
     }
 
-    .nav-link:hover {
-      color: var(--navy);
-    }
+    .nav-link:hover { color: var(--navy); }
 
     .nav-right {
       display: flex;
@@ -153,7 +157,6 @@
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      /* FIXED: missing rgba() */
       box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
     }
 
@@ -161,24 +164,6 @@
       max-width: 1200px;
       margin: 80px auto;
       padding: 0 40px;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-title {
-      font-family: 'Crimson Pro', serif;
-      font-size: 42px;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      font-size: 18px;
-      color: #4A5568;
     }
 
     .standards-grid {
@@ -189,9 +174,7 @@
       margin: 0 auto;
     }
 
-    .standard-item {
-      text-align: center;
-    }
+    .standard-item { text-align: center; }
 
     .standard-title {
       font-size: 16px;
@@ -210,6 +193,19 @@
       max-width: 1200px;
       margin: 80px auto;
       padding: 0 40px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-family: 'Crimson Pro', serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
     }
 
     .testimonials-grid {
@@ -271,13 +267,9 @@
       color: rgba(255, 255, 255, 0.7);
     }
 
-    .footer-column ul {
-      list-style: none;
-    }
+    .footer-column ul { list-style: none; }
 
-    .footer-column ul li {
-      margin-bottom: 12px;
-    }
+    .footer-column ul li { margin-bottom: 12px; }
 
     .footer-column a {
       color: white;
@@ -286,9 +278,7 @@
       transition: color 0.2s;
     }
 
-    .footer-column a:hover {
-      color: var(--orange);
-    }
+    .footer-column a:hover { color: var(--orange); }
 
     .footer-bottom {
       max-width: 1200px;
@@ -310,9 +300,7 @@
         grid-template-columns: 1fr;
       }
 
-      .hero-title {
-        font-size: 36px;
-      }
+      .hero-title { font-size: 36px; }
 
       .footer-content {
         grid-template-columns: 1fr;
@@ -321,48 +309,53 @@
     }
 
     /* =========================
-       MOBILE NAV FIX (Index)
-       - pins LB bubble top-right
-       - keeps nav items usable without weird wrapping
+       MOBILE NAV FIX (Index) - NORMALIZED
+       - Single row nav
+       - Menu scrolls horizontally
+       - Bubble stays top-right
        ========================= */
     @media (max-width: 900px){
       .top-nav{
         padding:12px 16px;
-        gap:10px;
-        align-items:flex-start;
-      }
-
-      /* Keep left content from forcing bubble down */
-      .nav-left{
-        flex:1;
         gap:12px;
-        align-items:flex-start;
-        min-width:0;
+        align-items:center;
+        flex-wrap:nowrap; /* critical */
       }
 
-      /* Let the menu scroll horizontally instead of wrapping into tall stacks */
-      .nav-menu{
-        flex-wrap:nowrap;
+      .nav-left{
         gap:14px;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-        padding-bottom:2px; /* tiny breathing room */
+        align-items:center;
+        flex:1;
         min-width:0;
+        flex-wrap:nowrap; /* critical */
       }
 
+      .nav-menu{
+        gap:14px;
+        flex:1;
+        min-width:0;
+        flex-wrap:nowrap; /* critical */
+        overflow-x:auto;
+        overflow-y:hidden;
+        -webkit-overflow-scrolling:touch;
+        scrollbar-width:none;
+      }
       .nav-menu::-webkit-scrollbar{ display:none; }
 
-      /* Pin initials bubble at the top-right */
-      .nav-right{
-        margin-left:auto;
-        align-self:flex-start;
+      .nav-link{
+        font-size:14px;
+        white-space:nowrap;
       }
 
-      /* Slightly smaller text so "My Lessons" fits better */
-      .nav-link{ font-size:14px; }
+      .nav-right{
+        flex:0 0 auto;
+        margin-left:12px;
+        align-self:center;
+      }
     }
 
     @media (max-width: 520px){
+      .top-nav{ padding:10px 12px; }
       .logo-text{ font-size:20px; }
       .nav-link{ font-size:13.5px; }
     }
@@ -380,7 +373,7 @@
       z-index: 9999;
       background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);      
+      -webkit-backdrop-filter: blur(14px);
     }
     .lb-gate-overlay.is-open{ display:flex; }
     .lb-gate-card{
@@ -563,9 +556,6 @@
   <script type="module">
     import { checkHealth } from "./api.js";
 
-    // ----------------------------
-    // Access Gate (simple + reliable)
-    // ----------------------------
     const overlay = document.getElementById("accessGateOverlay");
     const codeInput = document.getElementById("lbAccessCode");
     const codeBtn = document.getElementById("lbAccessSubmit");
