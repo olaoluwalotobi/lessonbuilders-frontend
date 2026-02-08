@@ -1,508 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Teaching Style - LessonBuilders</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Teaching Style - LessonBuilders</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
 
-  <style>
-    :root{--navy:#0D2847;--orange:#FF8C42;--orangeLight:#FFB380;--green:#10B981;--red:#EF4444;}
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:var(--navy);}
+/* -------------------------
+   TOP NAV (UPDATED)
+   - mobile: logo + LB on top row, menu on row below (scrollable)
+   - removes conflicting duplicate @media blocks from your original
+   ------------------------- */
+.top-nav{
+  background:white;border-bottom:2px solid rgba(13,40,71,0.1);
+  padding:16px 40px;
+  position:sticky;top:0;z-index:1000;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
 
-    /* =========================
-       TOP NAV (FIXED)
-       - logo + LB always same row
-       - menu scrolls on mobile
-       ========================= */
-    .top-nav{
-      background:#fff;
-      border-bottom:2px solid rgba(13,40,71,.1);
-      padding:16px 40px;
-      position:sticky;top:0;z-index:1000;
-      box-shadow:0 2px 8px rgba(0,0,0,.05);
-    }
-    .nav-top-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      width:100%;
-    }
-    .logo-text{
-      font-family:'Crimson Pro',serif;
-      font-size:24px;font-weight:700;
-      color:var(--navy);
-      text-decoration:none;
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-    .nav-right{
-      margin-left:auto;
-      flex:0 0 auto;
-      display:flex;align-items:center;
-    }
-    .user-profile{
-      width:36px;height:36px;border-radius:50%;
-      background:linear-gradient(135deg,var(--orange),var(--orangeLight));
-      display:flex;align-items:center;justify-content:center;
-      color:#fff;font-weight:800;font-size:14px;
-      flex:0 0 auto;
-    }
-    .nav-menu{
-      display:flex;gap:32px;align-items:center;
-      margin-top:10px;
-    }
-    .nav-link{
-      text-decoration:none;
-      color:#4A5568;
-      font-weight:500;
-      font-size:15px;
-      transition:color .2s;
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-    .nav-link:hover{color:var(--navy);}
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.nav-top-row{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.logo-text{
+  font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);
+  text-decoration:none;
+  white-space:nowrap;
+}
+.nav-right{display:flex;align-items:center;gap:16px;flex:0 0 auto;}
+.user-profile{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--orange),#FFB380);
+  display:flex;align-items:center;justify-content:center;color:white;
+  font-weight:600;font-size:14px;cursor:pointer;
+  flex:0 0 auto;
+}
+.nav-menu{
+  width:100%;
+  display:flex;
+  gap:32px;
+  align-items:center;
+}
+.nav-link{
+  text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;
+  transition:color 0.2s;
+  white-space:nowrap;
+}
+.nav-link:hover{color:var(--navy);}
 
-    @media (max-width:900px){
-      .top-nav{padding:12px 16px;}
-      .nav-menu{
-        gap:14px;
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-        flex-wrap:nowrap;
-        padding-bottom:2px;
-      }
-      .nav-menu::-webkit-scrollbar{display:none;}
-    }
-    @media (max-width:520px){
-      .logo-text{font-size:20px;}
-      .nav-link{font-size:13.5px;}
-    }
+/* Main layout */
+.container{display:flex;max-width:1400px;margin:0 auto;}
+.sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
+/* lock left-step navigation (visual only) */
+.sidebar .nav-step{pointer-events:none;cursor:default;}
+.nav-step.completed{color:#10B981;}
+.step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
+.nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
+.nav-step.completed .step-number{background:#10B981;border-color:#10B981;color:white;}
+.main-content{flex:1;padding:40px 60px;max-width:900px;}
+.page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
+.page-subtitle{font-size:18px;color:#4A5568;margin-bottom:40px;}
+.progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:40px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),#FFB380);border-radius:3px;}
+.style-slider{margin-bottom:32px;}
+.style-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600;color:var(--navy);}
 
-    /* =========================
-       LAYOUT (Steps style)
-       ========================= */
-    .container{display:flex;max-width:1400px;margin:0 auto;}
-    .sidebar{
-      width:280px;background:#fff;
-      border-right:1px solid rgba(13,40,71,0.1);
-      padding:30px 20px;
-    }
-    .steps-label{
-      font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
-      color:#999;margin:6px 0 16px;
-    }
-    .steps-links{display:block;}
-    .nav-step{
-      display:flex;align-items:center;gap:12px;
-      padding:12px;margin-bottom:8px;
-      border-left:3px solid transparent;
-      text-decoration:none;color:#4A5568;
-      user-select:none;
-      cursor:default;
-      border-radius:10px;
-    }
-    .nav-step.active{
-      background:rgba(255,140,66,0.10);
-      border-left-color:var(--orange);
-      color:var(--navy);
-      font-weight:800;
-    }
-    .step-number{
-      width:28px;height:28px;border-radius:50%;
-      background:#F7FAFC;border:2px solid #E2E8F0;
-      display:flex;align-items:center;justify-content:center;
-      font-size:13px;font-weight:800;color:#999;
-      flex:0 0 auto;
-    }
-    .nav-step.active .step-number{
-      background:var(--orange);
-      border-color:var(--orange);
-      color:#fff;
-    }
+/* -------------------------
+   PERCENT INPUTS (UPDATED)
+   - replaces span % with a small editable input
+   - keeps your layout stable
+   ------------------------- */
+.style-value-wrap{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
+.style-value-input{
+  width:70px;
+  text-align:center;
+  padding:10px 10px;
+  border-radius:12px;
+  border:2px solid #E2E8F0;
+  font-family:'DM Sans',sans-serif;
+  font-weight:800;
+  color:var(--orange);
+  background:white;
+  outline:none;
+}
+.style-value-input:focus{
+  border-color: rgba(255,140,66,0.85);
+  box-shadow: 0 0 0 4px rgba(255,140,66,0.14);
+}
+.style-value-sign{font-weight:900;color:var(--orange);}
 
-    .main-content{flex:1;padding:40px 60px;max-width:900px;}
-    .page-title{font-family:'Crimson Pro',serif;font-size:42px;font-weight:700;margin-bottom:12px;color:var(--navy);}
-    .page-subtitle{font-size:18px;color:#4A5568;margin-bottom:26px;}
-    .progress-bar{height:6px;background:#E2E8F0;border-radius:3px;margin-bottom:34px;}
-    .progress-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orangeLight));border-radius:3px;}
+.slider{width:100%;height:8px;border-radius:4px;background:#E2E8F0;appearance:none;cursor:pointer;outline:none;}
+.slider::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--orange);cursor:pointer;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--orange);cursor:pointer;border:3px solid white;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
 
-    /* =========================
-       SLIDERS + editable % input
-       ========================= */
-    .style-row{margin:22px 0;}
-    .style-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:16px;}
-    .style-label{font-size:22px;font-weight:900;color:var(--navy);}
-    .pct-wrap{display:flex;align-items:center;gap:6px;flex:0 0 auto;}
-    .pct-input{
-      width:78px;
-      padding:8px 10px;
-      border:2px solid #E2E8F0;
-      border-radius:10px;
-      font-size:20px;
-      font-weight:900;
-      color:var(--orange);
-      text-align:right;
-      background:#fff;
-      font-family:'DM Sans',sans-serif;
-    }
-    .pct-input:focus{outline:none;border-color:var(--orange);}
-    .pct-sign{font-size:20px;font-weight:900;color:var(--orange);}
+.btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block;border:none;}
+.btn-primary{background:linear-gradient(135deg,var(--orange),#FFB380);color:white;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.4);}
+.btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
+.btn-secondary:hover{border-color:var(--orange);}
+.btn-group{display:flex;justify-content:space-between;margin-top:40px;}
 
-    .style-slider{
-      width:100%;
-      height:8px;border-radius:4px;
-      background:#E2E8F0;
-      appearance:none;
-      cursor:pointer;
-    }
-    .style-slider::-webkit-slider-thumb{
-      appearance:none;
-      width:26px;height:26px;border-radius:50%;
-      background:var(--orange);
-      box-shadow:0 8px 18px rgba(0,0,0,0.12);
-      cursor:pointer;
-    }
-    .style-slider::-moz-range-thumb{
-      width:26px;height:26px;border-radius:50%;
-      background:var(--orange);
-      border:none;
-      box-shadow:0 8px 18px rgba(0,0,0,0.12);
-      cursor:pointer;
-    }
+/* ================================
+   Mobile / Tablet responsiveness
+   ================================ */
+@media (max-width: 900px){
+  .top-nav{padding:12px 16px;}
+  /* menu becomes scrollable row below */
+  .nav-menu{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    gap:16px;
+    padding-bottom:2px;
+  }
+  .nav-menu::-webkit-scrollbar{display:none;}
+  .nav-link{font-size:14px;}
 
-    .total-card{
-      margin-top:24px;
-      background:rgba(255,140,66,0.06);
-      border:2px solid rgba(255,140,66,0.20);
-      border-radius:16px;
-      padding:18px 18px;
-      text-align:center;
-    }
-    .total-label{font-size:16px;color:#4A5568;font-weight:800;margin-bottom:6px;}
-    .total-value{
-      font-size:44px;
-      font-weight:900;
-      color:var(--navy);
-    }
-    .total-hint{
-      margin-top:8px;
-      font-size:13px;
-      color:#718096;
-      line-height:1.35;
-    }
+  .container{flex-direction:column;max-width:100%;}
+  .sidebar{
+    width:100%;
+    border-right:none;
+    border-bottom:1px solid rgba(13,40,71,0.1);
+    padding:14px 12px;
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .sidebar > div:first-child{display:none;}
+  .nav-step{
+    flex:0 0 auto;
+    margin-bottom:0;
+    padding:10px 12px;
+    border-left:none;
+    border-bottom:3px solid transparent;
+    border-radius:10px;
+    background:#fff;
+    white-space:nowrap;
+  }
+  .nav-step.active{
+    border-bottom-color:var(--orange);
+    background:rgba(255,140,66,0.08);
+  }
+  .step-number{flex:0 0 auto;}
+  .main-content{padding:22px 16px;max-width:100%;}
+  .btn{width:auto;}
+}
 
-    .btn{padding:14px 28px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;border:none;font-family:'DM Sans',sans-serif;}
-    .btn-primary{background:linear-gradient(135deg,var(--orange),var(--orangeLight));color:#fff;}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,140,66,0.35);}
-    .btn-secondary{background:#fff;border:2px solid #E2E8F0;color:var(--navy);}
-    .btn-secondary:hover{border-color:var(--orange);}
-    .btn-group{display:flex;justify-content:space-between;gap:12px;margin-top:34px;flex-wrap:wrap;}
-
-    /* =========================
-       Mobile / Tablet
-       ========================= */
-    @media (max-width: 900px){
-      .container{flex-direction:column;max-width:100%;}
-      .sidebar{
-        width:100%;
-        border-right:none;
-        border-bottom:1px solid rgba(13,40,71,0.1);
-        padding:14px 12px;
-      }
-      .steps-label{display:none;}
-      .steps-links{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;}
-      .nav-step{
-        flex:0 0 auto;
-        margin-bottom:0;
-        padding:10px 12px;
-        border-left:none;
-        border-bottom:3px solid transparent;
-        border-radius:10px;
-        background:#fff;
-        white-space:nowrap;
-      }
-      .nav-step.active{
-        border-bottom-color:var(--orange);
-        background:rgba(255,140,66,0.08);
-      }
-      .main-content{padding:22px 16px;max-width:100%;}
-      .style-label{font-size:19px;}
-      .pct-input{width:72px;font-size:18px;}
-      .total-value{font-size:40px;}
-    }
-    @media (max-width: 520px){
-      .page-title{font-size:32px;}
-      .page-subtitle{font-size:15px;}
-      .btn-group{flex-direction:column;align-items:stretch;}
-      .btn-group .btn{width:100%;}
-    }
-  </style>
+@media (max-width: 520px){
+  .logo-text{font-size:20px;}
+  .page-title{font-size:32px;}
+  .page-subtitle{font-size:15px;}
+}
+</style>
 </head>
 
 <body>
 
-  <!-- TOP NAV (fixed structure) -->
-  <nav class="top-nav">
-    <div class="nav-top-row">
-      <a href="index.html" class="logo-text">LessonBuilders</a>
-      <div class="nav-right">
-        <div class="user-profile" id="userProfile">LB</div>
-      </div>
+<!-- TOP NAV (UPDATED STRUCTURE) -->
+<nav class="top-nav">
+  <div class="nav-top-row">
+    <a href="index.html" class="logo-text">LessonBuilders</a>
+    <div class="nav-right">
+      <div class="user-profile" id="userProfile">LB</div>
     </div>
-
-    <div class="nav-menu">
-      <a href="build-step1.html" class="nav-link">Build</a>
-      <a href="library.html" class="nav-link">My Lessons</a>
-      <a href="assessments.html" class="nav-link">Assessments</a>
-      <a href="discover.html" class="nav-link">Discover</a>
-      <a href="about.html" class="nav-link">Help</a>
-    </div>
-  </nav>
-
-  <div class="container">
-    <aside class="sidebar">
-      <div class="steps-label">BUILD LESSON</div>
-
-      <div class="steps-links">
-        <div class="nav-step"><div class="step-number">1</div><div>Basic Information</div></div>
-        <div class="nav-step active"><div class="step-number">2</div><div>Teaching Style</div></div>
-        <div class="nav-step"><div class="step-number">3</div><div>Choose Template</div></div>
-        <div class="nav-step"><div class="step-number">4</div><div>Assessments</div></div>
-        <div class="nav-step"><div class="step-number">5</div><div>Build Method</div></div>
-        <div class="nav-step"><div class="step-number">6</div><div>Preview &amp; Export</div></div>
-        <div class="nav-step"><div class="step-number">7</div><div>Collaborate</div></div>
-      </div>
-    </aside>
-
-    <main class="main-content">
-      <h1 class="page-title">Help us match your classroom style</h1>
-      <p class="page-subtitle">Use the sliders — or tap the percentage and type a number.</p>
-
-      <div class="progress-bar"><div class="progress-fill" style="width:24%;"></div></div>
-
-      <!-- SLIDERS (editable %) -->
-      <div class="style-row" data-key="handsOn">
-        <div class="style-head">
-          <div class="style-label">Hands-On Activities</div>
-          <div class="pct-wrap">
-            <input class="pct-input" type="number" min="0" max="100" step="1" inputmode="numeric" value="20" />
-            <span class="pct-sign">%</span>
-          </div>
-        </div>
-        <input class="style-slider" type="range" min="0" max="100" value="20" />
-      </div>
-
-      <div class="style-row" data-key="direct">
-        <div class="style-head">
-          <div class="style-label">Direct Instruction</div>
-          <div class="pct-wrap">
-            <input class="pct-input" type="number" min="0" max="100" step="1" inputmode="numeric" value="20" />
-            <span class="pct-sign">%</span>
-          </div>
-        </div>
-        <input class="style-slider" type="range" min="0" max="100" value="20" />
-      </div>
-
-      <div class="style-row" data-key="collab">
-        <div class="style-head">
-          <div class="style-label">Collaborative Work</div>
-          <div class="pct-wrap">
-            <input class="pct-input" type="number" min="0" max="100" step="1" inputmode="numeric" value="20" />
-            <span class="pct-sign">%</span>
-          </div>
-        </div>
-        <input class="style-slider" type="range" min="0" max="100" value="20" />
-      </div>
-
-      <div class="style-row" data-key="independent">
-        <div class="style-head">
-          <div class="style-label">Independent Practice</div>
-          <div class="pct-wrap">
-            <input class="pct-input" type="number" min="0" max="100" step="1" inputmode="numeric" value="20" />
-            <span class="pct-sign">%</span>
-          </div>
-        </div>
-        <input class="style-slider" type="range" min="0" max="100" value="20" />
-      </div>
-
-      <div class="style-row" data-key="tech">
-        <div class="style-head">
-          <div class="style-label">Technology Integration</div>
-          <div class="pct-wrap">
-            <input class="pct-input" type="number" min="0" max="100" step="1" inputmode="numeric" value="20" />
-            <span class="pct-sign">%</span>
-          </div>
-        </div>
-        <input class="style-slider" type="range" min="0" max="100" value="20" />
-      </div>
-
-      <div class="total-card">
-        <div class="total-label">Combined Total</div>
-        <div class="total-value" id="combinedTotal">100%</div>
-        <div class="total-hint">Tip: Totals don’t have to equal 100% — this helps us understand your mix.</div>
-      </div>
-
-      <div class="btn-group">
-        <a href="build-step1.html" class="btn btn-secondary">&larr; Back</a>
-        <button class="btn btn-primary" type="button" onclick="saveAndContinue()">Next: Choose Template &rarr;</button>
-      </div>
-    </main>
   </div>
 
-  <script>
-    /* ---------- helpers: storage ---------- */
-    function safeParse(x){ try{ return JSON.parse(x); } catch { return null; } }
-    function getLessonData(){
-      const raw = localStorage.getItem("lessonData");
-      return raw ? (safeParse(raw) || {}) : {};
+  <div class="nav-menu">
+    <a href="build-step1.html" class="nav-link">Build</a>
+    <a href="library.html" class="nav-link">My Lessons</a>
+    <a href="assessments.html" class="nav-link">Assessments</a>
+    <a href="discover.html" class="nav-link">Discover</a>
+    <a href="about.html" class="nav-link">Help</a>
+  </div>
+</nav>
+
+<div class="container">
+  <aside class="sidebar">
+    <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
+    <div class="nav-step completed"><div class="step-number">&#10003;</div><div>Basic Information</div></div>
+    <div class="nav-step active"><div class="step-number">2</div><div>Teaching Style</div></div>
+    <div class="nav-step"><div class="step-number">3</div><div>Choose Template</div></div>
+    <div class="nav-step"><div class="step-number">4</div><div>Assessments</div></div>
+    <div class="nav-step"><div class="step-number">5</div><div>Build Method</div></div>
+    <div class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></div>
+    <div class="nav-step"><div class="step-number">7</div><div>Collaborate</div></div>
+  </aside>
+
+  <main class="main-content">
+    <h1 class="page-title">How do you teach?</h1>
+    <p class="page-subtitle">Help us match your classroom style</p>
+    <div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
+
+    <!-- Sliders (UPDATED % UI only) -->
+    <div class="style-slider">
+      <div class="style-label">
+        <span>Hands-On Activities</span>
+        <span class="style-value-wrap">
+          <input class="style-value-input" id="handsOnValue" inputmode="numeric" pattern="[0-9]*" value="20" aria-label="Hands-On Activities percent">
+          <span class="style-value-sign">%</span>
+        </span>
+      </div>
+      <input type="range" min="0" max="100" step="1" value="20" class="slider" id="handsOnSlider">
+    </div>
+
+    <div class="style-slider">
+      <div class="style-label">
+        <span>Direct Instruction</span>
+        <span class="style-value-wrap">
+          <input class="style-value-input" id="directValue" inputmode="numeric" pattern="[0-9]*" value="20" aria-label="Direct Instruction percent">
+          <span class="style-value-sign">%</span>
+        </span>
+      </div>
+      <input type="range" min="0" max="100" step="1" value="20" class="slider" id="directSlider">
+    </div>
+
+    <div class="style-slider">
+      <div class="style-label">
+        <span>Collaborative Work</span>
+        <span class="style-value-wrap">
+          <input class="style-value-input" id="collabValue" inputmode="numeric" pattern="[0-9]*" value="20" aria-label="Collaborative Work percent">
+          <span class="style-value-sign">%</span>
+        </span>
+      </div>
+      <input type="range" min="0" max="100" step="1" value="20" class="slider" id="collabSlider">
+    </div>
+
+    <div class="style-slider">
+      <div class="style-label">
+        <span>Independent Practice</span>
+        <span class="style-value-wrap">
+          <input class="style-value-input" id="indepValue" inputmode="numeric" pattern="[0-9]*" value="20" aria-label="Independent Practice percent">
+          <span class="style-value-sign">%</span>
+        </span>
+      </div>
+      <input type="range" min="0" max="100" step="1" value="20" class="slider" id="indepSlider">
+    </div>
+
+    <div class="style-slider">
+      <div class="style-label">
+        <span>Technology Integration</span>
+        <span class="style-value-wrap">
+          <input class="style-value-input" id="techValue" inputmode="numeric" pattern="[0-9]*" value="20" aria-label="Technology Integration percent">
+          <span class="style-value-sign">%</span>
+        </span>
+      </div>
+      <input type="range" min="0" max="100" step="1" value="20" class="slider" id="techSlider">
+    </div>
+
+    <!-- Combined Total (UNCHANGED from your original) -->
+    <div style="margin-top:24px;padding:16px;background:rgba(255,140,66,0.05);border-radius:10px;text-align:center;">
+      <div style="font-size:14px;color:#4A5568;margin-bottom:4px;">Combined Total</div>
+      <div style="font-size:28px;font-weight:700;color:var(--navy);" id="totalValue">100%</div>
+    </div>
+
+    <!-- Buttons (UNCHANGED from your original) -->
+    <div class="btn-group">
+      <a href="build-step1.html" class="btn btn-secondary">&larr; Back</a>
+      <button class="btn btn-primary" onclick="saveAndContinue()">Next: Choose Template &rarr;</button>
+    </div>
+  </main>
+</div>
+
+<script>
+/* -------------------------
+   Load saved Step 2 (unchanged behavior)
+   ------------------------- */
+window.addEventListener('DOMContentLoaded', function() {
+  const saved = localStorage.getItem('lessonData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    if (data.step2) {
+      document.getElementById('handsOnSlider').value = data.step2.handsOn ?? 20;
+      document.getElementById('directSlider').value  = data.step2.direct ?? 20;
+      document.getElementById('collabSlider').value  = data.step2.collaborative ?? 20;
+      document.getElementById('indepSlider').value   = data.step2.independent ?? 20;
+      document.getElementById('techSlider').value    = data.step2.technology ?? 20;
     }
-    function setLessonData(data){
-      localStorage.setItem("lessonData", JSON.stringify(data || {}));
+  }
+  updateAllDisplays();
+});
+
+/* -------------------------
+   Slider + editable % binding (NEW)
+   ------------------------- */
+const sliders = {
+  handsOn: document.getElementById('handsOnSlider'),
+  direct:  document.getElementById('directSlider'),
+  collab:  document.getElementById('collabSlider'),
+  indep:   document.getElementById('indepSlider'),
+  tech:    document.getElementById('techSlider')
+};
+
+const values = {
+  handsOn: document.getElementById('handsOnValue'),
+  direct:  document.getElementById('directValue'),
+  collab:  document.getElementById('collabValue'),
+  indep:   document.getElementById('indepValue'),
+  tech:    document.getElementById('techValue')
+};
+
+const totalDisplay = document.getElementById('totalValue');
+
+function clampInt(v, min, max) {
+  const n = parseInt(String(v).replace(/[^\d]/g,''), 10);
+  if (!Number.isFinite(n)) return min;
+  return Math.max(min, Math.min(max, n));
+}
+
+function getTotal() {
+  return parseInt(sliders.handsOn.value,10) +
+         parseInt(sliders.direct.value,10)  +
+         parseInt(sliders.collab.value,10)  +
+         parseInt(sliders.indep.value,10)   +
+         parseInt(sliders.tech.value,10);
+}
+
+function updateTotal() {
+  const total = getTotal();
+  totalDisplay.textContent = total + '%';
+
+  if (total === 100) totalDisplay.style.color = '#10B981';
+  else if (total > 100) totalDisplay.style.color = '#EF4444';
+  else totalDisplay.style.color = 'var(--orange)';
+}
+
+function updateAllDisplays() {
+  values.handsOn.value = sliders.handsOn.value;
+  values.direct.value  = sliders.direct.value;
+  values.collab.value  = sliders.collab.value;
+  values.indep.value   = sliders.indep.value;
+  values.tech.value    = sliders.tech.value;
+  updateTotal();
+}
+
+function bind(sliderEl, inputEl) {
+  if (!sliderEl || !inputEl) return;
+
+  // slider -> input
+  sliderEl.addEventListener('input', function() {
+    inputEl.value = this.value;
+    updateTotal();
+  });
+
+  // keep digits-only while typing
+  inputEl.addEventListener('input', function() {
+    this.value = this.value.replace(/[^\d]/g,'');
+  });
+
+  // input -> slider on blur / Enter
+  function commit() {
+    const min = sliderEl.min ? parseInt(sliderEl.min,10) : 0;
+    const max = sliderEl.max ? parseInt(sliderEl.max,10) : 100;
+    const v = clampInt(inputEl.value, min, max);
+    inputEl.value = String(v);
+    sliderEl.value = String(v);
+    updateTotal();
+  }
+
+  inputEl.addEventListener('blur', commit);
+  inputEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      inputEl.blur();
     }
+  });
+}
 
-    /* ---------- editable % + total ---------- */
-    function clamp(n, min, max){
-      n = Number(n);
-      if (!Number.isFinite(n)) return min;
-      return Math.min(max, Math.max(min, n));
-    }
+bind(sliders.handsOn, values.handsOn);
+bind(sliders.direct,  values.direct);
+bind(sliders.collab,  values.collab);
+bind(sliders.indep,   values.indep);
+bind(sliders.tech,    values.tech);
 
-    function syncAllTotals(){
-      const totalEl = document.getElementById("combinedTotal");
-      if (!totalEl) return;
+updateTotal();
 
-      const sliders = Array.from(document.querySelectorAll(".style-slider"));
-      const total = sliders.reduce((sum, s) => sum + Number(s.value || 0), 0);
+/* -------------------------
+   Save + continue (UNCHANGED logic)
+   ------------------------- */
+function saveAndContinue() {
+  const total = getTotal();
 
-      totalEl.textContent = total + "%";
-      totalEl.style.color = total > 100 ? getComputedStyle(document.documentElement).getPropertyValue("--red") : getComputedStyle(document.documentElement).getPropertyValue("--navy");
-    }
+  if (total !== 100) {
+    alert('Please adjust the sliders so they total exactly 100%');
+    return;
+  }
 
-    function initEditablePercents(){
-      const rows = document.querySelectorAll(".style-row");
-      rows.forEach(row => {
-        const slider = row.querySelector(".style-slider");
-        const input  = row.querySelector(".pct-input");
-        if (!slider || !input) return;
+  const teachingStyles = {
+    handsOn: parseInt(sliders.handsOn.value,10),
+    direct: parseInt(sliders.direct.value,10),
+    collaborative: parseInt(sliders.collab.value,10),
+    independent: parseInt(sliders.indep.value,10),
+    technology: parseInt(sliders.tech.value,10)
+  };
 
-        const min = Number(slider.min || 0);
-        const max = Number(slider.max || 100);
+  let lessonData = {};
+  const saved = localStorage.getItem('lessonData');
+  if (saved) lessonData = JSON.parse(saved);
 
-        // align start
-        const start = clamp(input.value || slider.value, min, max);
-        slider.value = start;
-        input.value = start;
+  lessonData.step2 = teachingStyles;
+  localStorage.setItem('lessonData', JSON.stringify(lessonData));
+  window.location.href = 'build-step3.html';
+}
+</script>
 
-        slider.addEventListener("input", () => {
-          input.value = slider.value;
-          syncAllTotals();
-        });
+<script type="module">
+  // Update the top-right bubble to show initials when logged in.
+  // Falls back to "LB" when logged out or if auth isn't available.
+  function initialsFromEmail(email) {
+    if (!email) return "LB";
+    const namePart = String(email).split("@")[0] || "";
+    const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+    const a = tokens[0]?.[0] || "";
+    const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+    const ini = (a + b).toUpperCase();
+    return ini || "LB";
+  }
 
-        input.addEventListener("input", () => {
-          if (input.value === "") return; // allow empty while typing
-          const v = clamp(input.value, min, max);
-          slider.value = v;
-          input.value = v;
-          syncAllTotals();
-        });
+  const el = document.getElementById("userProfile");
+  if (!el) return;
 
-        input.addEventListener("blur", () => {
-          if (input.value === "") input.value = slider.value;
-          const v = clamp(input.value, min, max);
-          slider.value = v;
-          input.value = v;
-          syncAllTotals();
-        });
-      });
-
-      syncAllTotals();
-    }
-
-    /* ---------- load/save step2 ---------- */
-    function loadFromLessonData(){
-      const data = getLessonData();
-      const step2 = data.step2 || {};
-
-      // defaults if empty
-      const defaults = {
-        handsOn: 20,
-        direct: 20,
-        collab: 20,
-        independent: 20,
-        tech: 20
-      };
-
-      const merged = { ...defaults, ...step2 };
-
-      document.querySelectorAll(".style-row").forEach(row => {
-        const key = row.getAttribute("data-key");
-        const slider = row.querySelector(".style-slider");
-        const input  = row.querySelector(".pct-input");
-        if (!key || !slider || !input) return;
-
-        const v = clamp(merged[key], Number(slider.min||0), Number(slider.max||100));
-        slider.value = v;
-        input.value = v;
-      });
-
-      syncAllTotals();
-    }
-
-    function saveAndContinue(){
-      const out = {};
-      document.querySelectorAll(".style-row").forEach(row => {
-        const key = row.getAttribute("data-key");
-        const slider = row.querySelector(".style-slider");
-        if (!key || !slider) return;
-        out[key] = Number(slider.value || 0);
-      });
-
-      const data = getLessonData();
-      data.step2 = out;
-      setLessonData(data);
-
-      window.location.href = "build-step3.html";
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      loadFromLessonData();
-      initEditablePercents();
-    });
-  </script>
-
-  <script type="module">
-    // Top-right initials bubble
-    function initialsFromEmail(email) {
-      if (!email) return "LB";
-      const namePart = String(email).split("@")[0] || "";
-      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-      const a = tokens[0]?.[0] || "";
-      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-      const ini = (a + b).toUpperCase();
-      return ini || "LB";
-    }
-
-    const el = document.getElementById("userProfile");
-    if (!el) return;
-
-    try {
-      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-      if (raw) {
-        const u = JSON.parse(raw);
-        const email = u?.email || u?.user?.email;
-        el.textContent = initialsFromEmail(email);
-      } else {
-        el.textContent = "LB";
-      }
-    } catch {
+  try {
+    const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+    if (raw) {
+      const u = JSON.parse(raw);
+      const email = u?.email || u?.user?.email;
+      el.textContent = initialsFromEmail(email);
+    } else {
       el.textContent = "LB";
     }
-  </script>
+  } catch {
+    el.textContent = "LB";
+  }
+</script>
 
 </body>
 </html>
