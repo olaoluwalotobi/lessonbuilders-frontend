@@ -2,27 +2,78 @@
 <html lang="en">
 <head>
 <link rel="icon" type="image/png" href="/favicon.png">
- 
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Basic Information - LessonBuilders</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<style>  
-:root{--navy:#0D2847;--orange:#FF8C42;}
+
+<style>
+:root{--navy:#0D2847;--orange:#FF8C42;--green:#10B981;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 0%,#FFF 100%);color:#0D2847;}
-.top-nav{background:white;border-bottom:2px solid rgba(13,40,71,0.1);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-.nav-left{display:flex;align-items:center;gap:40px;}
-.logo-text{font-family:'Crimson Pro',serif;font-size:24px;font-weight:700;color:var(--navy);text-decoration:none;}
-.nav-menu{display:flex;gap:32px;align-items:center;}
-.nav-link{text-decoration:none;color:#4A5568;font-weight:500;font-size:15px;transition:color 0.2s;}
-.nav-link:hover{color:var(--navy);}
+
+/* =========================
+   TOP NAV (FIXED)
+   - Always keeps "LessonBuilders" + LB on SAME line
+   - Nav menu becomes the line below on mobile (scrolls horizontally)
+   ========================= */
+.top-nav{
+  background:white;
+  border-bottom:2px solid rgba(13,40,71,0.1);
+  padding:16px 40px;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+.nav-top-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.logo-text{
+  font-family:'Crimson Pro',serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--navy);
+  text-decoration:none;
+  white-space:nowrap;
+}
 .nav-right{display:flex;align-items:center;gap:16px;}
-.user-profile{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FFB380);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;font-size:14px;cursor:pointer;}
+.user-profile{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--orange),#FFB380);
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-weight:600;font-size:14px;cursor:pointer;
+  flex:0 0 auto;
+}
+
+/* desktop menu sits under the top row (clean + consistent) */
+.nav-menu{
+  display:flex;
+  gap:32px;
+  align-items:center;
+  margin-top:10px;
+}
+.nav-link{
+  text-decoration:none;
+  color:#4A5568;
+  font-weight:500;
+  font-size:15px;
+  transition:color 0.2s;
+  white-space:nowrap;
+}
+.nav-link:hover{color:var(--navy);}
+
+/* =========================
+   PAGE LAYOUT
+   ========================= */
 .container{display:flex;max-width:1400px;margin:0 auto;}
 .sidebar{width:280px;background:white;border-right:1px solid rgba(13,40,71,0.1);padding:30px 20px;}
-.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
-.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;} 
+.nav-step{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;cursor:default;transition:all 0.2s;border-left:3px solid transparent;text-decoration:none;color:#4A5568;}
+.nav-step.active{background:rgba(255,140,66,0.1);border-left-color:var(--orange);color:var(--navy);font-weight:600;}
 .step-number{width:28px;height:28px;border-radius:50%;background:#F7FAFC;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#999;}
 .nav-step.active .step-number{background:var(--orange);border-color:var(--orange);color:white;}
 .main-content{flex:1;padding:40px 60px;max-width:900px;}
@@ -43,6 +94,7 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .btn-secondary{background:white;border:2px solid #E2E8F0;color:var(--navy);}
 .btn-secondary:hover{border-color:var(--orange);}
 .btn-group{display:flex;justify-content:space-between;margin-top:40px;}
+
 .optional-section{background:rgba(255,140,66,0.05);border:2px dashed rgba(255,140,66,0.3);border-radius:12px;padding:20px;margin:32px 0;transition:all 0.3s;}
 .optional-section:hover{background:rgba(255,140,66,0.1);}
 .optional-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
@@ -73,10 +125,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 }
 .insp-caret{font-size:12px;color:#718096;transition:transform .25s;}
 .insp-caret.expanded{transform:rotate(180deg);}
-
 .insp-body{margin-top:10px;max-height:0;overflow:hidden;transition:max-height .3s ease;}
 .insp-body.show{max-height:1200px;}
-
 .dropzone{
   border:2px dashed rgba(13,40,71,0.25);
   border-radius:12px;
@@ -105,13 +155,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
 .mini-secondary:hover{border-color:var(--orange);}
 
 .file-list{margin-top:10px;display:grid;gap:8px;}
-.file-item{
-  background:white;border:2px solid #E2E8F0;border-radius:12px;
-  padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;
-}
-.file-name{font-size:13px;color:var(--navy);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px;}
-.file-meta{font-size:12px;color:#718096;}
-
 .sidebar-note{margin-top:12px;}
 .sidebar-note textarea{
   width:100%;
@@ -121,16 +164,25 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   resize:vertical;min-height:88px;
 }
 .sidebar-note textarea:focus{outline:none;border-color:var(--orange);}
-
 .sidebar-hint{margin-top:10px;font-size:12px;color:#718096;line-height:1.35;}
+
 /* ================================
    Mobile / Tablet responsiveness
-   (added by LessonBuilders)
    ================================ */
 @media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;}
-  .nav-menu{gap:16px;flex-wrap:wrap;}
+  .top-nav{padding:12px 16px;}
+  /* menu becomes the second line and scrolls horizontally */
+  .nav-menu{
+    margin-top:10px;
+    gap:14px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;
+    padding-bottom:2px;
+  }
+  .nav-menu::-webkit-scrollbar{display:none;}
+  .nav-link{font-size:14px;}
+
   .container{flex-direction:column;max-width:100%;}
   .sidebar{
     width:100%;
@@ -139,9 +191,8 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     padding:14px 12px;
     display:block;
   }
-  /* keep inspiration visible on mobile */
   .steps-label{display:none;}
-  .steps-links{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;} /* hide "BUILD LESSON" label on mobile */
+  .steps-links{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;}
   .nav-step{
     flex:0 0 auto;
     margin-bottom:0;
@@ -156,13 +207,10 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     border-bottom-color:var(--orange);
     background:rgba(255,140,66,0.08);
   }
-  .nav-step.completed{
-    color:var(--green);
-  }
+  .nav-step.completed{color:var(--green);}
   .step-number{flex:0 0 auto;}
   .main-content{padding:22px 16px;max-width:100%;}
-  .btn-row{flex-wrap:nowrap;gap:10px;}
-  .export-group{width:100%;}
+  .btn-group{gap:10px;}
   .btn{width:auto;padding:12px 14px;}
 }
 
@@ -170,53 +218,27 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
   .logo-text{font-size:20px;}
   .page-title{font-size:32px;}
   .page-subtitle{font-size:15px;}
-  .lesson-title{font-size:22px;}
-  .btn-row{flex-direction:column;align-items:stretch;}
-  .btn-row .btn{width:100%;}
-  .export-group{justify-content:space-between;}
 }
-
-
-/* Sidebar nav is visual only (locked) */
-.nav-step{cursor:default;}
-
-
-
-/* =========================
-   MOBILE FIX (ONLY)
-   - Matches About/Help behavior
-   - Keeps initials bubble top-right
-   - Prevents nav overflow + keeps nav items on one line
-   ========================= */
-@media (max-width: 900px){
-  .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
-  .nav-left{gap:16px;flex-wrap:wrap;width:100%;align-items:flex-start;}
-  .nav-menu{gap:16px;flex-wrap:wrap;width:100%;}
-  .nav-link{white-space:nowrap;}
-  .nav-right{justify-self:end;align-self:flex-start;margin-top:2px;}
-}
-@media (max-width: 520px){
-  .logo-text{font-size:20px;}
-  .nav-link{font-size:14px;}
-}
-
 </style>
 </head>
+
 <body>
 
+<!-- ✅ NAV UPDATED: title + LB always share top row -->
 <nav class="top-nav">
-  <div class="nav-left">
+  <div class="nav-top-row">
     <a href="index.html" class="logo-text">LessonBuilders</a>
-    <div class="nav-menu">
-      <a href="build-step1.html" class="nav-link">Build</a>
-      <a href="library.html" class="nav-link">My Lessons</a>
-      <a href="assessments.html" class="nav-link">Assessments</a>
-      <a href="discover.html" class="nav-link">Discover</a>
-      <a href="about.html" class="nav-link">Help</a>
+    <div class="nav-right">
+      <div class="user-profile" id="userProfile">LB</div>
     </div>
   </div>
-  <div class="nav-right">
-    <div class="user-profile" id="userProfile">LB</div>
+
+  <div class="nav-menu">
+    <a href="build-step1.html" class="nav-link">Build</a>
+    <a href="library.html" class="nav-link">My Lessons</a>
+    <a href="assessments.html" class="nav-link">Assessments</a>
+    <a href="discover.html" class="nav-link">Discover</a>
+    <a href="about.html" class="nav-link">Help</a>
   </div>
 </nav>
 
@@ -261,22 +283,21 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     </div>
 
     <div class="steps-label" style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#999;margin-bottom:16px;">BUILD LESSON</div>
-    
-    <div class="steps-links">
-<div class="nav-step active"><div class="step-number">1</div><div>Basic Information</div></div>
-    <div class="nav-step"><div class="step-number">2</div><div>Teaching Style</div></div>
-    <div class="nav-step"><div class="step-number">3</div><div>Choose Template</div></div>
-        <div class="nav-step"><div class="step-number">4</div><div>Assessments</div></div>
-    <div class="nav-step"><div class="step-number">5</div><div>Build Method</div></div>
-    <div class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></div>
-    <div class="nav-step"><div class="step-number">7</div><div>Collaborate</div></div>
-    </div>
 
+    <div class="steps-links">
+      <div class="nav-step active"><div class="step-number">1</div><div>Basic Information</div></div>
+      <div class="nav-step"><div class="step-number">2</div><div>Teaching Style</div></div>
+      <div class="nav-step"><div class="step-number">3</div><div>Choose Template</div></div>
+      <div class="nav-step"><div class="step-number">4</div><div>Assessments</div></div>
+      <div class="nav-step"><div class="step-number">5</div><div>Build Method</div></div>
+      <div class="nav-step"><div class="step-number">6</div><div>Preview & Export</div></div>
+      <div class="nav-step"><div class="step-number">7</div><div>Collaborate</div></div>
+    </div>
   </aside>
 
   <main class="main-content">
-    <h1 class="page-title">Tell us what you need</h1>
-    <p class="page-subtitle">We&apos;ll align it to California standards</p>
+    <h1 class="page-title">Describe what you want</h1>
+    <p class="page-subtitle">We&apos;ll align it to state standards</p>
     <div class="progress-bar"><div class="progress-fill" style="width:12%;"></div></div>
 
     <div class="form-group">
@@ -401,8 +422,6 @@ body{font-family:'DM Sans',sans-serif;background:linear-gradient(135deg,#F7FAFC 
     try {
       localStorage.removeItem("lessonData");
       localStorage.removeItem("verifiedStandards");
-      // Keep savedLessons if you want a library. If not, uncomment:
-      // localStorage.removeItem("savedLessons");
     } catch(e){}
     sessionStorage.setItem(BUILD_FLAG, "1");
   }
@@ -475,7 +494,6 @@ function persistInspirationToLessonData(){
   const notes = (document.getElementById("inspirationNotes")?.value || "").trim();
   data.step1.inspiration = {
     notes,
-    // metadata only — avoids localStorage quota issues
     files: inspirationFiles.map(f => ({ name:f.name, type:f.type, size:f.size })),
     storedLocally: true,
     deleteAfter: "save/export"
@@ -487,7 +505,6 @@ function handlePickedFiles(fileList){
   const files = Array.from(fileList || []);
   if (!files.length) return;
 
-  // Keep it simple: cap number of files to prevent UX issues
   const MAX_FILES = 5;
   const remaining = Math.max(0, MAX_FILES - inspirationFiles.length);
   const toAdd = files.slice(0, remaining);
@@ -512,7 +529,6 @@ function setupInspirationUI(){
   const picker = document.getElementById("filePicker");
   const notes = document.getElementById("inspirationNotes");
 
-  // Start CLOSED every time you land on Step 1 (your request)
   if (body) body.classList.remove("show");
   if (caret) caret.classList.remove("expanded");
   if (header) header.setAttribute("aria-expanded", "false");
@@ -556,19 +572,16 @@ function setupInspirationUI(){
   if (picker){
     picker.addEventListener("change", (e) => {
       handlePickedFiles(e.target.files);
-      // reset so same file can be chosen again
       picker.value = "";
     });
   }
 
   if (notes){
     notes.addEventListener("input", () => {
-      // don't save on every keystroke if you don't want; but this is lightweight
       persistInspirationToLessonData();
     });
   }
 
-  // Load existing inspiration (only within same build session)
   const data = getLessonData();
   const insp = data?.step1?.inspiration || {};
   const savedFiles = Array.isArray(insp.files) ? insp.files : [];
@@ -577,37 +590,25 @@ function setupInspirationUI(){
   renderFileList();
 }
 
-/* ---------- Existing Step 1 fields ---------- */
 window.addEventListener('DOMContentLoaded', function() {
-  // MVP reset: always start a fresh build when arriving at Step 1.
-  // Keeps saved lessons + API_URL, clears in-progress build fields (including inspiration).
   try{
     const apiUrl = localStorage.getItem('API_URL');
     const savedLessons = localStorage.getItem('savedLessons');
     localStorage.removeItem('lessonData');
     localStorage.removeItem('prebuiltLesson');
     localStorage.removeItem('generatedLesson');
-    // restore allowed keys
     if (apiUrl) localStorage.setItem('API_URL', apiUrl);
     if (savedLessons) localStorage.setItem('savedLessons', savedLessons);
   }catch(e){}
 
   setupInspirationUI();
 
-  // Set clean defaults
   document.getElementById('gradeSelect').value = '5th Grade';
   document.getElementById('subjectSelect').value = 'Mathematics';
   document.getElementById('topicInput').value = '';
   document.getElementById('stateSelect').value = 'California';
   document.getElementById('durationSlider').value = 45;
   document.getElementById('durationValue').textContent = '45 minutes';
-  if (document.getElementById('classSizeSelect')) document.getElementById('classSizeSelect').value = '';
-  if (document.getElementById('standardInput')) document.getElementById('standardInput').value = '';
-  if (document.getElementById('priorKnowledge')) document.getElementById('priorKnowledge').value = '';
-  if (document.getElementById('languageNeeds')) document.getElementById('languageNeeds').value = '';
-  if (document.getElementById('iepNeeds')) document.getElementById('iepNeeds').value = '';
-  if (document.getElementById('lessonEmphasis')) document.getElementById('lessonEmphasis').value = 20;
-  if (document.getElementById('lessonEmphasisValue')) document.getElementById('lessonEmphasisValue').textContent = '20%';
 });
 
 function escapeHtml(str) {
@@ -642,7 +643,6 @@ function saveAndContinue() {
     return;
   }
 
-  // Persist inspiration notes/files metadata too
   persistInspirationToLessonData();
 
   const data = getLessonData();
@@ -678,11 +678,9 @@ header.addEventListener('click', function(e){
   icon.classList.toggle('expanded');
 });
 content.addEventListener('click', function(e){ e.stopPropagation(); });
-
 </script>
+
 <script type="module">
-  // Update the top-right bubble to show initials when logged in.
-  // Falls back to "LB" when logged out or if auth isn't available.
   function initialsFromEmail(email) {
     if (!email) return "LB";
     const namePart = String(email).split("@")[0] || "";
@@ -697,7 +695,6 @@ content.addEventListener('click', function(e){ e.stopPropagation(); });
   if (!el) return;
 
   try {
-    // If you store auth in localStorage (common for MVP)
     const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
     if (raw) {
       const u = JSON.parse(raw);
@@ -710,6 +707,6 @@ content.addEventListener('click', function(e){ e.stopPropagation(); });
     el.textContent = "LB";
   }
 </script>
-  
+
 </body>
 </html>
