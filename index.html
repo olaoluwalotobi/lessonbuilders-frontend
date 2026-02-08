@@ -39,6 +39,7 @@
       display: flex;
       align-items: center;
       gap: 40px;
+      min-width: 0; /* IMPORTANT for mobile overflow handling */
     }
 
     .logo-text {
@@ -47,12 +48,15 @@
       font-weight: 700;
       color: var(--navy);
       text-decoration: none;
+      white-space: nowrap;
+      flex: 0 0 auto;
     }
 
     .nav-menu {
       display: flex;
       gap: 32px;
       align-items: center;
+      min-width: 0;
     }
 
     .nav-link {
@@ -61,6 +65,8 @@
       font-weight: 500;
       font-size: 15px;
       transition: color 0.2s;
+      white-space: nowrap;
+      flex: 0 0 auto;
     }
 
     .nav-link:hover {
@@ -71,6 +77,7 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      flex: 0 0 auto;
     }
 
     .user-profile {
@@ -85,6 +92,7 @@
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
+      flex: 0 0 auto;
     }
 
     .hero {
@@ -145,7 +153,8 @@
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px (255, 140, 66, 0.4);
+      /* FIXED: missing rgba() */
+      box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
     }
 
     .standards-section {
@@ -294,6 +303,7 @@
       color: rgba(255, 255, 255, 0.6);
     }
 
+    /* Existing responsive for content (kept) */
     @media (max-width: 768px) {
       .standards-grid,
       .testimonials-grid {
@@ -308,28 +318,69 @@
         grid-template-columns: 1fr;
         gap: 40px;
       }
+    }
 
-      .top-nav { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
-      .nav-left { gap: 16px; flex-wrap: wrap; }
-      .nav-menu { gap: 16px; flex-wrap: wrap; }
+    /* =========================
+       MOBILE NAV FIX (Index)
+       - pins LB bubble top-right
+       - keeps nav items usable without weird wrapping
+       ========================= */
+    @media (max-width: 900px){
+      .top-nav{
+        padding:12px 16px;
+        gap:10px;
+        align-items:flex-start;
+      }
+
+      /* Keep left content from forcing bubble down */
+      .nav-left{
+        flex:1;
+        gap:12px;
+        align-items:flex-start;
+        min-width:0;
+      }
+
+      /* Let the menu scroll horizontally instead of wrapping into tall stacks */
+      .nav-menu{
+        flex-wrap:nowrap;
+        gap:14px;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+        padding-bottom:2px; /* tiny breathing room */
+        min-width:0;
+      }
+
+      .nav-menu::-webkit-scrollbar{ display:none; }
+
+      /* Pin initials bubble at the top-right */
+      .nav-right{
+        margin-left:auto;
+        align-self:flex-start;
+      }
+
+      /* Slightly smaller text so "My Lessons" fits better */
+      .nav-link{ font-size:14px; }
+    }
+
+    @media (max-width: 520px){
+      .logo-text{ font-size:20px; }
+      .nav-link{ font-size:13.5px; }
     }
 
     /* =========================
        Access Gate (Landing)
        ========================= */
     .lb-gate-overlay{
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    z-index: 9999;
-
-    /* LIGHT frosted glass */
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);      
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 9999;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);      
     }
     .lb-gate-overlay.is-open{ display:flex; }
     .lb-gate-card{
@@ -400,17 +451,18 @@
     </div>
   </div>
 
-<nav class="top-nav">
-  <div class="nav-left">
-    <a href="index.html" class="logo-text">LessonBuilders</a>
-    <div class="nav-menu">
-      <a href="build-step1.html" class="nav-link">Build</a>
-      <a href="library.html" class="nav-link">My Lessons</a>
-      <a href="assessments.html" class="nav-link">Assessments</a>
-      <a href="discover.html" class="nav-link">Discover</a>
-      <a href="about.html" class="nav-link">Help</a>
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="index.html" class="logo-text">LessonBuilders</a>
+      <div class="nav-menu">
+        <a href="build-step1.html" class="btn btn-primary">Start Building &rarr;</a>
+        <a href="library.html" class="nav-link">My Lessons</a>
+        <a href="assessments.html" class="nav-link">Assessments</a>
+        <a href="discover.html" class="nav-link">Discover</a>
+        <a href="about.html" class="nav-link">Help</a>
+      </div>
     </div>
-    </div>
+
     <div class="nav-right">
       <div class="user-profile" id="userProfile">LB</div>
     </div>
@@ -527,7 +579,6 @@
       overlay.classList.add("is-open");
       overlay.setAttribute("aria-hidden", "false");
       setTimeout(() => codeInput?.focus(), 100);
-      // prevent scroll behind modal
       document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
     }
@@ -539,48 +590,18 @@
       document.body.style.overflow = "";
     }
 
-    function setCodeError(msg) {
-      codeErr.textContent = msg || "";
-    }
-
-    function setEmailStatus(msg) {
-      emailStatus.textContent = msg || "";
-    }
-
-    async function apiFetch(path, opts) {
-      // Uses your api.js base (API_BASE) because api.js already points to Railway.
-      // We simply call the relative endpoints here.
-      const base = (typeof window.API_BASE_OVERRIDE === "string" && window.API_BASE_OVERRIDE)
-        ? window.API_BASE_OVERRIDE.replace(/\/+$/, "")
-        : null;
-
-      // If you ever want override, set window.API_BASE_OVERRIDE in console.
-      const url = base ? `${base}${path}` : path;
-
-      const res = await fetch(url, {
-        cache: "no-store",
-        ...opts,
-        headers: {
-          "Content-Type": "application/json",
-          ...(opts && opts.headers ? opts.headers : {}),
-        },
-      });
-
-      return res;
-    }
+    function setCodeError(msg) { codeErr.textContent = msg || ""; }
+    function setEmailStatus(msg) { emailStatus.textContent = msg || ""; }
 
     async function checkGateEnabled() {
       try {
-        // Prefer calling your backend directly by using checkHealth() first
-        // (If backend is down, we still show the gate)
         await checkHealth();
-
         const res = await fetch(`${(await getApiBaseFromApiJs())}/api/access/enabled`, { cache: "no-store" });
-        if (!res.ok) return true; // fail closed
+        if (!res.ok) return true;
         const data = await res.json();
         return !!data.enabled;
       } catch {
-        return true; // fail closed (gate stays)
+        return true;
       }
     }
 
@@ -597,7 +618,6 @@
       return { ok: false, message: err.message || "Incorrect code" };
     }
 
-    // If you implemented this endpoint server-side, we’ll call it.
     async function requestEmailLink(email) {
       const base = await getApiBaseFromApiJs();
       const res = await fetch(`${base}/api/auth/request-link`, {
@@ -611,44 +631,22 @@
       return { ok: false, message: err.message || "Email link not available yet" };
     }
 
-    // Pull API_BASE from your existing api.js (hardcoded to Railway).
     async function getApiBaseFromApiJs() {
-      // Your api.js has: const API_BASE = "https://....railway.app";
-      // We can’t import that const directly unless api.js exports it.
-      // So we safely compute it from a known call by using checkHealth fetch behavior:
-      // We'll just store your current value here as a single source of truth.
       return "https://lessonbuilders-backend-production.up.railway.app";
     }
 
-    // Gate boot
     (async function bootGate() {
-      // Always start locked until proven otherwise
       openGate();
-
       const enabled = await checkGateEnabled();
-      if (!enabled) {
-        // Gate disabled server-side
-        closeGate();
-        return;
-      }
-
-      // If enabled, check session memory so repeat visitors don’t re-enter constantly
+      if (!enabled) { closeGate(); return; }
       const alreadyOk = localStorage.getItem("LB_ACCESS_OK") === "true";
-      if (alreadyOk) {
-        closeGate();
-      } else {
-        openGate();
-      }
+      if (alreadyOk) closeGate();
     })();
 
-    // Submit handlers
     async function handleCodeSubmit() {
       setCodeError("");
       const code = String(codeInput.value || "").trim();
-      if (!code) {
-        setCodeError("Please enter the access code.");
-        return;
-      }
+      if (!code) { setCodeError("Please enter the access code."); return; }
 
       codeBtn.disabled = true;
       codeBtn.textContent = "Checking...";
@@ -671,20 +669,14 @@
     async function handleEmailSubmit() {
       setEmailStatus("");
       const email = String(emailInput.value || "").trim();
-      if (!email || !email.includes("@")) {
-        setEmailStatus("Enter a valid email address.");
-        return;
-      }
+      if (!email || !email.includes("@")) { setEmailStatus("Enter a valid email address."); return; }
 
       emailBtn.disabled = true;
       emailBtn.textContent = "Sending...";
       try {
         const result = await requestEmailLink(email);
-        if (result.ok) {
-          setEmailStatus("Check your email for a sign-in link.");
-        } else {
-          setEmailStatus(result.message || "Email sign-in not available yet.");
-        }
+        if (result.ok) setEmailStatus("Check your email for a sign-in link.");
+        else setEmailStatus(result.message || "Email sign-in not available yet.");
       } catch {
         setEmailStatus("Could not send link (backend unreachable).");
       } finally {
@@ -694,50 +686,43 @@
     }
 
     codeBtn.addEventListener("click", handleCodeSubmit);
-    codeInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleCodeSubmit();
-    });
+    codeInput.addEventListener("keydown", (e) => { if (e.key === "Enter") handleCodeSubmit(); });
 
     emailBtn.addEventListener("click", handleEmailSubmit);
-    emailInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleEmailSubmit();
-    });
+    emailInput.addEventListener("keydown", (e) => { if (e.key === "Enter") handleEmailSubmit(); });
 
-    // Optional debug health check (won’t render on page)
     checkHealth()
       .then(data => console.log("API OK:", data))
       .catch(err => console.error("API ERROR:", err));
   </script>
-<script type="module">
-  // Update the top-right bubble to show initials when logged in.
-  // Falls back to "LB" when logged out or if auth isn't available.
-  function initialsFromEmail(email) {
-    if (!email) return "LB";
-    const namePart = String(email).split("@")[0] || "";
-    const tokens = namePart.split(/[.\-_]/).filter(Boolean);
-    const a = tokens[0]?.[0] || "";
-    const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
-    const ini = (a + b).toUpperCase();
-    return ini || "LB";
-  }
 
-  const el = document.getElementById("userProfile");
-  if (!el) return;
+  <script type="module">
+    function initialsFromEmail(email) {
+      if (!email) return "LB";
+      const namePart = String(email).split("@")[0] || "";
+      const tokens = namePart.split(/[.\-_]/).filter(Boolean);
+      const a = tokens[0]?.[0] || "";
+      const b = tokens[1]?.[0] || tokens[0]?.[1] || "";
+      const ini = (a + b).toUpperCase();
+      return ini || "LB";
+    }
 
-  try {
-    // If you store auth in localStorage (common for MVP)
-    const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
-    if (raw) {
-      const u = JSON.parse(raw);
-      const email = u?.email || u?.user?.email;
-      el.textContent = initialsFromEmail(email);
-    } else {
+    const el = document.getElementById("userProfile");
+    if (!el) return;
+
+    try {
+      const raw = localStorage.getItem("lb_user") || localStorage.getItem("user") || "";
+      if (raw) {
+        const u = JSON.parse(raw);
+        const email = u?.email || u?.user?.email;
+        el.textContent = initialsFromEmail(email);
+      } else {
+        el.textContent = "LB";
+      }
+    } catch {
       el.textContent = "LB";
     }
-  } catch {
-    el.textContent = "LB";
-  }
-</script>
-  
+  </script>
+
 </body>
 </html>
